@@ -8,13 +8,18 @@ body {
   width: 40px;
   height: 40px;
   margin: 5px;
-}
-
-.PlayableNoteBoxActive {
   background-color: aqua;
 }
 
-.PlayableNoteBoxInactive {
+.PlayableNoteBoxActive {
   background-color: blueviolet;
+}
+
+.SoundboardContainer {
+  display: flex;
+}
+
+.NoteRow {
+  display: flex;
 }
 

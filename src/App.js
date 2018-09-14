@@ -8,8 +8,10 @@ class App extends Component {
   
   render() {
     return (
-      <PlayableBoard />
-      <LoopBoard />
+      <div className="SoundboardContainer">
+        <PlayableBoard />
+        <LoopBoard />
+      </div>
     );
   }
 }

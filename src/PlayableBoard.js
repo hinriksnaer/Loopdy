@@ -5,19 +5,19 @@ const Tone = require('tone');
 class PlayableBoard extends Component {
 
   state = {
-    c3isActive: "Active",
-    d3isActive: "Active",
-    e3isActive: "Active",
-    f3isActive: "Active",
-    g3isActive: "Active",
-    a3isActive: "Active",
-    b3isActive: "Active",
-    c4isActive: "Active"
+    c3isActive: "Inactive",
+    d3isActive: "Inactive",
+    e3isActive: "Inactive",
+    f3isActive: "Inactive",
+    g3isActive: "Inactive",
+    a3isActive: "Inactive",
+    b3isActive: "Inactive",
+    c4isActive: "Inactive"
   }
 
   updateNoteClass = (noteClass) => {
     this.setState({
-        [noteClass+'isActive']: "Active"
+        [noteClass+'isActive']: "Inactive"
       });
   }
 
@@ -46,45 +46,45 @@ class PlayableBoard extends Component {
   render() {
     return (
       <div className="PlayableBoardContainer">
-        <div className={'NoteBox' + ' ' + 'PlayableNoteBox'+this.state.c3isActive} 
-            onMouseDown={() => this.notePressed('c3', 'Inactive')}
-            onMouseUp={() => this.alterClass('c3', 'Active')}
-            onMouseOut={() => this.alterClass('c3', 'Active')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.d3isActive} 
-            onMouseDown={() => this.notePressed('d3', 'Inactive')}
-            onMouseUp={() => this.alterClass('d3', 'Active')}
-            onMouseOut={() => this.alterClass('d3', 'Active')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.e3isActive} 
-            onMouseDown={() => this.notePressed('e3', 'Inactive')}
-            onMouseUp={() => this.alterClass('e3', 'Active')}
-            onMouseOut={() => this.alterClass('e3', 'Active')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.f3isActive} 
-            onMouseDown={() => this.notePressed('f3', 'Inactive')}
-            onMouseUp={() => this.alterClass('f3', 'Active')}
-            onMouseOut={() => this.alterClass('f3', 'Active')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.g3isActive} 
-            onMouseDown={() => this.notePressed('g3', 'Inactive')}
-            onMouseUp={() => this.alterClass('g3', 'Active')}
-            onMouseOut={() => this.alterClass('g3', 'Active')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.a3isActive} 
-            onMouseDown={() => this.notePressed('a3', 'Inactive')}
-            onMouseUp={() => this.alterClass('a3', 'Active')}
-            onMouseOut={() => this.alterClass('a3', 'Active')}>
+        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.c4isActive} 
+            onMouseDown={() => this.notePressed('c4', 'Active')}
+            onMouseUp={() => this.alterClass('c4', 'Inactive')}
+            onMouseOut={() => this.alterClass('c4', 'Inactive')}>
         </div>
         <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.b3isActive} 
-            onMouseDown={() => this.notePressed('b3', 'Inactive')}
-            onMouseUp={() => this.alterClass('b3', 'Active')}
-            onMouseOut={() => this.alterClass('b3', 'Active')}>
+            onMouseDown={() => this.notePressed('b3', 'Active')}
+            onMouseUp={() => this.alterClass('b3', 'Inactive')}
+            onMouseOut={() => this.alterClass('b3', 'Inactive')}>
         </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.c4isActive} 
-            onMouseDown={() => this.notePressed('c4', 'Inactive')}
-            onMouseUp={() => this.alterClass('c4', 'Active')}
-            onMouseOut={() => this.alterClass('c4', 'Active')}>
+        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.a3isActive} 
+            onMouseDown={() => this.notePressed('a3', 'Active')}
+            onMouseUp={() => this.alterClass('a3', 'Inactive')}
+            onMouseOut={() => this.alterClass('a3', 'Inactive')}>
+        </div>
+        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.g3isActive} 
+            onMouseDown={() => this.notePressed('g3', 'Active')}
+            onMouseUp={() => this.alterClass('g3', 'Inactive')}
+            onMouseOut={() => this.alterClass('g3', 'Inactive')}>
+        </div>
+        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.f3isActive} 
+            onMouseDown={() => this.notePressed('f3', 'Active')}
+            onMouseUp={() => this.alterClass('f3', 'Inactive')}
+            onMouseOut={() => this.alterClass('f3', 'Inactive')}>
+        </div>
+        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.e3isActive} 
+            onMouseDown={() => this.notePressed('e3', 'Active')}
+            onMouseUp={() => this.alterClass('e3', 'Inactive')}
+            onMouseOut={() => this.alterClass('e3', 'Inactive')}>
+        </div>
+        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.d3isActive} 
+            onMouseDown={() => this.notePressed('d3', 'Active')}
+            onMouseUp={() => this.alterClass('d3', 'Inactive')}
+            onMouseOut={() => this.alterClass('d3', 'Inactive')}>
+        </div>
+        <div className={'NoteBox' + ' ' + 'PlayableNoteBox'+this.state.c3isActive} 
+            onMouseDown={() => this.notePressed('c3', 'Active')}
+            onMouseUp={() => this.alterClass('c3', 'Inactive')}
+            onMouseOut={() => this.alterClass('c3', 'Inactive')}>
         </div>
       </div>
     );
