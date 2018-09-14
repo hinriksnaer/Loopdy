@@ -9,11 +9,7 @@ class LoopBoard extends Component {
       ['Inactive', 'Inactive', 'Inactive', 'Inactive'],
       ['Inactive', 'Inactive', 'Inactive', 'Inactive'],
       ['Inactive', 'Inactive', 'Inactive', 'Inactive']],
-    isPlaying: [
-      ['NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying'],
-      ['NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying'],
-      ['NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying']
-    ],
+    isPlaying: ['NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying'],
     looping: false
   }
 
@@ -27,13 +23,18 @@ class LoopBoard extends Component {
 
   startLoop = () => {
     this.setState({ looping: !this.state.looping })
+    let newIsLooping = ['NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying'];
     if (this.state.looping) {
       let interval = this.state.playLoop;
       clearInterval(interval);
+      this.setState({ isPlaying: newIsLooping })
       return;
     }
     let count = 0;
     let playLoop = setInterval(() => {
+      let newIsLooping = ['NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying'];
+      newIsLooping[count] = 'NoteIsPlaying';
+      this.setState({ isPlaying: newIsLooping });
       let noteStatus = this.state.noteStatus;
       let noteList = [noteStatus[0][count], noteStatus[1][count], noteStatus[2][count]];
       
@@ -70,22 +71,22 @@ class LoopBoard extends Component {
     return (
       <div className="LoopBoardContainer">
         <div className='NoteRow'>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][0]} onClick={() => this.alterActiveState(0,0)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][1]} onClick={() => this.alterActiveState(0,1)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][2]} onClick={() => this.alterActiveState(0,2)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][3]} onClick={() => this.alterActiveState(0,3)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][0] + ' ' + this.state.isPlaying[0]} onClick={() => this.alterActiveState(0,0)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][1] + ' ' + this.state.isPlaying[1]} onClick={() => this.alterActiveState(0,1)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][2] + ' ' + this.state.isPlaying[2]} onClick={() => this.alterActiveState(0,2)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][3] + ' ' + this.state.isPlaying[3]} onClick={() => this.alterActiveState(0,3)}></div>
         </div>
           <div className='NoteRow'>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][0]} onClick={() => this.alterActiveState(1,0)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][1]} onClick={() => this.alterActiveState(1,1)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][2]} onClick={() => this.alterActiveState(1,2)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][3]} onClick={() => this.alterActiveState(1,3)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][0] + ' ' + this.state.isPlaying[0]} onClick={() => this.alterActiveState(1,0)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][1] + ' ' + this.state.isPlaying[1]} onClick={() => this.alterActiveState(1,1)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][2] + ' ' + this.state.isPlaying[2]} onClick={() => this.alterActiveState(1,2)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][3] + ' ' + this.state.isPlaying[3]} onClick={() => this.alterActiveState(1,3)}></div>
         </div>
         <div className='NoteRow'>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][0]} onClick={() => this.alterActiveState(2,0)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][1]} onClick={() => this.alterActiveState(2,1)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][2]} onClick={() => this.alterActiveState(2,2)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][3]} onClick={() => this.alterActiveState(2,3)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][0] + ' ' + this.state.isPlaying[0]} onClick={() => this.alterActiveState(2,0)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][1] + ' ' + this.state.isPlaying[1]} onClick={() => this.alterActiveState(2,1)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][2] + ' ' + this.state.isPlaying[2]} onClick={() => this.alterActiveState(2,2)}></div>
+          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][3] + ' ' + this.state.isPlaying[3]} onClick={() => this.alterActiveState(2,3)}></div>
         </div>
         <button onClick={() => this.startLoop()}>{startText}</button>
       </div>

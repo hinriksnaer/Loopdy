@@ -15,6 +15,10 @@ body {
   background-color: blueviolet;
 }
 
+.NoteIsPlaying {
+  border: 2px solid white;
+}
+
 .SoundboardContainer {
   display: flex;
 }
