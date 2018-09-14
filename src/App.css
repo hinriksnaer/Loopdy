@@ -2,19 +2,19 @@ body {
   background-color:#2E2E2E;
 }
 
-.NoteBoxActive {
+/*Div for playable notes*/
+.NoteBox {
   margin: auto;
-  width: 50px;
-  height: 50px;
-  margin-top: 20px;
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+}
+
+.PlayableNoteBoxActive {
   background-color: aqua;
 }
 
-.NoteBoxInactive {
-  margin: auto;
-  width: 50px;
-  height: 50px;
-  margin-top: 20px;
+.PlayableNoteBoxInactive {
   background-color: blueviolet;
 }
 
