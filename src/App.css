@@ -8,15 +8,17 @@ body {
   width: 40px;
   height: 40px;
   margin: 5px;
+  border: 3px solid aqua;
   background-color: aqua;
 }
 
 .PlayableNoteBoxActive {
   background-color: blueviolet;
+  border-color: blueviolet;
 }
 
 .NoteIsPlaying {
-  border: 2px solid white;
+  border-color: white;
 }
 
 .SoundboardContainer {
