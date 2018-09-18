@@ -4,12 +4,30 @@ body {
 
 /*Div for playable notes*/
 .NoteBox {
-  margin: auto;
+  border-radius: 7px;
   width: 40px;
   height: 40px;
   margin: 5px;
   border: 3px solid aqua;
   background-color: aqua;
+}
+
+.InfoText {
+  color: white;
+  margin-right: 10px;
+  position:absolute;
+  bottom:0;
+  right:0;
+}
+
+.PlayableBoardContainer {
+  border-radius: 6px;
+  border: 1px solid white;
+  margin-right: 5px;
+}
+
+.PlayableBoardContainer .NoteBox {
+  margin-bottom: 10px;
 }
 
 .PlayableNoteBoxActive {
@@ -27,5 +45,10 @@ body {
 
 .NoteRow {
   display: flex;
+}
+
+.SoundboardContainer {
+  width: 600px;
+  margin:100px auto;
 }
 

@@ -94,4 +94,26 @@ class LoopBoard extends Component {
   }
 }
 
+/*
+const { notes } = this.state;
+
+<NoteRow>
+  {}
+  <NoteBox isPLaying={notes[i][j]} onClick={this.togglePlaying(i, j)} />
+</NoteRow>
+
+class Notebox extends React.Component {
+  static propTypes = {
+    isPLaying: PropTypes.bool,
+    onClick: PropTypes.func,
+  }
+
+  render() {
+    const { isPlaying, onClick } = this.props;
+    return (
+      <div className=
+    )
+  } 
+}
+*/
 export default LoopBoard;

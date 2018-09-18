@@ -8,9 +8,14 @@ class App extends Component {
   
   render() {
     return (
-      <div className="SoundboardContainer">
-        <PlayableBoard />
-        <LoopBoard />
+      <div>
+        <div className="SoundboardContainer">
+          <PlayableBoard />
+          <LoopBoard row={10} cols={10} />
+        </div>
+        <div className="InfoText">
+          <p>Loopdy 0.1.0 created by Hinrik S. Guðmundsson</p>
+        </div>
       </div>
     );
   }
