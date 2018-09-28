@@ -1,29 +1,37 @@
 import React, { Component } from 'react';
+import NoteBox from './NoteBox';
 import './App.css';
-const Tone = require('tone');
+import { playSound } from './SoundBox';
 
 class LoopBoard extends Component {
   
   state = {
-    noteStatus: [
-      ['Inactive', 'Inactive', 'Inactive', 'Inactive'],
-      ['Inactive', 'Inactive', 'Inactive', 'Inactive'],
-      ['Inactive', 'Inactive', 'Inactive', 'Inactive']],
-    isPlaying: ['NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying'],
+    isPlaying: [false, false, false, false],
     looping: false
   }
 
-  playSound = (note) => {
-      //create a synth and connect it to the master output (your speakers)
-    var synth = new Tone.Synth().toMaster()
+  componentWillMount() {
+    const { cols, rows } = this.props;
+    let noteStatus = [];
+    let falseInit = [];
+    for (let i = 0; i<cols;i++){
+      falseInit.push(false);
+    }
+    for (let i = 0; i<rows; i++){
+      noteStatus.push(falseInit.slice());
+    }
+    this.setState({ noteStatus })
 
-    //play a middle 'C' for the duration of an 8th note
-    synth.triggerAttackRelease(note, '16n');
   }
 
+  // starts the loop if it is not currently active, iterates over the boxes and plays active noteboxes
   startLoop = () => {
+    let { cols } = this.props;
     this.setState({ looping: !this.state.looping })
-    let newIsLooping = ['NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying'];
+    let newIsLooping = [];
+    for (let i = 0; i<cols;i++){
+      newIsLooping.push(false);
+    }
     if (this.state.looping) {
       let interval = this.state.playLoop;
       clearInterval(interval);
@@ -31,89 +39,86 @@ class LoopBoard extends Component {
       return;
     }
     let count = 0;
+    const notes = ['c3', 'd3', 'e3', 'f3', 'g3', 'a3', 'b3', 'c4'];
     let playLoop = setInterval(() => {
-      let newIsLooping = ['NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying', 'NoteNotPlaying'];
-      newIsLooping[count] = 'NoteIsPlaying';
-      this.setState({ isPlaying: newIsLooping });
+    
       let noteStatus = this.state.noteStatus;
-      let noteList = [noteStatus[0][count], noteStatus[1][count], noteStatus[2][count]];
+
+      for (let i = 0; i<8; i++){
+        if (noteStatus[i][count] == true){
+          playSound(notes[i]);
+        }
+      }
       
-      if(noteStatus[0][count] == 'Active'){
-        this.playSound('f3');
+      let { cols } = this.props;
+      let newIsLooping = [];
+      for (let i = 0; i<cols;i++){
+        newIsLooping.push(false);
       }
-      if(noteStatus[1][count] == 'Active'){
-        this.playSound('e3');
-      }
-      if(noteStatus[2][count] == 'Active'){
-        this.playSound('c3');
-      }
+      newIsLooping[count] = true;
+      this.setState({ isPlaying: newIsLooping });
       count++;
-      if(count > 3){
+      if(count >= cols){
         count = 0;
       }
-    }, 150);
+    }, 200);
     this.setState({ playLoop: playLoop })
   }
 
+  // toggles wether or not a notebox is active or not
   alterActiveState = (row, column) => {
     let { noteStatus } = this.state;
-    if (noteStatus[row][column] == 'Active'){
-      noteStatus[row][column] = 'Inactive';
+    if (noteStatus[row][column] === true){
+      noteStatus[row][column] = false;
       this.setState({ noteStatus });
     } else {
-      noteStatus[row][column] = 'Active';
+      noteStatus[row][column] = true;
       this.setState({ noteStatus });
     }
   }
 
+  // generates row of noteboxes
+  generateNoteBoxRow = (row, noteStatus, isPlaying) => {
+    let notes = [];
+    const { cols } = this.props;
+    for(let i = 0; i<cols; i++) {
+      notes.push(
+      <NoteBox 
+        isActive={noteStatus[row][i]}
+        isPlaying={isPlaying[i]}
+        onClick={this.alterActiveState}
+        x={row}
+        y={i}
+        />);
+    }
+    return notes;
+  }
+
+  // Generates all noteboxes for board
+  generateNoteBoxes = ( noRows, noteStatus, isPlaying ) => {
+    const noteRow = [];
+    for (let i = 0; i<noRows;i++){
+      noteRow.push(
+      <div className='NoteRow'>
+        {this.generateNoteBoxRow(noRows-1-i, noteStatus, isPlaying)}
+      </div>);
+    }
+    return noteRow;
+  }
+
+
   render() {
+    let { rows } = this.props;
     let startText = this.state.looping? "Stop":"Start";
+    let noteStatus = this.state.noteStatus;
+    let isPlaying = this.state.isPlaying;
     return (
       <div className="LoopBoardContainer">
-        <div className='NoteRow'>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][0] + ' ' + this.state.isPlaying[0]} onClick={() => this.alterActiveState(0,0)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][1] + ' ' + this.state.isPlaying[1]} onClick={() => this.alterActiveState(0,1)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][2] + ' ' + this.state.isPlaying[2]} onClick={() => this.alterActiveState(0,2)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[0][3] + ' ' + this.state.isPlaying[3]} onClick={() => this.alterActiveState(0,3)}></div>
-        </div>
-          <div className='NoteRow'>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][0] + ' ' + this.state.isPlaying[0]} onClick={() => this.alterActiveState(1,0)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][1] + ' ' + this.state.isPlaying[1]} onClick={() => this.alterActiveState(1,1)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][2] + ' ' + this.state.isPlaying[2]} onClick={() => this.alterActiveState(1,2)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[1][3] + ' ' + this.state.isPlaying[3]} onClick={() => this.alterActiveState(1,3)}></div>
-        </div>
-        <div className='NoteRow'>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][0] + ' ' + this.state.isPlaying[0]} onClick={() => this.alterActiveState(2,0)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][1] + ' ' + this.state.isPlaying[1]} onClick={() => this.alterActiveState(2,1)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][2] + ' ' + this.state.isPlaying[2]} onClick={() => this.alterActiveState(2,2)}></div>
-          <div className={'NoteBox '+"PlayableNoteBox"+this.state.noteStatus[2][3] + ' ' + this.state.isPlaying[3]} onClick={() => this.alterActiveState(2,3)}></div>
-        </div>
+        {this.generateNoteBoxes( rows, noteStatus, isPlaying)}
         <button onClick={() => this.startLoop()}>{startText}</button>
       </div>
     );
   }
 }
 
-/*
-const { notes } = this.state;
-
-<NoteRow>
-  {}
-  <NoteBox isPLaying={notes[i][j]} onClick={this.togglePlaying(i, j)} />
-</NoteRow>
-
-class Notebox extends React.Component {
-  static propTypes = {
-    isPLaying: PropTypes.bool,
-    onClick: PropTypes.func,
-  }
-
-  render() {
-    const { isPlaying, onClick } = this.props;
-    return (
-      <div className=
-    )
-  } 
-}
-*/
 export default LoopBoard;

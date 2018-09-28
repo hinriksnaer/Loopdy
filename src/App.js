@@ -11,7 +11,7 @@ class App extends Component {
       <div>
         <div className="SoundboardContainer">
           <PlayableBoard />
-          <LoopBoard row={10} cols={10} />
+          <LoopBoard cols={12} rows={8}/>
         </div>
         <div className="InfoText">
           <p>Loopdy 0.1.0 created by Hinrik S. Guðmundsson</p>
