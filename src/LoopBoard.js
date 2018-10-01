@@ -7,7 +7,7 @@ class LoopBoard extends Component {
   
   state = {
     isPlaying: [false, false, false, false],
-    looping: false
+    looping: false,
   }
 
   componentWillMount() {
@@ -26,7 +26,7 @@ class LoopBoard extends Component {
 
   // starts the loop if it is not currently active, iterates over the boxes and plays active noteboxes
   startLoop = () => {
-    let { cols } = this.props;
+    let { cols, speed } = this.props;
     this.setState({ looping: !this.state.looping })
     let newIsLooping = [];
     for (let i = 0; i<cols;i++){
@@ -61,7 +61,7 @@ class LoopBoard extends Component {
       if(count >= cols){
         count = 0;
       }
-    }, 200);
+    }, speed);
     this.setState({ playLoop: playLoop })
   }
 

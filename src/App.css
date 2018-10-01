@@ -47,8 +47,23 @@ body {
   display: flex;
 }
 
-.SoundboardContainer {
-  width: 600px;
-  margin:100px auto;
+.BoardContainer {
+  margin: 50px auto;
+}
+
+.MenuContainer {
+  display: flex;
+  justify-content: flex-end;
+  color: white;
+}
+
+.MenuContainer input {
+  width: 40px;
+  margin-left: 5px;
+}
+
+main {
+  display: flex;
+  justify-content: flex-end;
 }
 
