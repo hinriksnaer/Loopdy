@@ -39,7 +39,7 @@ class LoopBoard extends Component {
       return;
     }
     let count = 0;
-    const notes = ['c3', 'd3', 'e3', 'f3', 'g3', 'a3', 'b3', 'c4'];
+    const { notes } = this.props;
     let playLoop = setInterval(() => {
     
       let noteStatus = this.state.noteStatus;
