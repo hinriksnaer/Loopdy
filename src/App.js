@@ -22,7 +22,6 @@ class App extends Component {
     return (
       <main>
         <div className="BoardContainer">
-          <BoardSettings speed={speed} alterSpeed={this.alterSpeed}/>
           <div className="SoundboardContainer">
             <PlayableBoard notes={notes}/>
             <LoopBoard cols={12} rows={8} notes={notes} speed={speed}/>
