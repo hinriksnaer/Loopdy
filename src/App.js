@@ -28,7 +28,7 @@ class App extends Component {
             <LoopBoard cols={12} rows={8} notes={notes} speed={speed}/>
           </div>
           <div className="InfoText">
-            <p>Loopdy 0.1.0 created by Hinrik S. Guðmundsson</p>
+            <p>Loopdy 0.2.0 created by Hinrik S. Guðmundsson</p>
           </div>
         </div>
       </main>

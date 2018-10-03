@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import NoteBox from './NoteBox';
 import './App.css';
 import { playSound } from './SoundBox';
+import PropTypes from 'prop-types';
 
 class BoardSettings extends Component {
+
+  static propTypes = {
+    speed: PropTypes.number,
+    alterspeed: PropTypes.func
+  }
 
   state = {
     speed: this.props.speed

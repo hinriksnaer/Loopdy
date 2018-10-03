@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 import { playSound } from './SoundBox';
+import PropTypes from 'prop-types';
 const Tone = require('tone');
 
 class PlayableBoard extends Component {
 
+  static propTypes = {
+    notes: PropTypes.array
+  }
   componentWillMount() {
     const { notes } = this.props;
     let noteStatus = [];

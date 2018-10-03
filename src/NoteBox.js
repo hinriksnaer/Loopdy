@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
+import PropTypes from 'prop-types';
 const Tone = require('tone');
 
 class NoteBox extends Component {
-  /*
   static propTypes = {
       isPLaying: PropTypes.bool,
-      onClick: PropTypes.func
+      onClick: PropTypes.func,
+      isActive: PropTypes.bool,
+      x: PropTypes.number,
+      y: PropTypes.number
     }
-  */
 
   generateNoteBoxClass = (noteStatus, isPlaying) => {
     let status = "Inactive";
@@ -19,7 +21,7 @@ class NoteBox extends Component {
     if (!isPlaying) {
       playing = "NoteNotPlaying";
     } 
-    return 'NoteBox '+"PlayableNoteBox"+status + ' ' + playing;
+    return `NoteBox PlayableNoteBox${status} ${playing}`;
   }
 
   render() {

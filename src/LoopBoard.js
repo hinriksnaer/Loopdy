@@ -2,25 +2,34 @@ import React, { Component } from 'react';
 import NoteBox from './NoteBox';
 import './App.css';
 import { playSound } from './SoundBox';
+import PropTypes from 'prop-types';
 
 class LoopBoard extends Component {
   
+  static propTypes = {
+    cols: PropTypes.number,
+    rows: PropTypes.number,
+    notes: PropTypes.array,
+    speed: PropTypes.number
+  }
+
   state = {
-    isPlaying: [false, false, false, false],
-    looping: false,
+    looping: false
   }
 
   componentWillMount() {
     const { cols, rows } = this.props;
     let noteStatus = [];
     let falseInit = [];
+    let isPlaying = [];
     for (let i = 0; i<cols;i++){
       falseInit.push(false);
+      isPlaying.push(false);
     }
     for (let i = 0; i<rows; i++){
       noteStatus.push(falseInit.slice());
     }
-    this.setState({ noteStatus })
+    this.setState({ noteStatus, isPlaying })
 
   }
 
@@ -68,7 +77,7 @@ class LoopBoard extends Component {
   // toggles wether or not a notebox is active or not
   alterActiveState = (row, column) => {
     let { noteStatus } = this.state;
-    if (noteStatus[row][column] === true){
+    if (noteStatus[row][column]){
       noteStatus[row][column] = false;
       this.setState({ noteStatus });
     } else {
