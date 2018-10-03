@@ -1,91 +1,66 @@
 import React, { Component } from 'react';
 import './App.css';
+import { playSound } from './SoundBox';
+import PropTypes from 'prop-types';
 const Tone = require('tone');
 
 class PlayableBoard extends Component {
 
-  state = {
-    c3isActive: "Inactive",
-    d3isActive: "Inactive",
-    e3isActive: "Inactive",
-    f3isActive: "Inactive",
-    g3isActive: "Inactive",
-    a3isActive: "Inactive",
-    b3isActive: "Inactive",
-    c4isActive: "Inactive"
+  static propTypes = {
+    notes: PropTypes.array
+  }
+  componentWillMount() {
+    const { notes } = this.props;
+    let noteStatus = [];
+    for (let i = 0; i<notes.length;i++){
+      noteStatus.push(false);
+    }
+    this.setState({ noteStatus })
+
   }
 
-  updateNoteClass = (noteClass) => {
+  activateNote = (notePlacement, note) => {
+    let { noteStatus } = this.state;
+    noteStatus[notePlacement] = true;
     this.setState({
-        [noteClass+'isActive']: "Inactive"
+        noteStatus: noteStatus
       });
+    playSound(note);
   }
 
-  alterClass = (noteClass, status) => {
+  deactivateNote = (notePlacement) => {
+    let { noteStatus } = this.state;
+    noteStatus[notePlacement] = false;
     this.setState({
-        [noteClass+'isActive']: status
+        noteStatus: noteStatus
       })
   }
 
-  notePressed = (note, status) => {
-    //play sound
-    this.playSound(note);
-    //alter class to change color
-    this.alterClass(note, status);
-    
+  checkNote = (notePlacement) => {
+      let { noteStatus } = this.state;
+      if (noteStatus[notePlacement] === true) return 'Active';
+      else return 'Inactive';
   }
 
-  playSound = (note) => {
-      //create a synth and connect it to the master output (your speakers)
-    var synth = new Tone.Synth().toMaster()
-
-    //play a middle 'C' for the duration of an 8th note
-    synth.triggerAttackRelease(note, '16n');
+  generatePlayableBoard = () => {
+      let { notes } = this.props;
+      let board = [];
+      for (let i = 0; i < notes.length;i++){
+        board.push(
+            <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.checkNote(notes.length-i-1)} 
+                onMouseDown={() => this.activateNote(notes.length-i-1, notes[notes.length-i-1])}
+                onMouseUp={() => this.deactivateNote(notes.length-i-1)}
+                onMouseOut={() => this.deactivateNote(notes.length-i-1)}>
+            </div>
+        );
+      }
+      return board;
   }
   
   render() {
     return (
       <div className="PlayableBoardContainer">
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.c4isActive} 
-            onMouseDown={() => this.notePressed('c4', 'Active')}
-            onMouseUp={() => this.alterClass('c4', 'Inactive')}
-            onMouseOut={() => this.alterClass('c4', 'Inactive')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.b3isActive} 
-            onMouseDown={() => this.notePressed('b3', 'Active')}
-            onMouseUp={() => this.alterClass('b3', 'Inactive')}
-            onMouseOut={() => this.alterClass('b3', 'Inactive')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.a3isActive} 
-            onMouseDown={() => this.notePressed('a3', 'Active')}
-            onMouseUp={() => this.alterClass('a3', 'Inactive')}
-            onMouseOut={() => this.alterClass('a3', 'Inactive')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.g3isActive} 
-            onMouseDown={() => this.notePressed('g3', 'Active')}
-            onMouseUp={() => this.alterClass('g3', 'Inactive')}
-            onMouseOut={() => this.alterClass('g3', 'Inactive')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.f3isActive} 
-            onMouseDown={() => this.notePressed('f3', 'Active')}
-            onMouseUp={() => this.alterClass('f3', 'Inactive')}
-            onMouseOut={() => this.alterClass('f3', 'Inactive')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.e3isActive} 
-            onMouseDown={() => this.notePressed('e3', 'Active')}
-            onMouseUp={() => this.alterClass('e3', 'Inactive')}
-            onMouseOut={() => this.alterClass('e3', 'Inactive')}>
-        </div>
-        <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.state.d3isActive} 
-            onMouseDown={() => this.notePressed('d3', 'Active')}
-            onMouseUp={() => this.alterClass('d3', 'Inactive')}
-            onMouseOut={() => this.alterClass('d3', 'Inactive')}>
-        </div>
-        <div className={'NoteBox' + ' ' + 'PlayableNoteBox'+this.state.c3isActive} 
-            onMouseDown={() => this.notePressed('c3', 'Active')}
-            onMouseUp={() => this.alterClass('c3', 'Inactive')}
-            onMouseOut={() => this.alterClass('c3', 'Inactive')}>
-        </div>
+        {this.generatePlayableBoard()}
       </div>
     );
   }
