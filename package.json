@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "jslint": "^0.12.0",
     "react": "^16.5.0",
+    "react-adsense": "0.0.6",
     "react-dom": "^16.5.0",
     "react-scripts": "1.1.5",
     "tone": "^0.12.80"
