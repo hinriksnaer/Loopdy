@@ -34,8 +34,8 @@ class LoopBoard extends Component {
   }
   
   componentDidUpdate(prevProps) {
-    const { speed } = this.props;
-    if (speed !== prevProps.speed) {
+    const { speed, notes } = this.props;
+    if (speed !== prevProps.speed && this.state.looping) {
       let interval = this.state.playLoop;
       this.setState({ 
         isPlaying: []
@@ -82,7 +82,7 @@ class LoopBoard extends Component {
 
       for (let i = 0; i<rows; i++){
         if (noteStatus[i][currentNote]){
-          playSound(notes[i]);
+          playSound(this.props.notes[i]);
         }
       }
       

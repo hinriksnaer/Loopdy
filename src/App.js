@@ -11,7 +11,12 @@ class App extends Component {
     speed: 200,
     boardIsLooping: false,
     cols: 12,
-    rows: 8
+    rows: 8,
+    eigth: 3,
+  }
+
+  componentWillMount() {
+    this.generateNotes(this.state.eigth);
   }
 
   // converts bpm to speed and sets it
@@ -19,14 +24,34 @@ class App extends Component {
     this.setState({ speed });
   }
 
-  render() {
+  alterEigth = (eigth) => {
+    this.setState({ eigth });
+    this.generateNotes(eigth);
+  }
 
-    let notes = ['c3', 'd3', 'e3', 'f3', 'g3', 'a3', 'b3', 'c4'];
-    let { speed, boardIsLooping, cols, rows } = this.state;
+  generateNotes = (eigth) => {
+    eigth = Number(eigth);
+    let { rows } = this.state;
+    let dur = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
+    let notes = [];
+    let listpos = 0;
+    for (let i = 0; i<rows; i++) {
+      if (i > 0 && i%7 === 0) {
+        eigth += 1;
+        listpos += 7;
+      }
+      notes.push(dur[i-listpos]+eigth.toString());
+    }
+    console.log(notes);
+    this.setState({ notes });
+  }
+
+  render() {
+    let { speed, boardIsLooping, cols, rows, notes, eigth } = this.state;
     return (
       <main>
         <div className="BoardContainer">
-          <BoardSettings speed={speed} alterSpeed={this.alterSpeed}/>
+          <BoardSettings eigth={eigth} alterEigth={this.alterEigth} speed={speed} alterSpeed={this.alterSpeed}/>
           <div className="SoundboardContainer">
             <PlayableBoard notes={notes}/>
             <LoopBoard cols={cols} rows={rows} notes={notes} speed={speed} boardIsLooping={boardIsLooping}/>
