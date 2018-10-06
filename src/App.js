@@ -29,13 +29,6 @@ class App extends Component {
             <p>Loopdy 0.1.0 created by Hinrik S. Guðmundsson</p>
           </div>
         </div>
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <script>{`
-          (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-6855375666493546",
-            enable_page_level_ads: true
-          });`}
-        </script>
       </main>
     );
   }
