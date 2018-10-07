@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { initStatus } from './LoopBoardGenerator';
 import NoteBox from './NoteBox';
 import './App.css';
 import { playSound } from './SoundBox';
@@ -19,22 +20,11 @@ class LoopBoard extends Component {
   }
 
   componentWillMount() {
-    const { cols, rows } = this.props;
-    let noteStatus = [];
-    let falseInit = [];
-    let isPlaying = [];
-    for (let i = 0; i<cols;i++){
-      falseInit.push(false);
-      isPlaying.push(false);
-    }
-    for (let i = 0; i<rows; i++){
-      noteStatus.push(falseInit.slice());
-    }
-    this.setState({ noteStatus, isPlaying })
+    this.initStatus();
   }
   
   componentDidUpdate(prevProps) {
-    const { speed, notes } = this.props;
+    const { speed, notes, rows } = this.props;
     if (speed !== prevProps.speed && this.state.looping) {
       let interval = this.state.playLoop;
       this.setState({ 
@@ -42,9 +32,19 @@ class LoopBoard extends Component {
       });
       let playLoop = this.playLoop();
       clearInterval(interval);
-      this.setState({ playLoop })
+      this.setState({ playLoop });
+    }
+    if (rows !== prevProps.rows) {
+      this.initStatus();
     }
   }
+
+  initStatus = () => {
+    let { cols, rows } = this.props;
+    let initData = initStatus(rows, cols);
+    this.setState({ noteStatus: initData[0], isPlaying: initData[1] });
+  }
+
 
   // starts the loop if it is not currently active, iterates over the boxes and plays active noteboxes
   startLoop = () => {
@@ -79,7 +79,6 @@ class LoopBoard extends Component {
     let playLoop = setInterval(() => {
       
       let { noteStatus, currentNote } = this.state;
-
       for (let i = 0; i<rows; i++){
         if (noteStatus[i][currentNote]){
           playSound(this.props.notes[i]);
@@ -118,7 +117,7 @@ class LoopBoard extends Component {
   generateNoteBoxRow = (row, noteStatus, isPlaying) => {
     let notes = [];
     const { cols } = this.props;
-    for(let i = 0; i<cols; i++) {
+    for(let i = 0; i<noteStatus[0].length; i++) {
       notes.push(
       <NoteBox 
         isActive={noteStatus[row][i]}
@@ -134,10 +133,10 @@ class LoopBoard extends Component {
   // Generates all noteboxes for board
   generateNoteBoxes = ( noRows, noteStatus, isPlaying ) => {
     const noteRow = [];
-    for (let i = 0; i<noRows;i++){
+    for (let i = 0; i<noteStatus.length;i++){
       noteRow.push(
       <div className='NoteRow'>
-        {this.generateNoteBoxRow(noRows-1-i, noteStatus, isPlaying)}
+        {this.generateNoteBoxRow(noteStatus.length-1-i, noteStatus, isPlaying)}
       </div>);
     }
     return noteRow;

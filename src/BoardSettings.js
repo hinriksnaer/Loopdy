@@ -13,12 +13,19 @@ class BoardSettings extends Component {
   }
 
   state = {
-    speed: this.props.speed
+    speed: this.props.speed,
+    rows: this.props.rows
   }
 
   handleSpeedChange = (event) => {
     this.setState({speed: Number(event.target.value)});
   }
+
+  speedAltered = (event) => {
+    let { speed } = this.state;
+    let { alterSpeed } = this.props;
+    alterSpeed(speed);
+  }  
 
   handlePitchChange = (event) => {
     if(-1 < Number(event.target.value) && Number(event.target.value) <8) {
@@ -35,15 +42,28 @@ class BoardSettings extends Component {
     }
   }
 
-  speedAltered = (event) => {
-    let { speed } = this.state;
-    let { alterSpeed } = this.props;
-    alterSpeed(speed);
-  }  
+  handleRowChange = (event) => {
+    this.setState({ rows: Number(event.target.value) });
+  }
+
+  applyRowChange = (event) => {
+    let { rows } = this.state;
+    if(0 < rows && rows < 20) {
+      let { alterRows } = this.props;
+      alterRows(Number(this.state.rows));
+    }
+  }
 
   render() {
     return (
       <div className="MenuContainer">
+        <div>
+            <label>Rows:<input type="number" value={this.state.rows} onChange={this.handleRowChange}></input></label>
+            <button onClick={this.applyRowChange}>Confirm</button>
+        </div>
+        <div>
+            <label>Columns:<input type="number" value={this.props.cols} onChange={this.handleColumnChange}></input></label>
+        </div>
         <div>
             <label>Pitch:<input type="number" value={this.props.eigth} onChange={this.handlePitchChange} onKeyPress={this.handleKeyPitchChange}></input></label>
         </div>
