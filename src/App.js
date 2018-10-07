@@ -58,7 +58,7 @@ class App extends Component {
     return (
       <main>
         <div className="BoardContainer">
-          <BoardSettings rows={rows} alterRows={this.alterRows} cols={this.alterCols} alterCols={cols} eigth={eigth} alterEigth={this.alterEigth} speed={speed} alterSpeed={this.alterSpeed}/>
+          <BoardSettings rows={rows} alterRows={this.alterRows} cols={cols} alterCols={this.alterCols} eigth={eigth} alterEigth={this.alterEigth} speed={speed} alterSpeed={this.alterSpeed}/>
           <div className="SoundboardContainer">
             <PlayableBoard notes={notes}/>
             <LoopBoard cols={cols} rows={rows} notes={notes} speed={speed} boardIsLooping={boardIsLooping}/>

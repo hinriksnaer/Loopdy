@@ -67,3 +67,10 @@ main {
   justify-content: flex-end;
 }
 
+.InputContainer {
+  margin-right: 10px;
+}
+
+.InputContainer button {
+  margin-left: 5px;
+}

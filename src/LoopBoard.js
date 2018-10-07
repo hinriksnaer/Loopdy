@@ -24,7 +24,7 @@ class LoopBoard extends Component {
   }
   
   componentDidUpdate(prevProps) {
-    const { speed, notes, rows } = this.props;
+    const { speed, notes, rows, cols } = this.props;
     if (speed !== prevProps.speed && this.state.looping) {
       let interval = this.state.playLoop;
       this.setState({ 
@@ -37,7 +37,11 @@ class LoopBoard extends Component {
     if (rows !== prevProps.rows) {
       this.initStatus();
     }
+    if (cols !== prevProps.cols) {
+      this.initStatus();
+    }
   }
+
 
   initStatus = () => {
     let { cols, rows } = this.props;
@@ -144,6 +148,7 @@ class LoopBoard extends Component {
 
 
   render() {
+    console.log(this.props.cols);
     let { rows } = this.props;
     let startText = this.state.looping? "Stop":"Start";
     let noteStatus = this.state.noteStatus;
