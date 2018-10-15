@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { initStatus } from './LoopBoardGenerator';
+import { initStatus, alterColumns, alterRows } from './LoopBoardGenerator';
 import NoteBox from './NoteBox';
 import './App.css';
 import { playSound } from './SoundBox';
@@ -35,34 +35,12 @@ class LoopBoard extends Component {
       this.setState({ playLoop });
     }
     if (rows !== prevProps.rows) {
-      let { noteStatus } = this.state;
-      let newNoteStatus = noteStatus;
-      let newRow = [];
-      if (rows>prevProps.rows) {
-        for (let i = 0; i<cols; i++) {
-          newRow.push(false);
-        }
-        newNoteStatus.push(newRow);
-        this.setState({ noteStatus: newNoteStatus });
-      } else {
-        newNoteStatus.pop();
-        this.setState({ noteSatus: newNoteStatus });
-      }
+      let newNoteStatus = alterRows(this.state.noteStatus, cols, rows, prevProps.rows);
+      this.setState({ noteStatus: newNoteStatus });
     }
     if (cols !== prevProps.cols) {
-      let { noteStatus } = this.state;
-      let newNoteStatus = noteStatus;
-      if (cols>prevProps.cols) {
-        for (let i = 0; i<newNoteStatus.length; i++) {
-          newNoteStatus[i][cols-1] = false;
-        }
-        this.setState({ noteStatus: newNoteStatus });
-      } else {
-        for (let i = 0; i<newNoteStatus.length; i++) {
-          newNoteStatus[i].pop();
-        }
-        this.setState({ noteStatus: newNoteStatus });
-      }
+      let newNoteStatus = alterColumns(this.state.noteStatus, cols, prevProps.cols);
+      this.setState({ noteStatus: newNoteStatus });
     }
   }
 

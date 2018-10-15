@@ -44,6 +44,7 @@ class BoardSettings extends Component {
   }
 
   applyRowChange = (event) => {
+    if (event.target.value < 1 || event.target.value > 16) return;
     let { rows } = this.state;
     this.setState({ rows: Number(event.target.value) });
     if(0 < rows && rows < 19) {
@@ -53,12 +54,11 @@ class BoardSettings extends Component {
   }
 
   applyColumnChange = (event) => {
+    if (event.target.value < 1 || event.target.value > 20) return;
     let { cols } = this.state;
     this.setState({ cols: Number(event.target.value) });
-    if(3 < cols && cols < 20) {
-      let { alterCols } = this.props;
-      alterCols(Number(event.target.value));
-    }
+    let { alterCols } = this.props;
+    alterCols(Number(event.target.value));
   }
 
   render() {
