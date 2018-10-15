@@ -43,27 +43,21 @@ class BoardSettings extends Component {
     }
   }
 
-  handleRowChange = (event) => {
-    this.setState({ rows: Number(event.target.value) });
-  }
-
   applyRowChange = (event) => {
     let { rows } = this.state;
+    this.setState({ rows: Number(event.target.value) });
     if(0 < rows && rows < 19) {
       let { alterRows } = this.props;
-      alterRows(Number(this.state.rows));
+      alterRows(Number(event.target.value));
     }
-  }
-
-  handleColumnChange = (event) => {
-    this.setState({ cols: Number(event.target.value) });
   }
 
   applyColumnChange = (event) => {
     let { cols } = this.state;
+    this.setState({ cols: Number(event.target.value) });
     if(3 < cols && cols < 20) {
       let { alterCols } = this.props;
-      alterCols(Number(this.state.cols));
+      alterCols(Number(event.target.value));
     }
   }
 
@@ -71,12 +65,10 @@ class BoardSettings extends Component {
     return (
       <div className="MenuContainer">
         <div className="InputContainer">
-            <label>Rows:<input type="number" value={this.state.rows} onChange={this.handleRowChange}></input></label>
-            <button onClick={this.applyRowChange}>Confirm</button>
+            <label>Rows:<input type="number" value={this.state.rows} onChange={this.applyRowChange}></input></label>
         </div>
         <div className="InputContainer">
-            <label>Columns:<input type="number" value={this.state.cols} onChange={this.handleColumnChange}></input></label>
-            <button onClick={this.applyColumnChange}>Confirm</button>
+            <label>Columns:<input type="number" value={this.state.cols} onChange={this.applyColumnChange}></input></label>
         </div>
         <div className="InputContainer">
             <label>Pitch:<input type="number" value={this.props.eigth} onChange={this.handlePitchChange} onKeyPress={this.handleKeyPitchChange}></input></label>

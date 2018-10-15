@@ -35,10 +35,34 @@ class LoopBoard extends Component {
       this.setState({ playLoop });
     }
     if (rows !== prevProps.rows) {
-      this.initStatus();
+      let { noteStatus } = this.state;
+      let newNoteStatus = noteStatus;
+      let newRow = [];
+      if (rows>prevProps.rows) {
+        for (let i = 0; i<cols; i++) {
+          newRow.push(false);
+        }
+        newNoteStatus.push(newRow);
+        this.setState({ noteStatus: newNoteStatus });
+      } else {
+        newNoteStatus.pop();
+        this.setState({ noteSatus: newNoteStatus });
+      }
     }
     if (cols !== prevProps.cols) {
-      this.initStatus();
+      let { noteStatus } = this.state;
+      let newNoteStatus = noteStatus;
+      if (cols>prevProps.cols) {
+        for (let i = 0; i<newNoteStatus.length; i++) {
+          newNoteStatus[i][cols-1] = false;
+        }
+        this.setState({ noteStatus: newNoteStatus });
+      } else {
+        for (let i = 0; i<newNoteStatus.length; i++) {
+          newNoteStatus[i].pop();
+        }
+        this.setState({ noteStatus: newNoteStatus });
+      }
     }
   }
 
@@ -79,9 +103,9 @@ class LoopBoard extends Component {
   }
 
   playLoop = () => {
-    const { notes, rows, cols, speed } = this.props;
+    const { notes, cols, speed } = this.props;
     let playLoop = setInterval(() => {
-      
+      let rows = this.props.rows;
       let { noteStatus, currentNote } = this.state;
       for (let i = 0; i<rows; i++){
         if (noteStatus[i][currentNote]){
@@ -148,7 +172,6 @@ class LoopBoard extends Component {
 
 
   render() {
-    console.log(this.props.cols);
     let { rows } = this.props;
     let startText = this.state.looping? "Stop":"Start";
     let noteStatus = this.state.noteStatus;
