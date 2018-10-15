@@ -25,8 +25,10 @@ class App extends Component {
   }
 
   alterEigth = (eigth) => {
-    this.setState({ eigth });
-    this.generateNotes(eigth);
+    let { rows } = this.state;
+    let pitch = Number(eigth);
+    this.setState({ eigth: pitch });
+    this.generateNotes(pitch, rows);
   }
 
   alterRows = (rows) => {
