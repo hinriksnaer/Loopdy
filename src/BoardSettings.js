@@ -65,17 +65,17 @@ class BoardSettings extends Component {
     return (
       <div className="MenuContainer">
         <div className="InputContainer">
-            <label>Rows:<input type="number" value={this.state.rows} onChange={this.applyRowChange}></input></label>
+          <label>Rows:<input type="number" value={this.state.rows} onChange={this.applyRowChange}></input></label>
         </div>
         <div className="InputContainer">
-            <label>Columns:<input type="number" value={this.state.cols} onChange={this.applyColumnChange}></input></label>
+          <label>Columns:<input type="number" value={this.state.cols} onChange={this.applyColumnChange}></input></label>
         </div>
         <div className="InputContainer">
-            <label>Pitch:<input type="number" value={this.props.eigth} onChange={this.handlePitchChange} onKeyPress={this.handleKeyPitchChange}></input></label>
+          <label>Pitch:<input type="number" value={this.props.eigth} onChange={this.handlePitchChange} onKeyPress={this.handleKeyPitchChange}></input></label>
         </div>
         <div className="InputContainer">
-            <label>Speed:<input value={this.state.speed} onChange={this.handleSpeedChange}></input></label>
-            <button onClick={this.speedAltered}>Confirm</button>
+          <label>Speed:<input value={this.state.speed} onChange={this.handleSpeedChange}></input></label>
+          <button onClick={this.speedAltered}>Confirm</button>
         </div>
       </div>
     );

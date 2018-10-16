@@ -12,8 +12,8 @@ class App extends Component {
     boardIsLooping: false,
     cols: 12,
     rows: 8,
-    eigth: 3,
-  }
+    eigth: 3
+  };
 
   componentWillMount() {
     this.generateNotes(this.state.eigth, this.state.rows);
