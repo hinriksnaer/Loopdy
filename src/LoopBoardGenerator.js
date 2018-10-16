@@ -40,4 +40,4 @@ function alterRows(noteStatus, cols, rows, prevRows) {
   return newNoteStatus;
 }
 
-export { initStatus, alterColumns, alterRows }
+export { initStatus, alterColumns, alterRows };

@@ -3,7 +3,6 @@ import './App.css';
 import LoopBoard from './LoopBoard';
 import PlayableBoard from './PlayableBoard';
 import BoardSettings from './BoardSettings';
-const Tone = require('tone');
 
 class App extends Component {
   

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import NoteBox from './NoteBox';
 import './App.css';
-import { playSound } from './SoundBox';
 import PropTypes from 'prop-types';
 
 class BoardSettings extends Component {
@@ -22,7 +20,7 @@ class BoardSettings extends Component {
     this.setState({speed: Number(event.target.value)});
   }
 
-  speedAltered = (event) => {
+  speedAltered = () => {
     let { speed } = this.state;
     let { alterSpeed } = this.props;
     alterSpeed(speed);
@@ -55,7 +53,6 @@ class BoardSettings extends Component {
 
   applyColumnChange = (event) => {
     if (event.target.value < 1 || event.target.value > 20) return;
-    let { cols } = this.state;
     this.setState({ cols: Number(event.target.value) });
     let { alterCols } = this.props;
     alterCols(Number(event.target.value));

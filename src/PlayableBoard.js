@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import { playSound } from './SoundBox';
 import PropTypes from 'prop-types';
-const Tone = require('tone');
 
 class PlayableBoard extends Component {
 
@@ -23,8 +22,8 @@ class PlayableBoard extends Component {
     let { noteStatus } = this.state;
     noteStatus[notePlacement] = true;
     this.setState({
-        noteStatus: noteStatus
-      });
+      noteStatus: noteStatus
+    });
     playSound(note);
   }
 
@@ -32,29 +31,29 @@ class PlayableBoard extends Component {
     let { noteStatus } = this.state;
     noteStatus[notePlacement] = false;
     this.setState({
-        noteStatus: noteStatus
-      })
+      noteStatus: noteStatus
+    });
   }
 
   checkNote = (notePlacement) => {
-      let { noteStatus } = this.state;
-      if (noteStatus[notePlacement] === true) return 'Active';
-      else return 'Inactive';
+    let { noteStatus } = this.state;
+    if (noteStatus[notePlacement] === true) return 'Active';
+    else return 'Inactive';
   }
 
   generatePlayableBoard = () => {
-      let { notes } = this.props;
-      let board = [];
-      for (let i = 0; i < notes.length;i++){
-        board.push(
-            <div className={'NoteBox' + ' ' + "PlayableNoteBox"+this.checkNote(notes.length-i-1)} 
-                onMouseDown={() => this.activateNote(notes.length-i-1, notes[notes.length-i-1])}
-                onMouseUp={() => this.deactivateNote(notes.length-i-1)}
-                onMouseOut={() => this.deactivateNote(notes.length-i-1)}>
-            </div>
-        );
-      }
-      return board;
+    let { notes } = this.props;
+    let board = [];
+    for (let i = 0; i < notes.length;i++){
+      board.push(
+        <div className={'NoteBox' + ' ' + 'PlayableNoteBox'+this.checkNote(notes.length-i-1)} 
+          onMouseDown={() => this.activateNote(notes.length-i-1, notes[notes.length-i-1])}
+          onMouseUp={() => this.deactivateNote(notes.length-i-1)}
+          onMouseOut={() => this.deactivateNote(notes.length-i-1)}>
+        </div>
+      );
+    }
+    return board;
   }
   
   render() {
