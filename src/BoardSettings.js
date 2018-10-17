@@ -7,7 +7,9 @@ class BoardSettings extends Component {
   static propTypes = {
     speed: PropTypes.number,
     alterspeed: PropTypes.func,
-    eigth: PropTypes.number
+    eigth: PropTypes.number,
+    cols: PropTypes.number,
+    rows: PropTypes.number
   }
 
   state = {
@@ -26,49 +28,59 @@ class BoardSettings extends Component {
     alterSpeed(speed);
   }  
 
-  handlePitchChange = (event) => {
-    if(-1 < Number(event.target.value) && Number(event.target.value) <8) {
-      let { alterEigth } = this.props;
-      alterEigth(event.target.value);
-    }
+  handlePitchChange = (newPitch) => {
+    if (newPitch < 0 || newPitch > 7) return;
+    let { alterEigth } = this.props;
+    alterEigth(newPitch);
   }
 
-  handleKeyPitchChange = (event) => {
-    let key = Number(event.key);
-    if( 0 <= key && key <= 7 ) {
-      let { alterEigth } = this.props;
-      alterEigth(key);
-    }
-  }
-
-  applyRowChange = (event) => {
-    if (event.target.value < 1 || event.target.value > 16) return;
-    let { rows } = this.state;
-    this.setState({ rows: Number(event.target.value) });
-    if(0 < rows && rows < 19) {
+  applyRowChange = (newRows) => {
+    if (newRows < 1 || newRows > 16) return;
+    this.setState({ rows: Number(newRows) });
+    if(0 < newRows && newRows < 19) {
       let { alterRows } = this.props;
-      alterRows(Number(event.target.value));
+      alterRows(Number(newRows));
     }
   }
 
-  applyColumnChange = (event) => {
-    if (event.target.value < 1 || event.target.value > 20) return;
-    this.setState({ cols: Number(event.target.value) });
+  applyColumnChange = (newCols) => {
+    if (newCols < 1 || newCols > 20) return;
+    this.setState({ cols: Number(newCols) });
     let { alterCols } = this.props;
-    alterCols(Number(event.target.value));
+    alterCols(Number(newCols));
   }
 
   render() {
+    let { rows, cols } = this.state;
+    let { eigth } = this.props;
     return (
       <div className="MenuContainer">
         <div className="InputContainer">
-          <label>Rows:<input type="number" value={this.state.rows} onChange={this.applyRowChange}></input></label>
+          <label>Rows:<input type="number" value={this.state.rows}></input></label>
+          <div className="MenuIconContainer" onClick={() => this.applyRowChange(rows-1)}>
+            <img src={ require('./img/minus.png')}/>
+          </div>
+          <div className="MenuIconContainer" onClick={() => this.applyRowChange(rows+1)}>
+            <img src={ require('./img/plus.png')}/>
+          </div>
         </div>
         <div className="InputContainer">
-          <label>Columns:<input type="number" value={this.state.cols} onChange={this.applyColumnChange}></input></label>
+          <label>Columns:<input type="number" value={this.state.cols}></input></label>
+          <div className="MenuIconContainer" onClick={() => this.applyColumnChange(cols-1)}>
+            <img src={ require('./img/minus.png')}/>
+          </div>
+          <div className="MenuIconContainer" onClick={() => this.applyColumnChange(cols+1)}>
+            <img src={ require('./img/plus.png')}/>
+          </div>
         </div>
         <div className="InputContainer">
-          <label>Pitch:<input type="number" value={this.props.eigth} onChange={this.handlePitchChange} onKeyPress={this.handleKeyPitchChange}></input></label>
+          <label>Pitch:<input type="number" value={this.props.eigth}></input></label>
+          <div className="MenuIconContainer" onClick={() => this.handlePitchChange(eigth-1)}>
+            <img src={ require('./img/minus.png')}/>
+          </div>
+          <div className="MenuIconContainer" onClick={() => this.handlePitchChange(eigth+1)}>
+            <img src={ require('./img/plus.png')}/>
+          </div>
         </div>
         <div className="InputContainer">
           <label>Speed:<input value={this.state.speed} onChange={this.handleSpeedChange}></input></label>

@@ -69,6 +69,21 @@ main {
 
 .InputContainer {
   margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.MenuIconContainer img {
+  max-width: 100%;
+}
+
+.MenuIconContainer {
+  width: 26px;
+  padding-top: 6px;
+}
+
+.InputContainer .MenuIconContainer + .MenuIconContainer {
+  padding-top: 4.5px;
 }
 
 .InputContainer button {
