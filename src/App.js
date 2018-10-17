@@ -3,6 +3,7 @@ import './App.css';
 import LoopBoard from './LoopBoard';
 import PlayableBoard from './PlayableBoard';
 import BoardSettings from './BoardSettings';
+import { appService } from './AppService';
 
 class App extends Component {
   
@@ -40,17 +41,7 @@ class App extends Component {
   }
 
   generateNotes = (eigth, rows) => {
-    eigth = Number(eigth);
-    let dur = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
-    let notes = [];
-    let listpos = 0;
-    for (let i = 0; i<rows; i++) {
-      if (i > 0 && i%7 === 0) {
-        eigth += 1;
-        listpos += 7;
-      }
-      notes.push(dur[i-listpos]+eigth.toString());
-    }
+    let notes = appService.generateNotes(eigth, rows);
     this.setState({ notes });
   }
 

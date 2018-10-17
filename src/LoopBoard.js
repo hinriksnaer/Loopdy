@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { initStatus, alterColumns, alterRows } from './LoopBoardGenerator';
+import { loopBoardService } from './LoopBoardService';
 import NoteBox from './NoteBox';
 import './App.css';
 import { playSound } from './SoundBox';
@@ -35,11 +35,11 @@ class LoopBoard extends Component {
       this.setState({ playLoop });
     }
     if (rows !== prevProps.rows) {
-      let newNoteStatus = alterRows(this.state.noteStatus, cols, rows, prevProps.rows);
+      let newNoteStatus = loopBoardService.alterRows(this.state.noteStatus, cols, rows, prevProps.rows);
       this.setState({ noteStatus: newNoteStatus });
     }
     if (cols !== prevProps.cols) {
-      let newNoteStatus = alterColumns(this.state.noteStatus, cols, prevProps.cols);
+      let newNoteStatus = loopBoardService.alterColumns(this.state.noteStatus, cols, prevProps.cols);
       this.setState({ noteStatus: newNoteStatus });
     }
   }
@@ -47,7 +47,7 @@ class LoopBoard extends Component {
 
   initStatus = () => {
     let { cols, rows } = this.props;
-    let initData = initStatus(rows, cols);
+    let initData = loopBoardService.initStatus(rows, cols);
     this.setState({ noteStatus: initData[0], isPlaying: initData[1] });
   }
 
@@ -77,7 +77,7 @@ class LoopBoard extends Component {
     }
 
     let playLoop = this.playLoop(speed);
-    this.setState({ playLoop })
+    this.setState({ playLoop });
   }
 
   playLoop = () => {
@@ -102,7 +102,7 @@ class LoopBoard extends Component {
       if(currentNote >= cols){
         currentNote = 0;
       }
-      this.setState({ currentNote })
+      this.setState({ currentNote });
     }, speed);
     return playLoop;
   }
@@ -141,9 +141,9 @@ class LoopBoard extends Component {
     const noteRow = [];
     for (let i = 0; i<noteStatus.length;i++){
       noteRow.push(
-      <div className='NoteRow'>
-        {this.generateNoteBoxRow(noteStatus.length-1-i, noteStatus, isPlaying)}
-      </div>);
+        <div className='NoteRow'>
+          {this.generateNoteBoxRow(noteStatus.length-1-i, noteStatus, isPlaying)}
+        </div>);
     }
     return noteRow;
   }
@@ -151,7 +151,7 @@ class LoopBoard extends Component {
 
   render() {
     let { rows } = this.props;
-    let startText = this.state.looping? "Stop":"Start";
+    let startText = this.state.looping? 'Stop':'Start';
     let noteStatus = this.state.noteStatus;
     let isPlaying = this.state.isPlaying;
     return (
