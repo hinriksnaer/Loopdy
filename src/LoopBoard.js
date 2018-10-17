@@ -125,12 +125,12 @@ class LoopBoard extends Component {
     const { cols } = this.props;
     for(let i = 0; i<noteStatus[0].length; i++) {
       notes.push(
-      <NoteBox 
-        isActive={noteStatus[row][i]}
-        isPlaying={isPlaying[i]}
-        onClick={this.alterActiveState}
-        x={row}
-        y={i}
+        <NoteBox 
+          isActive={noteStatus[row][i]}
+          isPlaying={isPlaying[i]}
+          onClick={this.alterActiveState}
+          x={row}
+          y={i}
         />);
     }
     return notes;

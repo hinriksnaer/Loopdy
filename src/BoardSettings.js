@@ -13,9 +13,13 @@ class BoardSettings extends Component {
   }
 
   state = {
-    speed: this.props.speed,
     rows: this.props.rows,
     cols: this.props.cols
+  }
+
+  componentDidMount() {
+    let speed = 60000/this.props.speed;
+    this.setState({ speed });
   }
 
   handleSpeedChange = (event) => {
@@ -25,7 +29,8 @@ class BoardSettings extends Component {
   speedAltered = () => {
     let { speed } = this.state;
     let { alterSpeed } = this.props;
-    alterSpeed(speed);
+    let convertedSpeed = 60000/speed;
+    alterSpeed(convertedSpeed);
   }  
 
   handlePitchChange = (newPitch) => {
@@ -56,7 +61,7 @@ class BoardSettings extends Component {
     return (
       <div className="MenuContainer">
         <div className="InputContainer">
-          <label>Rows:<input type="number" value={this.state.rows}></input></label>
+          <label>Rows:<input type="number" value={this.state.rows} disabled={'true'}></input></label>
           <div className="MenuIconContainer" onClick={() => this.applyRowChange(rows-1)}>
             <img src={ require('./img/minus.png')}/>
           </div>
@@ -65,7 +70,7 @@ class BoardSettings extends Component {
           </div>
         </div>
         <div className="InputContainer">
-          <label>Columns:<input type="number" value={this.state.cols}></input></label>
+          <label>Columns:<input type="number" value={this.state.cols} disabled={'true'}></input></label>
           <div className="MenuIconContainer" onClick={() => this.applyColumnChange(cols-1)}>
             <img src={ require('./img/minus.png')}/>
           </div>
@@ -74,7 +79,7 @@ class BoardSettings extends Component {
           </div>
         </div>
         <div className="InputContainer">
-          <label>Pitch:<input type="number" value={this.props.eigth}></input></label>
+          <label>Pitch:<input type="number" value={this.props.eigth} disabled={'true'}></input></label>
           <div className="MenuIconContainer" onClick={() => this.handlePitchChange(eigth-1)}>
             <img src={ require('./img/minus.png')}/>
           </div>
@@ -83,7 +88,7 @@ class BoardSettings extends Component {
           </div>
         </div>
         <div className="InputContainer">
-          <label>Speed:<input value={this.state.speed} onChange={this.handleSpeedChange}></input></label>
+          <label>Notes per minute:<input value={this.state.speed} onChange={this.handleSpeedChange}></input></label>
           <button onClick={this.speedAltered}>Confirm</button>
         </div>
       </div>
