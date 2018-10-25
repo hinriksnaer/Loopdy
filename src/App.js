@@ -3,10 +3,11 @@ import './App.css';
 import LoopBoard from './LoopBoard';
 import PlayableBoard from './PlayableBoard';
 import BoardSettings from './BoardSettings';
-import { appService } from './AppService';
+import { appService,  } from './AppService';
+import { loopBoardService } from './LoopBoardService';
 
 class App extends Component {
-  
+
   state = {
     speed: 200,
     boardIsLooping: false,
@@ -17,6 +18,13 @@ class App extends Component {
 
   componentWillMount() {
     this.generateNotes(this.state.eigth, this.state.rows);
+    let currentNoteStatus = loopBoardService.initStatus(8, 12);
+    this.setState({ currentNoteStatus: currentNoteStatus[0] });
+  }
+
+  alterCurrentNoteStatus = (noteStatus) => {
+    let newNoteStatus = noteStatus;
+    this.setState({ currentNoteStatus: newNoteStatus });
   }
 
   // converts bpm to speed and sets it
@@ -46,18 +54,25 @@ class App extends Component {
   }
 
   render() {
-    let { speed, boardIsLooping, cols, rows, notes, eigth } = this.state;
+    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus } = this.state;
     return (
       <main>
         <div className="BoardContainer">
           <BoardSettings rows={rows} alterRows={this.alterRows} cols={cols} alterCols={this.alterCols} eigth={eigth} alterEigth={this.alterEigth} speed={speed} alterSpeed={this.alterSpeed}/>
           <div className="SoundboardContainer">
             <PlayableBoard notes={notes}/>
-            <LoopBoard cols={cols} rows={rows} notes={notes} speed={speed} boardIsLooping={boardIsLooping}/>
+            <LoopBoard 
+              cols={cols} 
+              rows={rows} 
+              notes={notes} 
+              speed={speed} 
+              boardIsLooping={boardIsLooping}
+              currentNoteStatus={currentNoteStatus}
+              alterCurrentNoteStatus={this.alterCurrentNoteStatus}/>
           </div>
-          <div className="InfoText">
-            <p>Loopdy 0.2.0 created by Hinrik S. Guðmundsson</p>
-          </div>
+        </div>
+        <div className="InfoText">
+          <p>Loopdy 0.2.0 created by Hinrik S. Guðmundsson</p>
         </div>
       </main>
     );

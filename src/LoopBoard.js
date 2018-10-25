@@ -11,7 +11,9 @@ class LoopBoard extends Component {
     cols: PropTypes.number,
     rows: PropTypes.number,
     notes: PropTypes.array,
-    speed: PropTypes.number
+    speed: PropTypes.number,
+    noteStatus: PropTypes.array,
+    alterCurrentNoteStatus: PropTypes.func
   }
 
   state = {
@@ -21,10 +23,14 @@ class LoopBoard extends Component {
 
   componentWillMount() {
     this.initStatus();
+    let noteStatus = this.props.noteStatus;
+    if(noteStatus){
+      this.setState({ noteStatus });
+    }
   }
   
   componentDidUpdate(prevProps) {
-    const { speed, notes, rows, cols } = this.props;
+    const { speed, rows, cols, alterCurrentNoteStatus } = this.props;
     if (speed !== prevProps.speed && this.state.looping) {
       let interval = this.state.playLoop;
       this.setState({ 
@@ -37,18 +43,21 @@ class LoopBoard extends Component {
     if (rows !== prevProps.rows) {
       let newNoteStatus = loopBoardService.alterRows(this.state.noteStatus, cols, rows, prevProps.rows);
       this.setState({ noteStatus: newNoteStatus });
+      alterCurrentNoteStatus(newNoteStatus);
     }
     if (cols !== prevProps.cols) {
       let newNoteStatus = loopBoardService.alterColumns(this.state.noteStatus, cols, prevProps.cols);
       this.setState({ noteStatus: newNoteStatus });
+      alterCurrentNoteStatus(newNoteStatus);
     }
   }
 
 
   initStatus = () => {
-    let { cols, rows } = this.props;
+    let { cols, rows, alterCurrentNoteStatus } = this.props;
     let initData = loopBoardService.initStatus(rows, cols);
     this.setState({ noteStatus: initData[0], isPlaying: initData[1] });
+    alterCurrentNoteStatus(initData[0]);
   }
 
 
@@ -110,12 +119,15 @@ class LoopBoard extends Component {
   // toggles whether or not a notebox is active or not
   alterActiveState = (row, column) => {
     let { noteStatus } = this.state;
+    let { alterCurrentNoteStatus } = this.props;
     if (noteStatus[row][column]){
       noteStatus[row][column] = false;
       this.setState({ noteStatus });
+      alterCurrentNoteStatus(noteStatus);
     } else {
       noteStatus[row][column] = true;
       this.setState({ noteStatus });
+      alterCurrentNoteStatus(noteStatus);
     }
   }
 
