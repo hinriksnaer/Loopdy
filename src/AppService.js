@@ -1,3 +1,5 @@
+const LZString = require('lz-string');
+
 const appService = function() {
   function generateNotes(eigth, rows) {
     eigth = Number(eigth);
@@ -14,8 +16,14 @@ const appService = function() {
     return notes;
   }
 
+  function decodeURL(url) {
+    let decodedURL = JSON.parse(LZString.decompressFromEncodedURIComponent(url));
+    return decodedURL;
+  }
+
   return {
-    generateNotes
+    generateNotes,
+    decodeURL
   };
 }();
   

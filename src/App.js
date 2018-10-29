@@ -3,6 +3,7 @@ import './App.css';
 import LoopBoard from './LoopBoard';
 import PlayableBoard from './PlayableBoard';
 import BoardSettings from './BoardSettings';
+import Share from './Share';
 import { appService,  } from './AppService';
 import { loopBoardService } from './LoopBoardService';
 
@@ -20,6 +21,18 @@ class App extends Component {
     this.generateNotes(this.state.eigth, this.state.rows);
     let currentNoteStatus = loopBoardService.initStatus(8, 12);
     this.setState({ currentNoteStatus: currentNoteStatus[0] });
+
+    let state = window.location.pathname;
+    state = state.substr(1);
+    let stateObject = appService.decodeURL(state);
+    console.log(stateObject);
+    this.setState({ 
+      currentNoteStatus: stateObject.songArray,
+      cols: stateObject.col,
+      rows: stateObject.row,
+      eigth: stateObject.pitch,
+      speed: stateObject.speed
+    });
   }
 
   alterCurrentNoteStatus = (noteStatus) => {
@@ -70,6 +83,13 @@ class App extends Component {
               currentNoteStatus={currentNoteStatus}
               alterCurrentNoteStatus={this.alterCurrentNoteStatus}/>
           </div>
+          <Share 
+            songArray={currentNoteStatus}
+            rows={rows}
+            cols={cols}
+            pitch={eigth}
+            speed={speed}
+          />
         </div>
         <div className="InfoText">
           <p>Loopdy 0.2.0 created by Hinrik S. Guðmundsson</p>

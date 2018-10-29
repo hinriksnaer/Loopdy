@@ -12,12 +12,15 @@ body {
   background-color: aqua;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+}
+
 .InfoText {
   color: white;
   margin-right: 10px;
-  position:absolute;
-  bottom:0;
-  right:0;
+  text-align: end;
 }
 
 .PlayableBoardContainer {

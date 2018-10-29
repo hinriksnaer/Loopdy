@@ -23,10 +23,6 @@ class LoopBoard extends Component {
 
   componentWillMount() {
     this.initStatus();
-    let noteStatus = this.props.noteStatus;
-    if(noteStatus){
-      this.setState({ noteStatus });
-    }
   }
   
   componentDidUpdate(prevProps) {
@@ -54,9 +50,15 @@ class LoopBoard extends Component {
 
 
   initStatus = () => {
+    let noteStatus = this.props.noteStatus;
     let { cols, rows, alterCurrentNoteStatus } = this.props;
     let initData = loopBoardService.initStatus(rows, cols);
-    this.setState({ noteStatus: initData[0], isPlaying: initData[1] });
+    this.setState({ isPlaying: initData[1] });
+    if(noteStatus){
+      this.setState({ noteStatus });
+    } else {
+      this.setState({ noteStatus: initData[0] });
+    }
     alterCurrentNoteStatus(initData[0]);
   }
 
