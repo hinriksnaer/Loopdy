@@ -20,25 +20,26 @@ class App extends Component {
   componentWillMount() {
     this.generateNotes(this.state.eigth, this.state.rows);
     let currentNoteStatus = loopBoardService.initStatus(8, 12);
-    let state = window.location.pathname;
+    this.setState({ currentNoteStatus: currentNoteStatus[0] });
 
+    let state = window.location.pathname;
     state = state.substr(1);
-    if (state.length > 0){
-      let stateObject = appService.decodeURL(state);
-      this.setState({ 
-        currentNoteStatus: stateObject.songArray,
-        cols: stateObject.col,
-        rows: stateObject.row,
-        eigth: stateObject.pitch,
-        speed: stateObject.speed
-      });
-    } else {
-      this.setState({ currentNoteStatus: currentNoteStatus[0] });
+    let stateObject = appService.decodeURL(state);
+    let songArray = null;
+    if (!stateObject) {
+      songArray = stateObject.songArray;
     }
+    console.log(stateObject);
+    this.setState({ 
+      currentNoteStatus: stateObject.songArray,
+      cols: stateObject.col,
+      rows: stateObject.row,
+      eigth: stateObject.pitch,
+      speed: stateObject.speed
+    });
   }
 
   alterCurrentNoteStatus = (noteStatus) => {
-    let { currentNoteStatus } = this.state;
     let newNoteStatus = noteStatus;
     this.setState({ currentNoteStatus: newNoteStatus });
   }
@@ -74,18 +75,9 @@ class App extends Component {
     return (
       <main>
         <div className="BoardContainer">
-          <BoardSettings 
-            rows={rows} 
-            alterRows={this.alterRows} 
-            cols={cols} 
-            alterCols={this.alterCols} 
-            eigth={eigth} 
-            alterEigth={this.alterEigth} 
-            speed={speed} 
-            alterSpeed={this.alterSpeed}/>
+          <BoardSettings rows={rows} alterRows={this.alterRows} cols={cols} alterCols={this.alterCols} eigth={eigth} alterEigth={this.alterEigth} speed={speed} alterSpeed={this.alterSpeed}/>
           <div className="SoundboardContainer">
-            <PlayableBoard 
-              notes={notes}/>
+            <PlayableBoard notes={notes}/>
             <LoopBoard 
               cols={cols} 
               rows={rows} 
@@ -112,3 +104,8 @@ class App extends Component {
 }
 
 export default App;
+OBOBOOOOOOOOOOOOOO
+OBBOOO
+OO
+Xqi
+

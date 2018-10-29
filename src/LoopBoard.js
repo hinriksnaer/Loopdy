@@ -48,18 +48,15 @@ class LoopBoard extends Component {
     }
   }
 
-
   initStatus = () => {
-    let noteStatus = this.props.noteStatus;
-    let { cols, rows, alterCurrentNoteStatus } = this.props;
+    let { cols, rows, currentNoteStatus, alterCurrentNoteStatus } = this.props;
     let initData = loopBoardService.initStatus(rows, cols);
     this.setState({ isPlaying: initData[1] });
-    if(noteStatus){
-      this.setState({ noteStatus });
+    if(currentNoteStatus){
+      this.setState({ noteStatus: currentNoteStatus });
     } else {
       this.setState({ noteStatus: initData[0] });
     }
-    alterCurrentNoteStatus(initData[0]);
   }
 
 
@@ -161,7 +158,6 @@ class LoopBoard extends Component {
     }
     return noteRow;
   }
-
 
   render() {
     let { rows } = this.props;

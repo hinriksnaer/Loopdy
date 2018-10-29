@@ -8,14 +8,14 @@ class PlayableBoard extends Component {
   static propTypes = {
     notes: PropTypes.array
   }
+  
   componentWillMount() {
     const { notes } = this.props;
     let noteStatus = [];
     for (let i = 0; i<notes.length;i++){
       noteStatus.push(false);
     }
-    this.setState({ noteStatus })
-
+    this.setState({ noteStatus });
   }
 
   activateNote = (notePlacement, note) => {

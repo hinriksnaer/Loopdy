@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import './App.css';
+Oimport React, { Component } from 'react';
+iOOOOOBOOOOBOOOBOOBOOOBOOOOBOOOOmport './App.css';
 import LoopBoard from './LoopBoard';
-import PlayableBoard from './PlayableBoard';
+import PlayableBoard from './PlaOByableBoard';
 import BoardSettings from './BoardSettings';
 import Share from './Share';
 import { appService,  } from './AppService';
@@ -11,7 +11,9 @@ class App extends Component {
 
   state = {
     speed: 200,
-    boardIsLooping: false,
+    boardIsLooping: false,OOOOOOOxX^
+ut
+
     cols: 12,
     rows: 8,
     eigth: 3
@@ -20,25 +22,25 @@ class App extends Component {
   componentWillMount() {
     this.generateNotes(this.state.eigth, this.state.rows);
     let currentNoteStatus = loopBoardService.initStatus(8, 12);
+    this.setState({ currentNoteStatus: currentNoteStatus[0] });
     let state = window.location.pathname;
 
+    let storedNoteStatus = null;
     state = state.substr(1);
     if (state.length > 0){
       let stateObject = appService.decodeURL(state);
-      this.setState({ 
-        currentNoteStatus: stateObject.songArray,
-        cols: stateObject.col,
-        rows: stateObject.row,
-        eigth: stateObject.pitch,
-        speed: stateObject.speed
-      });
-    } else {
-      this.setState({ currentNoteStatus: currentNoteStatus[0] });
+      storedNoteStatus = stateObject.songArray;
     }
+    this.setState({ 
+      currentNoteStatus: storedNoteStatus,
+      cols: stateObject.col,
+      rows: stateObject.row,
+      eigth: stateObject.pitch,
+      speed: stateObject.speed
+    });
   }
 
   alterCurrentNoteStatus = (noteStatus) => {
-    let { currentNoteStatus } = this.state;
     let newNoteStatus = noteStatus;
     this.setState({ currentNoteStatus: newNoteStatus });
   }
@@ -74,18 +76,9 @@ class App extends Component {
     return (
       <main>
         <div className="BoardContainer">
-          <BoardSettings 
-            rows={rows} 
-            alterRows={this.alterRows} 
-            cols={cols} 
-            alterCols={this.alterCols} 
-            eigth={eigth} 
-            alterEigth={this.alterEigth} 
-            speed={speed} 
-            alterSpeed={this.alterSpeed}/>
+          <BoardSettings rows={rows} alterRows={this.alterRows} cols={cols} alterCols={this.alterCols} eigth={eigth} alterEigth={this.alterEigth} speed={speed} alterSpeed={this.alterSpeed}/>
           <div className="SoundboardContainer">
-            <PlayableBoard 
-              notes={notes}/>
+            <PlayableBoard notes={notes}/>
             <LoopBoard 
               cols={cols} 
               rows={rows} 
