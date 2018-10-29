@@ -18,10 +18,9 @@ class App extends Component {
   };
 
   componentWillMount() {
-    this.generateNotes(this.state.eigth, this.state.rows);
     let currentNoteStatus = loopBoardService.initStatus(8, 12);
     let state = window.location.pathname;
-
+    
     state = state.substr(1);
     if (state.length > 0){
       let stateObject = appService.decodeURL(state);
@@ -32,8 +31,10 @@ class App extends Component {
         eigth: stateObject.pitch,
         speed: stateObject.speed
       });
+      this.generateNotes(stateObject.pitch, stateObject.row);
     } else {
       this.setState({ currentNoteStatus: currentNoteStatus[0] });
+      this.generateNotes(this.state.eigth, this.state.rows);
     }
   }
 
