@@ -12,7 +12,7 @@ const ShareService = function() {
     };
     let jsonObject = JSON.stringify(object);
     let compressed = LZString.compressToEncodedURIComponent(jsonObject);
-    return `localhost:3000/${compressed}`;
+    return `loopdy.net/${compressed}`;
   }
 
   return {
