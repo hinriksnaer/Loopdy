@@ -12,12 +12,15 @@ body {
   background-color: aqua;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+}
+
 .InfoText {
   color: white;
   margin-right: 10px;
-  position:absolute;
-  bottom:0;
-  right:0;
+  text-align: end;
 }
 
 .PlayableBoardContainer {
@@ -53,7 +56,7 @@ body {
 
 .MenuContainer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   color: white;
 }
 
@@ -67,3 +70,25 @@ main {
   justify-content: flex-end;
 }
 
+.InputContainer {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.MenuIconContainer img {
+  max-width: 100%;
+}
+
+.MenuIconContainer {
+  width: 26px;
+  padding-top: 6px;
+}
+
+.InputContainer .MenuIconContainer + .MenuIconContainer {
+  padding-top: 4.5px;
+}
+
+.InputContainer button {
+  margin-left: 5px;
+}
