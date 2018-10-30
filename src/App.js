@@ -19,11 +19,10 @@ class App extends Component {
 
   componentWillMount() {
     let currentNoteStatus = loopBoardService.initStatus(8, 12);
-    let state = window.location.pathname;
-    
-    state = state.substr(1);
-    if (state.length > 0){
-      let stateObject = appService.decodeURL(state);
+    let url = new URL(window.location.href);
+    let board = url.searchParams.get('board');
+    let stateObject = appService.decodeURL(board);
+    if (stateObject){
       this.setState({ 
         currentNoteStatus: stateObject.songArray,
         cols: stateObject.col,
@@ -113,4 +112,3 @@ class App extends Component {
 }
 
 export default App;
-
