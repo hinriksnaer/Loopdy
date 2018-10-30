@@ -16,6 +16,13 @@ class Share extends Component {
     shareLink: ''
   }
 
+  copyLinkToClipboard = () => {
+    const shareInput = document.getElementsByClassName('ShareLinkInput');
+    console.log(shareInput);
+    shareInput[0].select();
+    document.execCommand('copy');
+  }
+
   shareButtonPressed = () => {
     const { songArray, rows, cols, pitch, speed } = this.props;
     const link = ShareService.generateShareLink(songArray, rows, cols, pitch, speed);
@@ -27,7 +34,8 @@ class Share extends Component {
     return (
       <div className={'ShareContainer'}>
         <button onClick={this.shareButtonPressed}>Create share link</button>
-        <input value={shareLink}></input>
+        <input className={'ShareLinkInput'} value={shareLink}></input>
+        <button onClick={this.copyLinkToClipboard}>Copy share link</button>
       </div>
     );
   } 
