@@ -21,16 +21,24 @@ class App extends Component {
     let currentNoteStatus = loopBoardService.initStatus(8, 12);
     let url = new URL(window.location.href);
     let board = url.searchParams.get('board');
-    let stateObject = appService.decodeURL(board);
-    if (stateObject){
-      this.setState({ 
-        currentNoteStatus: stateObject.songArray,
-        cols: stateObject.col,
-        rows: stateObject.row,
-        eigth: stateObject.pitch,
-        speed: stateObject.speed
-      });
-      this.generateNotes(stateObject.pitch, stateObject.row);
+    console.log(board);
+    if (board){
+      let stateObject = appService.decodeURL(board);
+      console.log(stateObject);
+      try {
+        this.setState({ 
+          currentNoteStatus: stateObject.songArray,
+          cols: stateObject.col,
+          rows: stateObject.row,
+          eigth: stateObject.pitch,
+          speed: stateObject.speed
+        });
+        this.generateNotes(stateObject.pitch, stateObject.row);
+
+      } catch (err) {
+        this.setState({ currentNoteStatus: currentNoteStatus[0] });
+        this.generateNotes(this.state.eigth, this.state.rows);
+      }
     } else {
       this.setState({ currentNoteStatus: currentNoteStatus[0] });
       this.generateNotes(this.state.eigth, this.state.rows);
