@@ -17,9 +17,11 @@ class App extends Component {
     eigth: 3
   };
 
+  // This should take care of checking if there is an url with a previous song to load or initialize the app
   componentWillMount() {
     let currentNoteStatus = loopBoardService.initStatus(8, 12);
     let url = new URL(window.location.href);
+    console.log(url);
     let board = url.searchParams.get('board');
     console.log(board);
     if (board){
