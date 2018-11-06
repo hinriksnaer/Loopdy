@@ -7,6 +7,7 @@ import Share from './View/Share';
 import Playback from './View/Playback'
 import { appService,  } from './Service/AppService';
 import { loopBoardService } from './Service/LoopBoardService';
+const uniqid = require('uniqid');
 
 class App extends Component {
 
@@ -16,7 +17,7 @@ class App extends Component {
     cols: 12,
     rows: 8,
     eigth: 3,
-    playbacks: []
+    playbacks: {}
   };
 
   // This should take care of checking if there is an url with a previous song to load or initialize the app
@@ -48,11 +49,33 @@ class App extends Component {
       this.generateNotes(this.state.eigth, this.state.rows);
     }
     let notes = appService.generateNotes(this.state.eigth, this.state.rows);
-    let playback = this.generatePlayback(Array.from(notes), this.state.rows, this.state.cols, appService.deepCopy2dArray(currentNoteStatus[0]), this.state.speed);
-    this.setState( { playback: [playback] });
+    let playbackObj = {
+      notes: notes,
+      eigth: this.state.eigth,
+      rows: this.state.rows,
+      cols: this.state.cols,
+      noteStatus: appService.deepCopy2dArray(currentNoteStatus[0]),
+      speed: this.state.speed
+    };
+    let key = uniqid();
+    this.state.playbacks[key] = playbackObj;
+    this.setState( { currentPlaybackKey:key } );
     console.log('mounted app');
+    console.log(this.state.playbacks);
   }
 
+  // this does not work because react does not make sense
+  alterCurrentPlayback(key, value) {
+    let { currentPlaybackKey, playbacks } = this.state;
+    let playbacksCopy = JSON.parse(JSON.stringify(playbacks));
+    let keyCopy = JSON.parse(JSON.stringify(playbacks[currentPlaybackKey]));
+    keyCopy[key] = value;
+    playbacksCopy[currentPlaybackKey] = keyCopy;
+
+    this.setState({ playbacks: playbacksCopy });
+    this.setState({ playbacks: {} })
+  }
+    
   alterCurrentNoteStatus = (noteStatus) => {
     let { currentNoteStatus } = this.state;
     let newNoteStatus = noteStatus;
@@ -69,6 +92,7 @@ class App extends Component {
     let pitch = Number(eigth);
     this.setState({ eigth: pitch });
     this.generateNotes(pitch, rows);
+    this.alterCurrentPlayback('eigth', pitch);
   }
 
   alterRows = (rows) => {
@@ -83,10 +107,34 @@ class App extends Component {
   generateNotes = (eigth, rows) => {
     let notes = appService.generateNotes(eigth, rows);
     this.setState({ notes });
+    console.log('generating notes');
+    if (this.state.currentPlaybackKey) {
+      console.log('has a key');
+      this.alterCurrentPlayback('notes', notes);
+    }
   }
 
-  generatePlayback = (notes, rows, cols, noteStatus, speed) => {
+  generatePlaybacks() {
+    let { playbacks } = this.state;
+    let playbackList = [];
+    for(let key in playbacks) {
+      playbackList.push(
+        this.generatePlayback(
+          key,
+          playbacks[key].notes, 
+          playbacks[key].rows,
+          playbacks[key].cols,
+          playbacks[key].noteStatus,
+          playbacks[key].speed 
+          )
+      );
+    }
+    return playbackList;
+  }
+
+  generatePlayback = (key, notes, rows, cols, noteStatus, speed) => {
     return <Playback
+      randomval = {key}
       notes={notes}
       cols={cols}
       rows={rows}
@@ -96,7 +144,10 @@ class App extends Component {
   }
 
   render() {
-    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus } = this.state;
+    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks } = this.state;
+    let keys = Object.keys(playbacks);
+    console.log('keys are');
+    console.log(keys);
     return (
       <main>
         <div className="BoardContainer">
@@ -121,7 +172,15 @@ class App extends Component {
               currentNoteStatus={currentNoteStatus}
               alterCurrentNoteStatus={this.alterCurrentNoteStatus}/>
           </div>
-          {this.state.playback}
+          {keys.map((item, i) => (
+            <Playback
+              notes={playbacks[item].notes}
+              cols={playbacks[item].cols}
+              rows={playbacks[item].rows}
+              speed={playbacks[item].speed}
+              noteStatus={playbacks[item].noteStatus}
+            />
+          ))}
           <Share 
             songArray={currentNoteStatus}
             rows={rows}
