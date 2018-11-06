@@ -21,9 +21,18 @@ const appService = function() {
     return decodedURL;
   }
 
+  function deepCopy2dArray(array) {
+    let newArray = [];
+    for (let subArray of array) {
+      newArray.push(Array.from(subArray));
+    }
+    return newArray;
+  }
+
   return {
     generateNotes,
-    decodeURL
+    decodeURL,
+    deepCopy2dArray
   };
 }();
   
