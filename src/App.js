@@ -69,19 +69,19 @@ class App extends Component {
     //let keyCopy = JSON.parse(JSON.stringify(playbacks[currentPlaybackKey]));
     //keyCopy[key] = value;
     //playbacksCopy[currentPlaybackKey] = keyCopy;
+    let clone = JSON.parse(JSON.stringify(playbacks));
     let newKey = uniqid();
     let newObj = {};
     newObj[newKey] = {};
-    for (let ke in playbacks[currentPlaybackKey]) {
-      newObj[newKey][ke] = playbacks[currentPlaybackKey][ke]; 
+    for (let ke in clone[currentPlaybackKey]) {
+      if(ke !== key){
+        console.log(ke + " " + key);
+        console.log(ke === key);
+        newObj[newKey][ke] = clone[currentPlaybackKey][ke];
+        console.log(ke);
+      }
     }
-    newObj[newKey][key] = value;
-    console.log('bla');
-    console.log(newObj);
-    console.log('value');
-    console.log(value);
-    console.log('key');
-    console.log(key);
+    //newObj[newKey][key] = value;
 
     this.setState({ playbacks: newObj, currentPlaybackKey: newKey });
   }
@@ -108,6 +108,7 @@ class App extends Component {
   alterRows = (rows) => {
     this.setState({ rows });
     this.generateNotes(this.state.eigth, rows);
+    this.alterCurrentPlayback('rows', rows);
   }
 
   alterCols = (cols) => {
@@ -118,7 +119,7 @@ class App extends Component {
     let notes = appService.generateNotes(eigth, rows);
     this.setState({ notes });
     if (this.state.currentPlaybackKey) {
-      this.alterCurrentPlayback('notes', notes);
+      this.alterCurrentPlayback('notes', Array.from(notes));
     }
   }
 
