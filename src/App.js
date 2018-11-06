@@ -60,20 +60,30 @@ class App extends Component {
     let key = uniqid();
     this.state.playbacks[key] = playbackObj;
     this.setState( { currentPlaybackKey:key } );
-    console.log('mounted app');
-    console.log(this.state.playbacks);
   }
 
   // this does not work because react does not make sense
   alterCurrentPlayback(key, value) {
     let { currentPlaybackKey, playbacks } = this.state;
-    let playbacksCopy = JSON.parse(JSON.stringify(playbacks));
-    let keyCopy = JSON.parse(JSON.stringify(playbacks[currentPlaybackKey]));
-    keyCopy[key] = value;
-    playbacksCopy[currentPlaybackKey] = keyCopy;
+    //let playbacksCopy = JSON.parse(JSON.stringify(playbacks));
+    //let keyCopy = JSON.parse(JSON.stringify(playbacks[currentPlaybackKey]));
+    //keyCopy[key] = value;
+    //playbacksCopy[currentPlaybackKey] = keyCopy;
+    let newKey = uniqid();
+    let newObj = {};
+    newObj[newKey] = {};
+    for (let ke in playbacks[currentPlaybackKey]) {
+      newObj[newKey][ke] = playbacks[currentPlaybackKey][ke]; 
+    }
+    newObj[newKey][key] = value;
+    console.log('bla');
+    console.log(newObj);
+    console.log('value');
+    console.log(value);
+    console.log('key');
+    console.log(key);
 
-    this.setState({ playbacks: playbacksCopy });
-    this.setState({ playbacks: {} })
+    this.setState({ playbacks: newObj, currentPlaybackKey: newKey });
   }
     
   alterCurrentNoteStatus = (noteStatus) => {
@@ -107,9 +117,7 @@ class App extends Component {
   generateNotes = (eigth, rows) => {
     let notes = appService.generateNotes(eigth, rows);
     this.setState({ notes });
-    console.log('generating notes');
     if (this.state.currentPlaybackKey) {
-      console.log('has a key');
       this.alterCurrentPlayback('notes', notes);
     }
   }
@@ -146,8 +154,6 @@ class App extends Component {
   render() {
     let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks } = this.state;
     let keys = Object.keys(playbacks);
-    console.log('keys are');
-    console.log(keys);
     return (
       <main>
         <div className="BoardContainer">
@@ -174,6 +180,7 @@ class App extends Component {
           </div>
           {keys.map((item, i) => (
             <Playback
+              key = {keys[i]}
               notes={playbacks[item].notes}
               cols={playbacks[item].cols}
               rows={playbacks[item].rows}
