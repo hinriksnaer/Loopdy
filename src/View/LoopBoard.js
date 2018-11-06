@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { loopBoardService } from './LoopBoardService';
+import { loopBoardService } from '../Service/LoopBoardService';
 import NoteBox from './NoteBox';
-import './App.css';
-import { playSound } from './SoundBox';
+import '../App.css';
+import { playSound } from '../Service/SoundBox';
 import PropTypes from 'prop-types';
 
 class LoopBoard extends Component {

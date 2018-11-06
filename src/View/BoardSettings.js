@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import '../App.css';
 import PropTypes from 'prop-types';
 
 class BoardSettings extends Component {
@@ -63,28 +63,28 @@ class BoardSettings extends Component {
         <div className="InputContainer">
           <label>Rows:<input type="number" value={this.state.rows} disabled={'true'}></input></label>
           <div className="MenuIconContainer" onClick={() => this.applyRowChange(rows-1)}>
-            <img src={ require('./img/minus.png')}/>
+            <img src={ require('../img/minus.png')}/>
           </div>
           <div className="MenuIconContainer" onClick={() => this.applyRowChange(rows+1)}>
-            <img src={ require('./img/plus.png')}/>
+            <img src={ require('../img/plus.png')}/>
           </div>
         </div>
         <div className="InputContainer">
           <label>Columns:<input type="number" value={this.state.cols} disabled={'true'}></input></label>
           <div className="MenuIconContainer" onClick={() => this.applyColumnChange(cols-1)}>
-            <img src={ require('./img/minus.png')}/>
+            <img src={ require('../img/minus.png')}/>
           </div>
           <div className="MenuIconContainer" onClick={() => this.applyColumnChange(cols+1)}>
-            <img src={ require('./img/plus.png')}/>
+            <img src={ require('../img/plus.png')}/>
           </div>
         </div>
         <div className="InputContainer">
           <label>Pitch:<input type="number" value={this.props.eigth} disabled={'true'}></input></label>
           <div className="MenuIconContainer" onClick={() => this.handlePitchChange(eigth-1)}>
-            <img src={ require('./img/minus.png')}/>
+            <img src={ require('../img/minus.png')}/>
           </div>
           <div className="MenuIconContainer" onClick={() => this.handlePitchChange(eigth+1)}>
-            <img src={ require('./img/plus.png')}/>
+            <img src={ require('../img/plus.png')}/>
           </div>
         </div>
         <div className="InputContainer">

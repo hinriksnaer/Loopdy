@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
+import '../App.css';
 import PropTypes from 'prop-types';
-import { ShareService } from './ShareService';
+import { ShareService } from '../Service/ShareService';
 
 class Share extends Component {
   static propTypes = {

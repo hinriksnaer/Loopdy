@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-import LoopBoard from './LoopBoard';
-import PlayableBoard from './PlayableBoard';
-import BoardSettings from './BoardSettings';
-import Share from './Share';
-import { appService,  } from './AppService';
-import { loopBoardService } from './LoopBoardService';
+import LoopBoard from './View/LoopBoard';
+import PlayableBoard from './View/PlayableBoard';
+import BoardSettings from './View/BoardSettings';
+import Share from './View/Share';
+import Playback from './View/Playback'
+import { appService,  } from './Service/AppService';
+import { loopBoardService } from './Service/LoopBoardService';
 
 class App extends Component {
 
@@ -14,7 +15,8 @@ class App extends Component {
     boardIsLooping: false,
     cols: 12,
     rows: 8,
-    eigth: 3
+    eigth: 3,
+    playbacks: []
   };
 
   // This should take care of checking if there is an url with a previous song to load or initialize the app
@@ -45,6 +47,10 @@ class App extends Component {
       this.setState({ currentNoteStatus: currentNoteStatus[0] });
       this.generateNotes(this.state.eigth, this.state.rows);
     }
+    let notes = appService.generateNotes(this.state.eigth, this.state.rows);
+    let playback = this.generatePlayback(Array.from(notes), this.state.rows, this.state.cols, appService.deepCopy2dArray(currentNoteStatus[0]), this.state.speed);
+    this.setState( { playback: [playback] });
+    console.log('mounted app');
   }
 
   alterCurrentNoteStatus = (noteStatus) => {
@@ -79,6 +85,16 @@ class App extends Component {
     this.setState({ notes });
   }
 
+  generatePlayback = (notes, rows, cols, noteStatus, speed) => {
+    return <Playback
+      notes={notes}
+      cols={cols}
+      rows={rows}
+      speed={speed}
+      noteStatus={noteStatus}
+    />
+  }
+
   render() {
     let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus } = this.state;
     return (
@@ -105,6 +121,7 @@ class App extends Component {
               currentNoteStatus={currentNoteStatus}
               alterCurrentNoteStatus={this.alterCurrentNoteStatus}/>
           </div>
+          {this.state.playback}
           <Share 
             songArray={currentNoteStatus}
             rows={rows}
