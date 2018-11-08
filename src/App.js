@@ -50,7 +50,6 @@ class App extends Component {
     }
     let notes = appService.generateNotes(this.state.eigth, this.state.rows);
     let playbackObj = {
-      notes: notes,
       eigth: this.state.eigth,
       rows: this.state.rows,
       cols: this.state.cols,
@@ -65,25 +64,24 @@ class App extends Component {
   // this does not work because react does not make sense
   alterCurrentPlayback(key, value) {
     let { currentPlaybackKey, playbacks } = this.state;
-    //let playbacksCopy = JSON.parse(JSON.stringify(playbacks));
-    //let keyCopy = JSON.parse(JSON.stringify(playbacks[currentPlaybackKey]));
-    //keyCopy[key] = value;
-    //playbacksCopy[currentPlaybackKey] = keyCopy;
+
     let clone = JSON.parse(JSON.stringify(playbacks));
-    let newKey = uniqid();
+    console.log(value);
     let newObj = {};
-    newObj[newKey] = {};
+    newObj[currentPlaybackKey] = {};
     for (let ke in clone[currentPlaybackKey]) {
       if(ke !== key){
-        console.log(ke + " " + key);
-        console.log(ke === key);
-        newObj[newKey][ke] = clone[currentPlaybackKey][ke];
-        console.log(ke);
+        newObj[currentPlaybackKey][ke] = clone[currentPlaybackKey][ke];
       }
     }
-    //newObj[newKey][key] = value;
+    newObj[currentPlaybackKey][key] = value;
 
-    this.setState({ playbacks: newObj, currentPlaybackKey: newKey });
+    console.log(newObj);
+    console.log('putting it in');
+    this.setState({ playbacks: newObj });
+    console.log('inserted');
+    console.log(newObj);
+    console.log(value);
   }
     
   alterCurrentNoteStatus = (noteStatus) => {
@@ -95,6 +93,7 @@ class App extends Component {
   // converts bpm to speed and sets it
   alterSpeed = (speed) => {
     this.setState({ speed });
+    this.alterCurrentPlayback('speed', speed);
   }
 
   alterEigth = (eigth) => {
@@ -113,14 +112,12 @@ class App extends Component {
 
   alterCols = (cols) => {
     this.setState({ cols });
+    this.alterCurrentPlayback('cols', cols);
   }
 
   generateNotes = (eigth, rows) => {
     let notes = appService.generateNotes(eigth, rows);
     this.setState({ notes });
-    if (this.state.currentPlaybackKey) {
-      this.alterCurrentPlayback('notes', Array.from(notes));
-    }
   }
 
   generatePlaybacks() {
@@ -182,7 +179,7 @@ class App extends Component {
           {keys.map((item, i) => (
             <Playback
               key = {keys[i]}
-              notes={playbacks[item].notes}
+              notes={appService.generateNotes(playbacks[item].eigth, playbacks[item].rows)}
               cols={playbacks[item].cols}
               rows={playbacks[item].rows}
               speed={playbacks[item].speed}
