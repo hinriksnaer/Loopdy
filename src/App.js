@@ -20,16 +20,13 @@ class App extends Component {
     playbacks: {}
   };
 
-  // This should take care of checking if there is an url with a previous song to load or initialize the app
+  // im sorry
   componentWillMount() {
     let currentNoteStatus = loopBoardService.initStatus(8, 12);
     let url = new URL(window.location.href);
-    console.log(url);
     let board = url.searchParams.get('board');
-    console.log(board);
     if (board){
       let stateObject = appService.decodeURL(board);
-      console.log(stateObject);
       try {
         this.setState({ 
           currentNoteStatus: stateObject.songArray,
@@ -48,7 +45,6 @@ class App extends Component {
       this.setState({ currentNoteStatus: currentNoteStatus[0] });
       this.generateNotes(this.state.eigth, this.state.rows);
     }
-    let notes = appService.generateNotes(this.state.eigth, this.state.rows);
     let playbackObj = {
       eigth: this.state.eigth,
       rows: this.state.rows,
@@ -66,7 +62,6 @@ class App extends Component {
     let { currentPlaybackKey, playbacks } = this.state;
 
     let clone = JSON.parse(JSON.stringify(playbacks));
-    console.log(value);
     let newObj = {};
     newObj[currentPlaybackKey] = {};
     for (let ke in clone[currentPlaybackKey]) {
@@ -74,14 +69,14 @@ class App extends Component {
         newObj[currentPlaybackKey][ke] = clone[currentPlaybackKey][ke];
       }
     }
-    newObj[currentPlaybackKey][key] = value;
 
-    console.log(newObj);
-    console.log('putting it in');
+    for (let ke in clone) {
+      if(ke !== currentPlaybackKey){
+        newObj[ke] = clone[ke];
+      }
+    }
+    newObj[currentPlaybackKey][key] = value;
     this.setState({ playbacks: newObj });
-    console.log('inserted');
-    console.log(newObj);
-    console.log(value);
   }
     
   alterCurrentNoteStatus = (noteStatus) => {
@@ -150,8 +145,40 @@ class App extends Component {
     />
   }
 
+  // changes the currently select playback to edit
+  alterCurrentlyPlaying = (obj) => {
+    let { rows, cols, eigth, speed, noteStatus, key } = obj;
+    console.log(obj);
+    let notes = appService.generateNotes(eigth, rows);
+    console.log(noteStatus);
+    this.setState({
+      rows,
+      cols,
+      eigth,
+      speed,
+      notes,
+      currentPlaybackKey: key,
+      currentNoteStatus: noteStatus
+    })
+
+  }
+
+  addPlayback = () => {
+    let { eigth, rows, cols, speed, playbacks } = this.state;
+    let initNoteStatus = loopBoardService.initStatus(rows, cols);
+    let newPlayback = {
+      eigth: eigth,
+      rows: rows,
+      cols: cols,
+      noteStatus: appService.deepCopy2dArray(initNoteStatus[0]),
+      speed: speed
+    };
+    playbacks[uniqid()] = newPlayback;
+    this.setState({ playbacks });
+  }
+
   render() {
-    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks } = this.state;
+    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackKey } = this.state;
     let keys = Object.keys(playbacks);
     return (
       <main>
@@ -164,7 +191,8 @@ class App extends Component {
             eigth={eigth} 
             alterEigth={this.alterEigth} 
             speed={speed} 
-            alterSpeed={this.alterSpeed}/>
+            alterSpeed={this.alterSpeed}
+            />
           <div className="SoundboardContainer">
             <PlayableBoard 
               notes={notes}/>
@@ -177,16 +205,23 @@ class App extends Component {
               currentNoteStatus={currentNoteStatus}
               alterCurrentNoteStatus={this.alterCurrentNoteStatus}/>
           </div>
-          {keys.map((item, i) => (
-            <Playback
-              key = {keys[i]}
-              notes={appService.generateNotes(playbacks[item].eigth, playbacks[item].rows)}
-              cols={playbacks[item].cols}
-              rows={playbacks[item].rows}
-              speed={playbacks[item].speed}
-              noteStatus={playbacks[item].noteStatus}
-            />
-          ))}
+          <div className={'PlaybacksContainer'}>
+            {keys.map((item, i) => (
+              <Playback
+                key = {keys[i]}
+                notes={appService.generateNotes(playbacks[item].eigth, playbacks[item].rows)}
+                cols={playbacks[item].cols}
+                rows={playbacks[item].rows}
+                speed={playbacks[item].speed}
+                noteStatus={playbacks[item].noteStatus}
+                editing={keys[i]===currentPlaybackKey}
+                uniq = {keys[i]}
+                eigth = {playbacks[item].eigth}
+                alterCurrentlyPlaying={this.alterCurrentlyPlaying}
+              />
+            ))}
+            <button onClick={this.addPlayback}>+</button>
+          </div>
           <Share 
             songArray={currentNoteStatus}
             rows={rows}

@@ -57,7 +57,21 @@ class Playback extends Component {
     } else {
       playbackPlayer.stopLoop();
     }
+  }
 
+  handleEditButton = () => {
+    let { uniq, notes, rows, cols, noteStatus, speed, alterCurrentlyPlaying, eigth } = this.props;
+    let playbackData = {
+      key: uniq,
+      notes,
+      rows,
+      cols,
+      noteStatus,
+      speed,
+      eigth,
+
+    }
+    alterCurrentlyPlaying(playbackData);
   }
 
   render() {
@@ -65,7 +79,8 @@ class Playback extends Component {
     let playText = playing? 'Pause': 'Play';
     return (
       <div className={'PlaybackContainer'}>
-        <button>Edit</button><button onClick={this.handlePlayButton}>{playText}</button>
+        <button onClick={this.handleEditButton}>Edit</button>{!this.props.editing && <button onClick={this.handlePlayButton}>{playText}</button>}
+        <p>{this.props.uniq}</p>
       </div>
     );
   } 

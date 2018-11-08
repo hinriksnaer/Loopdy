@@ -23,6 +23,14 @@ main {
   text-align: end;
 }
 
+.PlaybackContainer {
+  margin-right: 4px;
+}
+
+.PlaybacksContainer {
+  display: flex;
+}
+
 .PlayableBoardContainer {
   border-radius: 6px;
   border: 1px solid white;
