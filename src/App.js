@@ -88,6 +88,7 @@ class App extends Component {
     let { currentNoteStatus } = this.state;
     let newNoteStatus = noteStatus;
     this.setState({ currentNoteStatus: newNoteStatus });
+    this.alterCurrentPlayback('noteStatus', newNoteStatus);
   }
 
   // converts bpm to speed and sets it

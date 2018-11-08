@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import PropTypes from 'prop-types';
+import { PlaybackPlayer } from '../Service/PlaybackPlayer';
 
 class Playback extends Component {
   static propTypes = {
@@ -17,10 +18,46 @@ class Playback extends Component {
 
   componentWillMount() {
     let { notes, rows, cols, noteStatus, speed } = this.props;
+    
+    let playbackPlayer = PlaybackPlayer(notes, cols, speed, rows, noteStatus);
+
     this.setState({
-      notes, rows, cols, noteStatus, speed
+      playbackPlayer
     });
-    console.log('playback mounted');
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let { notes, rows, cols, noteStatus, speed } = nextProps;
+    let { playbackPlayer } = this.state;
+    if (notes !== this.props.notes) {
+      playbackPlayer.setNotes(notes);
+    }
+    if (rows !== this.props.rows) {
+      playbackPlayer.setRows(rows);
+    }
+    if (cols !== this.props.cols) {
+      playbackPlayer.setCols(cols);
+    }
+    if (noteStatus !== this.props.noteStatus) {
+      playbackPlayer.setNoteStatus(noteStatus);
+    }
+    if (speed !== this.props.speed) {
+      playbackPlayer.setSpeed(speed);
+    }
+  }
+
+  handlePlayButton = () => {
+    const { playing, playbackPlayer } = this.state;
+    const newPlaying = !playing;
+    this.setState({ playing: newPlaying });
+    
+    if (!playing) {
+      playbackPlayer.startLoop();
+      console.log(playbackPlayer.getSpeed());
+    } else {
+      playbackPlayer.stopLoop();
+    }
+
   }
 
   render() {
@@ -28,7 +65,7 @@ class Playback extends Component {
     let playText = playing? 'Pause': 'Play';
     return (
       <div className={'PlaybackContainer'}>
-        <button>Edit</button><button>{playText}</button>
+        <button>Edit</button><button onClick={this.handlePlayButton}>{playText}</button>
       </div>
     );
   } 
