@@ -53,7 +53,6 @@ class Playback extends Component {
     
     if (!playing) {
       playbackPlayer.startLoop();
-      console.log(playbackPlayer.getSpeed());
     } else {
       playbackPlayer.stopLoop();
     }

@@ -148,9 +148,7 @@ class App extends Component {
   // changes the currently select playback to edit
   alterCurrentlyPlaying = (obj) => {
     let { rows, cols, eigth, speed, noteStatus, key } = obj;
-    console.log(obj);
     let notes = appService.generateNotes(eigth, rows);
-    console.log(noteStatus);
     this.setState({
       rows,
       cols,
@@ -159,7 +157,7 @@ class App extends Component {
       notes,
       currentPlaybackKey: key,
       currentNoteStatus: noteStatus
-    })
+    });
 
   }
 

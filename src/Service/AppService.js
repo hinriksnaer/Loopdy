@@ -24,7 +24,7 @@ const appService = function() {
   function deepCopy2dArray(array) {
     let newArray = [];
     for (let subArray of array) {
-      newArray.push(Array.from(subArray));
+      newArray.push(Array.from(subArray).slice());
     }
     return newArray;
   }

@@ -36,18 +36,19 @@ class LoopBoard extends Component {
       clearInterval(interval);
       this.setState({ playLoop });
     }
-    if (rows !== prevProps.rows) {
-      let newNoteStatus = loopBoardService.alterRows(this.state.noteStatus, cols, rows, prevProps.rows);
-      this.setState({ noteStatus: newNoteStatus });
-      alterCurrentNoteStatus(newNoteStatus);
-    }
-    if (cols !== prevProps.cols) {
-      let newNoteStatus = loopBoardService.alterColumns(this.state.noteStatus, cols, prevProps.cols);
-      this.setState({ noteStatus: newNoteStatus });
-      alterCurrentNoteStatus(newNoteStatus);
-    }
     if (currentNoteStatus !== this.state.noteStatus) {
       this.setState({ noteStatus:currentNoteStatus});
+    } else {
+      if (rows !== prevProps.rows) {
+        let newNoteStatus = loopBoardService.alterRows(this.state.noteStatus, cols, rows, prevProps.rows);
+        this.setState({ noteStatus: newNoteStatus });
+        alterCurrentNoteStatus(newNoteStatus);
+      }
+      if (cols !== prevProps.cols) {
+        let newNoteStatus = loopBoardService.alterColumns(this.state.noteStatus, cols, prevProps.cols);
+        this.setState({ noteStatus: newNoteStatus });
+        alterCurrentNoteStatus(newNoteStatus);
+      }
     }
   }
 
