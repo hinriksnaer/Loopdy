@@ -29,10 +29,19 @@ const appService = function() {
     return newArray;
   }
 
+  function getCurrentPlaybackIndex(list, key) {
+    for (let i = 0; i< list.length; i++) {
+      if (list[i].key === key) {
+        return i;
+      }
+    }
+  }
+
   return {
     generateNotes,
     decodeURL,
-    deepCopy2dArray
+    deepCopy2dArray,
+    getCurrentPlaybackIndex
   };
 }();
   

@@ -17,7 +17,7 @@ class App extends Component {
     cols: 12,
     rows: 8,
     eigth: 3,
-    playbacks: {}
+    playbacks: []
   };
 
   // im sorry
@@ -46,37 +46,24 @@ class App extends Component {
       this.generateNotes(this.state.eigth, this.state.rows);
     }
     let playbackObj = {
+      key: uniqid(),
       eigth: this.state.eigth,
       rows: this.state.rows,
       cols: this.state.cols,
       noteStatus: appService.deepCopy2dArray(currentNoteStatus[0]),
       speed: this.state.speed
     };
-    let key = uniqid();
-    this.state.playbacks[key] = playbackObj;
-    this.setState( { currentPlaybackKey:key } );
+    this.state.playbacks.push(playbackObj);
+    this.setState( { currentPlaybackKey:playbackObj.key } );
   }
 
   // this does not work because react does not make sense
   alterCurrentPlayback(key, value) {
     let { currentPlaybackKey, playbacks } = this.state;
 
-    let clone = JSON.parse(JSON.stringify(playbacks));
-    let newObj = {};
-    newObj[currentPlaybackKey] = {};
-    for (let ke in clone[currentPlaybackKey]) {
-      if(ke !== key){
-        newObj[currentPlaybackKey][ke] = clone[currentPlaybackKey][ke];
-      }
-    }
-
-    for (let ke in clone) {
-      if(ke !== currentPlaybackKey){
-        newObj[ke] = clone[ke];
-      }
-    }
-    newObj[currentPlaybackKey][key] = value;
-    this.setState({ playbacks: newObj });
+    let currentPlaybackIndex = appService.getCurrentPlaybackIndex(playbacks, currentPlaybackKey);
+    playbacks[currentPlaybackIndex][key] = value;
+    this.setState({ playbacks: Array.from(playbacks) });
   }
     
   alterCurrentNoteStatus = (noteStatus) => {
@@ -119,15 +106,15 @@ class App extends Component {
   generatePlaybacks() {
     let { playbacks } = this.state;
     let playbackList = [];
-    for(let key in playbacks) {
+    for(let playback of playbacks) {
       playbackList.push(
         this.generatePlayback(
-          key,
-          playbacks[key].notes, 
-          playbacks[key].rows,
-          playbacks[key].cols,
-          playbacks[key].noteStatus,
-          playbacks[key].speed 
+          playback.key,
+          playback.notes, 
+          playback.rows,
+          playback.cols,
+          playback.noteStatus,
+          playback.speed 
           )
       );
     }
@@ -165,14 +152,15 @@ class App extends Component {
     let { eigth, rows, cols, speed, playbacks } = this.state;
     let initNoteStatus = loopBoardService.initStatus(rows, cols);
     let newPlayback = {
+      key: uniqid(),
       eigth: eigth,
       rows: rows,
       cols: cols,
       noteStatus: appService.deepCopy2dArray(initNoteStatus[0]),
       speed: speed
     };
-    playbacks[uniqid()] = newPlayback;
-    this.setState({ playbacks });
+    playbacks.push(newPlayback);
+    this.setState({ playbacks: Array.from(playbacks) });
   }
 
   render() {
@@ -204,17 +192,17 @@ class App extends Component {
               alterCurrentNoteStatus={this.alterCurrentNoteStatus}/>
           </div>
           <div className={'PlaybacksContainer'}>
-            {keys.map((item, i) => (
+            {playbacks.map((playback, i) => (
               <Playback
-                key = {keys[i]}
-                notes={appService.generateNotes(playbacks[item].eigth, playbacks[item].rows)}
-                cols={playbacks[item].cols}
-                rows={playbacks[item].rows}
-                speed={playbacks[item].speed}
-                noteStatus={playbacks[item].noteStatus}
-                editing={keys[i]===currentPlaybackKey}
-                uniq = {keys[i]}
-                eigth = {playbacks[item].eigth}
+                key = {playback.keys}
+                notes={appService.generateNotes(playback.eigth, playback.rows)}
+                cols={playback.cols}
+                rows={playback.rows}
+                speed={playback.speed}
+                noteStatus={playback.noteStatus}
+                editing={playback.key===currentPlaybackKey}
+                uniq = {playback.key}
+                eigth = {playback.eigth}
                 alterCurrentlyPlaying={this.alterCurrentlyPlaying}
               />
             ))}
