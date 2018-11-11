@@ -28,10 +28,6 @@ const PlaybackPlayer = function(notes, cols, speed, rows, noteStatus) {
     if (_isLooping) this.startLoop();
   }
 
-  function setNotes(notes) {
-    _notes = notes;
-  }
-
   function getIsLooping() {
     return _isLooping;
   }

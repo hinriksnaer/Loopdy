@@ -1,6 +1,6 @@
 const LZString = require('lz-string');
 
-const appService = function() {
+const AppService = function() {
   function generateNotes(eigth, rows) {
     eigth = Number(eigth);
     let dur = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
@@ -46,4 +46,4 @@ const appService = function() {
 }();
   
 
-export { appService };
+export { AppService };
