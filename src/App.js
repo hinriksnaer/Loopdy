@@ -4,9 +4,10 @@ import LoopBoard from './View/LoopBoard';
 import PlayableBoard from './View/PlayableBoard';
 import BoardSettings from './View/BoardSettings';
 import Share from './View/Share';
-import Playback from './View/Playback'
-import { appService,  } from './Service/AppService';
-import { loopBoardService } from './Service/LoopBoardService';
+import Playbacks from './View/Playbacks';
+import { AppService,  } from './Service/AppService';
+import { LoopBoardService } from './Service/LoopBoardService';
+const uniqid = require('uniqid');
 
 class App extends Component {
 
@@ -19,16 +20,13 @@ class App extends Component {
     playbacks: []
   };
 
-  // This should take care of checking if there is an url with a previous song to load or initialize the app
+  // im sorry
   componentWillMount() {
-    let currentNoteStatus = loopBoardService.initStatus(8, 12);
+    let currentNoteStatus = LoopBoardService.initStatus(8, 12);
     let url = new URL(window.location.href);
-    console.log(url);
     let board = url.searchParams.get('board');
-    console.log(board);
     if (board){
-      let stateObject = appService.decodeURL(board);
-      console.log(stateObject);
+      let stateObject = AppService.decodeURL(board);
       try {
         this.setState({ 
           currentNoteStatus: stateObject.songArray,
@@ -47,21 +45,38 @@ class App extends Component {
       this.setState({ currentNoteStatus: currentNoteStatus[0] });
       this.generateNotes(this.state.eigth, this.state.rows);
     }
-    let notes = appService.generateNotes(this.state.eigth, this.state.rows);
-    let playback = this.generatePlayback(Array.from(notes), this.state.rows, this.state.cols, appService.deepCopy2dArray(currentNoteStatus[0]), this.state.speed);
-    this.setState( { playback: [playback] });
-    console.log('mounted app');
+    let playbackObj = {
+      key: uniqid(),
+      eigth: this.state.eigth,
+      rows: this.state.rows,
+      cols: this.state.cols,
+      noteStatus: AppService.deepCopy2dArray(currentNoteStatus[0]),
+      speed: this.state.speed
+    };
+    this.state.playbacks.push(playbackObj);
+    this.setState( { currentPlaybackKey:playbackObj.key } );
   }
 
+  // this does not work because react does not make sense
+  alterCurrentPlayback(key, value) {
+    let { currentPlaybackKey, playbacks } = this.state;
+
+    let currentPlaybackIndex = AppService.getCurrentPlaybackIndex(playbacks, currentPlaybackKey);
+    playbacks[currentPlaybackIndex][key] = value;
+    this.setState({ playbacks: Array.from(playbacks) });
+  }
+    
   alterCurrentNoteStatus = (noteStatus) => {
     let { currentNoteStatus } = this.state;
     let newNoteStatus = noteStatus;
     this.setState({ currentNoteStatus: newNoteStatus });
+    this.alterCurrentPlayback('noteStatus', newNoteStatus);
   }
 
   // converts bpm to speed and sets it
   alterSpeed = (speed) => {
     this.setState({ speed });
+    this.alterCurrentPlayback('speed', speed);
   }
 
   alterEigth = (eigth) => {
@@ -69,34 +84,58 @@ class App extends Component {
     let pitch = Number(eigth);
     this.setState({ eigth: pitch });
     this.generateNotes(pitch, rows);
+    this.alterCurrentPlayback('eigth', pitch);
   }
 
   alterRows = (rows) => {
     this.setState({ rows });
     this.generateNotes(this.state.eigth, rows);
+    this.alterCurrentPlayback('rows', rows);
   }
 
   alterCols = (cols) => {
     this.setState({ cols });
+    this.alterCurrentPlayback('cols', cols);
   }
 
   generateNotes = (eigth, rows) => {
-    let notes = appService.generateNotes(eigth, rows);
+    let notes = AppService.generateNotes(eigth, rows);
     this.setState({ notes });
   }
 
-  generatePlayback = (notes, rows, cols, noteStatus, speed) => {
-    return <Playback
-      notes={notes}
-      cols={cols}
-      rows={rows}
-      speed={speed}
-      noteStatus={noteStatus}
-    />
+  // changes the currently select playback to edit
+  alterCurrentlyPlaying = (obj) => {
+    let { rows, cols, eigth, speed, noteStatus, key } = obj;
+    let notes = AppService.generateNotes(eigth, rows);
+    this.setState({
+      rows,
+      cols,
+      eigth,
+      speed,
+      notes,
+      currentPlaybackKey: key,
+      currentNoteStatus: noteStatus
+    });
+
+  }
+
+  addPlayback = () => {
+    let { eigth, rows, cols, speed, playbacks } = this.state;
+    let initNoteStatus = LoopBoardService.initStatus(rows, cols);
+    let newPlayback = {
+      key: uniqid(),
+      eigth: eigth,
+      rows: rows,
+      cols: cols,
+      noteStatus: AppService.deepCopy2dArray(initNoteStatus[0]),
+      speed: speed
+    };
+    playbacks.push(newPlayback);
+    this.setState({ playbacks: Array.from(playbacks) });
   }
 
   render() {
-    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus } = this.state;
+    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackKey } = this.state;
     return (
       <main>
         <div className="BoardContainer">
@@ -108,7 +147,8 @@ class App extends Component {
             eigth={eigth} 
             alterEigth={this.alterEigth} 
             speed={speed} 
-            alterSpeed={this.alterSpeed}/>
+            alterSpeed={this.alterSpeed}
+            />
           <div className="SoundboardContainer">
             <PlayableBoard 
               notes={notes}/>
@@ -121,14 +161,19 @@ class App extends Component {
               currentNoteStatus={currentNoteStatus}
               alterCurrentNoteStatus={this.alterCurrentNoteStatus}/>
           </div>
-          {this.state.playback}
+          <Playbacks
+            playbacks={playbacks}
+            addPlayback={this.addPlayback}
+            currentPlaybackKey={currentPlaybackKey}
+            alterCurrentlyPlaying={this.alterCurrentlyPlaying}
+          />
           <Share 
             songArray={currentNoteStatus}
             rows={rows}
             cols={cols}
             pitch={eigth}
             speed={speed}
-          />
+            />
         </div>
         <div className="InfoText">
           <p>Loopdy 0.2.0 created by Hinrik S. Guðmundsson</p>

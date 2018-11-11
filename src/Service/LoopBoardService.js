@@ -1,4 +1,4 @@
-const loopBoardService = function() {
+const LoopBoardService = function() {
 
   function initStatus(rows, cols) {
     let noteStatus = [];
@@ -50,4 +50,4 @@ const loopBoardService = function() {
 }();
   
 
-export { loopBoardService };
+export { LoopBoardService };

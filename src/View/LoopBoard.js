@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { loopBoardService } from '../Service/LoopBoardService';
+import { LoopBoardService } from '../Service/LoopBoardService';
 import NoteBox from './NoteBox';
 import '../App.css';
 import { playSound } from '../Service/SoundBox';
@@ -26,7 +26,7 @@ class LoopBoard extends Component {
   }
   
   componentDidUpdate(prevProps) {
-    const { speed, rows, cols, alterCurrentNoteStatus } = this.props;
+    const { speed, rows, cols, alterCurrentNoteStatus, currentNoteStatus } = this.props;
     if (speed !== prevProps.speed && this.state.looping) {
       let interval = this.state.playLoop;
       this.setState({ 
@@ -36,21 +36,25 @@ class LoopBoard extends Component {
       clearInterval(interval);
       this.setState({ playLoop });
     }
-    if (rows !== prevProps.rows) {
-      let newNoteStatus = loopBoardService.alterRows(this.state.noteStatus, cols, rows, prevProps.rows);
-      this.setState({ noteStatus: newNoteStatus });
-      alterCurrentNoteStatus(newNoteStatus);
-    }
-    if (cols !== prevProps.cols) {
-      let newNoteStatus = loopBoardService.alterColumns(this.state.noteStatus, cols, prevProps.cols);
-      this.setState({ noteStatus: newNoteStatus });
-      alterCurrentNoteStatus(newNoteStatus);
+    if (currentNoteStatus !== this.state.noteStatus) {
+      this.setState({ noteStatus:currentNoteStatus});
+    } else {
+      if (rows !== prevProps.rows) {
+        let newNoteStatus = LoopBoardService.alterRows(this.state.noteStatus, cols, rows, prevProps.rows);
+        this.setState({ noteStatus: newNoteStatus });
+        alterCurrentNoteStatus(newNoteStatus);
+      }
+      if (cols !== prevProps.cols) {
+        let newNoteStatus = LoopBoardService.alterColumns(this.state.noteStatus, cols, prevProps.cols);
+        this.setState({ noteStatus: newNoteStatus });
+        alterCurrentNoteStatus(newNoteStatus);
+      }
     }
   }
 
   initStatus = () => {
     let { cols, rows, currentNoteStatus, alterCurrentNoteStatus } = this.props;
-    let initData = loopBoardService.initStatus(rows, cols);
+    let initData = LoopBoardService.initStatus(rows, cols);
     this.setState({ isPlaying: initData[1] });
     if(currentNoteStatus){
       this.setState({ noteStatus: currentNoteStatus });
