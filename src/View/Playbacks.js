@@ -9,24 +9,23 @@ class Playbacks extends Component {
   static propTypes = {
     playbacks: PropTypes.array,
     addPlayback: PropTypes.func,
-    currentPlaybackKey: PropTypes.string,
+    currentPlaybackIndex: PropTypes.number,
     alterCurrentlyPlaying: PropTypes.func
   }
 
   render() {
-    let { playbacks, currentPlaybackKey, addPlayback, alterCurrentlyPlaying } = this.props;
+    let { playbacks, currentPlaybackIndex, addPlayback, alterCurrentlyPlaying } = this.props;
     return (
       <div className={'PlaybacksContainer'}>
         {playbacks.map((playback) => (
           <Playback
-            key = {playback.keys}
+            index = {playback.index}
             notes={AppService.generateNotes(playback.eigth, playback.rows)}
             cols={playback.cols}
             rows={playback.rows}
             speed={playback.speed}
             noteStatus={playback.noteStatus}
-            editing={playback.key===currentPlaybackKey}
-            uniq = {playback.key}
+            editing={playback.index===currentPlaybackIndex}
             eigth = {playback.eigth}
             alterCurrentlyPlaying={alterCurrentlyPlaying}
           />

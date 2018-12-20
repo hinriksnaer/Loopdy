@@ -7,7 +7,6 @@ import Share from './View/Share';
 import Playbacks from './View/Playbacks';
 import { AppService,  } from './Service/AppService';
 import { LoopBoardService } from './Service/LoopBoardService';
-const uniqid = require('uniqid');
 
 class App extends Component {
 
@@ -17,36 +16,40 @@ class App extends Component {
     cols: 12,
     rows: 8,
     eigth: 3,
-    playbacks: []
+    playbacks: [],
+    currentPlaybackIndex: 0,
   };
 
-  // im sorry
+  // Initializes the loopboard, if the url contains a saved state then it will load, 
+  // if the save state is faulty or the url does not contain a save state then it will
+  // be initialized in a default state
   componentWillMount() {
     let currentNoteStatus = LoopBoardService.initStatus(8, 12);
     let url = new URL(window.location.href);
     let board = url.searchParams.get('board');
     if (board){
       let stateObject = AppService.decodeURL(board);
+      console.log(stateObject);
       try {
         this.setState({ 
           currentNoteStatus: stateObject.songArray,
           cols: stateObject.col,
           rows: stateObject.row,
           eigth: stateObject.pitch,
-          speed: stateObject.speed
+          speed: stateObject.speed,
+          playbacks: stateObject.playbacks,
+          currentPlaybackIndex: stateObject.currentPlaybackIndex,
         });
         this.generateNotes(stateObject.pitch, stateObject.row);
 
       } catch (err) {
-        this.setState({ currentNoteStatus: currentNoteStatus[0] });
-        this.generateNotes(this.state.eigth, this.state.rows);
+        this.setInitialState(currentNoteStatus[0]);
       }
     } else {
-      this.setState({ currentNoteStatus: currentNoteStatus[0] });
-      this.generateNotes(this.state.eigth, this.state.rows);
+      this.setInitialState(currentNoteStatus[0]);
     }
     let playbackObj = {
-      key: uniqid(),
+      index: this.state.currentPlaybackIndex,
       eigth: this.state.eigth,
       rows: this.state.rows,
       cols: this.state.cols,
@@ -54,20 +57,22 @@ class App extends Component {
       speed: this.state.speed
     };
     this.state.playbacks.push(playbackObj);
-    this.setState( { currentPlaybackKey:playbackObj.key } );
   }
 
-  // this does not work because react does not make sense
-  alterCurrentPlayback(key, value) {
-    let { currentPlaybackKey, playbacks } = this.state;
+  // initializes the loopboard in a default state
+  setInitialState = (defaultNoteStatus) => {
+    this.setState({ currentNoteStatus: defaultNoteStatus });
+    this.generateNotes(this.state.eigth, this.state.rows);
+  }
 
-    let currentPlaybackIndex = AppService.getCurrentPlaybackIndex(playbacks, currentPlaybackKey);
+  alterCurrentPlayback = (key, value) => {
+    let { currentPlaybackIndex, playbacks } = this.state;
+
     playbacks[currentPlaybackIndex][key] = value;
     this.setState({ playbacks: Array.from(playbacks) });
   }
     
   alterCurrentNoteStatus = (noteStatus) => {
-    let { currentNoteStatus } = this.state;
     let newNoteStatus = noteStatus;
     this.setState({ currentNoteStatus: newNoteStatus });
     this.alterCurrentPlayback('noteStatus', newNoteStatus);
@@ -105,7 +110,7 @@ class App extends Component {
 
   // changes the currently select playback to edit
   alterCurrentlyPlaying = (obj) => {
-    let { rows, cols, eigth, speed, noteStatus, key } = obj;
+    let { rows, cols, eigth, speed, noteStatus, index } = obj;
     let notes = AppService.generateNotes(eigth, rows);
     this.setState({
       rows,
@@ -113,7 +118,7 @@ class App extends Component {
       eigth,
       speed,
       notes,
-      currentPlaybackKey: key,
+      currentPlaybackIndex: index,
       currentNoteStatus: noteStatus
     });
 
@@ -123,7 +128,7 @@ class App extends Component {
     let { eigth, rows, cols, speed, playbacks } = this.state;
     let initNoteStatus = LoopBoardService.initStatus(rows, cols);
     let newPlayback = {
-      key: uniqid(),
+      index: playbacks.length,
       eigth: eigth,
       rows: rows,
       cols: cols,
@@ -135,7 +140,7 @@ class App extends Component {
   }
 
   render() {
-    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackKey } = this.state;
+    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackIndex } = this.state;
     return (
       <main>
         <div className="BoardContainer">
@@ -164,7 +169,7 @@ class App extends Component {
           <Playbacks
             playbacks={playbacks}
             addPlayback={this.addPlayback}
-            currentPlaybackKey={currentPlaybackKey}
+            currentPlaybackIndex={currentPlaybackIndex}
             alterCurrentlyPlaying={this.alterCurrentlyPlaying}
           />
           <Share 
@@ -173,6 +178,8 @@ class App extends Component {
             cols={cols}
             pitch={eigth}
             speed={speed}
+            playbacks={playbacks}
+            currentPlaybackIndex={currentPlaybackIndex}
             />
         </div>
         <div className="InfoText">

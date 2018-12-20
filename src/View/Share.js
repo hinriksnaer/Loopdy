@@ -10,6 +10,8 @@ class Share extends Component {
     cols: PropTypes.number,
     pitch: PropTypes.number,
     speed: PropTypes.number,
+    playbacks: PropTypes.array,
+    currentPlaybackIndex: PropTypes.number,
   };
 
   state = {
@@ -18,14 +20,13 @@ class Share extends Component {
 
   copyLinkToClipboard = () => {
     const shareInput = document.getElementsByClassName('ShareLinkInput');
-    console.log(shareInput);
     shareInput[0].select();
     document.execCommand('copy');
   }
 
   shareButtonPressed = () => {
-    const { songArray, rows, cols, pitch, speed } = this.props;
-    const link = ShareService.generateShareLink(songArray, rows, cols, pitch, speed);
+    const { songArray, rows, cols, pitch, speed, playbacks, currentPlaybackIndex } = this.props;
+    const link = ShareService.generateShareLink(songArray, rows, cols, pitch, speed, playbacks, currentPlaybackIndex);
     this.setState({shareLink: link});
   }
 
