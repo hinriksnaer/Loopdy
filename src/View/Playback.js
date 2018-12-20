@@ -68,7 +68,6 @@ class Playback extends Component {
       noteStatus,
       speed,
       eigth,
-
     }
     alterCurrentlyPlaying(playbackData);
   }

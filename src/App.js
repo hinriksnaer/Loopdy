@@ -17,10 +17,12 @@ class App extends Component {
     cols: 12,
     rows: 8,
     eigth: 3,
-    playbacks: []
+    playbacks: [],
   };
 
-  // im sorry
+  // Initializes the loopboard, if the url contains a saved state then it will load, 
+  // if the save state is faulty or the url does not contain a save state then it will
+  // be initialized in a default state
   componentWillMount() {
     let currentNoteStatus = LoopBoardService.initStatus(8, 12);
     let url = new URL(window.location.href);
@@ -33,17 +35,17 @@ class App extends Component {
           cols: stateObject.col,
           rows: stateObject.row,
           eigth: stateObject.pitch,
-          speed: stateObject.speed
+          speed: stateObject.speed,
+          playbacks: stateObject.playbacks,
+          currentPlaybackKey: stateObject.currentPlaybackKey,
         });
         this.generateNotes(stateObject.pitch, stateObject.row);
 
       } catch (err) {
-        this.setState({ currentNoteStatus: currentNoteStatus[0] });
-        this.generateNotes(this.state.eigth, this.state.rows);
+        this.setInitialState(currentNoteStatus[0]);
       }
     } else {
-      this.setState({ currentNoteStatus: currentNoteStatus[0] });
-      this.generateNotes(this.state.eigth, this.state.rows);
+      this.setInitialState(currentNoteStatus[0]);
     }
     let playbackObj = {
       key: uniqid(),
@@ -57,7 +59,12 @@ class App extends Component {
     this.setState( { currentPlaybackKey:playbackObj.key } );
   }
 
-  // this does not work because react does not make sense
+  // initializes the loopboard in a default state
+  setInitialState = (defaultNoteStatus) => {
+    this.setState({ currentNoteStatus: defaultNoteStatus });
+    this.generateNotes(this.state.eigth, this.state.rows);
+  }
+
   alterCurrentPlayback(key, value) {
     let { currentPlaybackKey, playbacks } = this.state;
 
@@ -173,6 +180,8 @@ class App extends Component {
             cols={cols}
             pitch={eigth}
             speed={speed}
+            playbacks={playbacks}
+            currentPlaybackKey={currentPlaybackKey}
             />
         </div>
         <div className="InfoText">
