@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
-import { playSound } from './SoundBox';
+import '../App.css';
+import { playSound } from '../Service/SoundBox';
 import PropTypes from 'prop-types';
 
 class PlayableBoard extends Component {
