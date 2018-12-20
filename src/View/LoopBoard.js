@@ -66,7 +66,6 @@ class LoopBoard extends Component {
 
   // starts the loop if it is not currently active, iterates over the boxes and plays active noteboxes
   startLoop = () => {
-    debugger;
     this.setState({ looping: !this.state.looping });
     let { cols, speed } = this.props;
     const { notes, rows } = this.props;

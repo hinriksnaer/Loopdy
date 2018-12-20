@@ -59,9 +59,9 @@ class Playback extends Component {
   }
 
   handleEditButton = () => {
-    let { uniq, notes, rows, cols, noteStatus, speed, alterCurrentlyPlaying, eigth } = this.props;
+    let { notes, rows, cols, noteStatus, speed, alterCurrentlyPlaying, eigth, index } = this.props;
     let playbackData = {
-      key: uniq,
+      index,
       notes,
       rows,
       cols,

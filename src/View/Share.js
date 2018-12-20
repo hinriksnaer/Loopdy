@@ -11,7 +11,7 @@ class Share extends Component {
     pitch: PropTypes.number,
     speed: PropTypes.number,
     playbacks: PropTypes.array,
-    currentPlaybackKey: PropTypes.string,
+    currentPlaybackIndex: PropTypes.number,
   };
 
   state = {
@@ -25,9 +25,8 @@ class Share extends Component {
   }
 
   shareButtonPressed = () => {
-    const { songArray, rows, cols, pitch, speed, playbacks, currentPlaybackKey } = this.props;
-    console.log(currentPlaybackKey);
-    const link = ShareService.generateShareLink(songArray, rows, cols, pitch, speed, playbacks, currentPlaybackKey);
+    const { songArray, rows, cols, pitch, speed, playbacks, currentPlaybackIndex } = this.props;
+    const link = ShareService.generateShareLink(songArray, rows, cols, pitch, speed, playbacks, currentPlaybackIndex);
     this.setState({shareLink: link});
   }
 

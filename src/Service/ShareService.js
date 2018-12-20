@@ -2,7 +2,7 @@ const LZString = require('lz-string');
 
 const ShareService = function() {
 
-  function generateShareLink(songArray, row, col, pitch, speed, playbacks, currentPlaybackKey) {
+  function generateShareLink(songArray, row, col, pitch, speed, playbacks, currentPlaybackIndex) {
     let object = {
       songArray,
       row,
@@ -10,7 +10,7 @@ const ShareService = function() {
       pitch,
       speed,
       playbacks,
-      currentPlaybackKey,
+      currentPlaybackIndex,
     };
     let jsonObject = JSON.stringify(object);
     let compressed = LZString.compressToEncodedURIComponent(jsonObject);
