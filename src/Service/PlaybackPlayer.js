@@ -10,6 +10,7 @@ const PlaybackPlayer = function(notes, cols, speed, rows, noteStatus) {
   let _isLooping = false;
   let _currentNote = 0;
   let _playLoop = null;
+  let _playersToStart = [];
   
   function setCols(cols) {
     _cols = cols;
@@ -49,6 +50,10 @@ const PlaybackPlayer = function(notes, cols, speed, rows, noteStatus) {
     clearInterval(_playLoop);
   }
 
+  function syncStartPlaybackPlayer(playbackPlayer) {
+    _playersToStart.push(playbackPlayer);
+  }
+
 
   async function startLoop() {
     _isLooping = true;
@@ -62,6 +67,11 @@ const PlaybackPlayer = function(notes, cols, speed, rows, noteStatus) {
       if(_currentNote >= _cols){
         _currentNote = 0;
       }
+      
+      for (let playbackPlayer of _playersToStart) {
+        playbackPlayer.startLoop();
+      }
+      _playersToStart = [];
     }, _speed);
   }
   
@@ -75,7 +85,8 @@ const PlaybackPlayer = function(notes, cols, speed, rows, noteStatus) {
     startLoop,
     getCurrentNote,
     getSpeed,
-    getIsLooping
+    getIsLooping,
+    syncStartPlaybackPlayer
   };
 };
     

@@ -48,11 +48,12 @@ class Playback extends Component {
 
   handlePlayButton = () => {
     const { playing, playbackPlayer } = this.state;
+    const { addPlayingPlayback } = this.props;
     const newPlaying = !playing;
     this.setState({ playing: newPlaying });
     
     if (!playing) {
-      playbackPlayer.startLoop();
+      addPlayingPlayback(playbackPlayer);
     } else {
       playbackPlayer.stopLoop();
     }
