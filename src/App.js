@@ -124,6 +124,11 @@ class App extends Component {
 
   }
 
+  setLoopBoardPlaybackPlayer = (playbackPlayer) => {
+    console.log(typeof playbackPlayer);
+    this.setState({ loopBoardPlaybackPlayer: playbackPlayer })
+  }
+
   addPlayback = () => {
     let { eigth, rows, cols, speed, playbacks } = this.state;
     let initNoteStatus = LoopBoardService.initStatus(rows, cols);
@@ -164,7 +169,9 @@ class App extends Component {
               speed={speed} 
               boardIsLooping={boardIsLooping}
               currentNoteStatus={currentNoteStatus}
-              alterCurrentNoteStatus={this.alterCurrentNoteStatus}/>
+              alterCurrentNoteStatus={this.alterCurrentNoteStatus}
+              setLoopBoardPlaybackPlayer={this.setLoopBoardPlaybackPlayer}
+              currentPlaybackIndex={currentPlaybackIndex}/>
           </div>
           <Playbacks
             playbacks={playbacks}
