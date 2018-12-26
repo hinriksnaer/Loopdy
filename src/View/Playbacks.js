@@ -3,6 +3,7 @@ import Playback from '../View/Playback';
 import { AppService } from '../Service/AppService'
 import '../App.css';
 import PropTypes from 'prop-types';
+import { PlaybackPlayer } from '../Service/PlaybackPlayer';
 
 class Playbacks extends Component {
 
@@ -11,6 +12,21 @@ class Playbacks extends Component {
     addPlayback: PropTypes.func,
     currentPlaybackIndex: PropTypes.number,
     alterCurrentlyPlaying: PropTypes.func
+  }
+
+  state = {
+    playingPlaybacks: []
+  }
+
+  addPlayingPlayback = (playback) => {
+    let { playingPlaybacks } = this.state;
+    if (!playingPlaybacks[0]) {
+      playingPlaybacks.push(playback);
+      this.setState({ playingPlaybacks });
+      playback.startLoop();
+    } else {
+      playingPlaybacks[0].syncStartPlaybackPlayer(playback);
+    }
   }
 
   render() {
@@ -28,6 +44,7 @@ class Playbacks extends Component {
             editing={playback.index===currentPlaybackIndex}
             eigth = {playback.eigth}
             alterCurrentlyPlaying={alterCurrentlyPlaying}
+            addPlayingPlaybacks={this.addPlayingPlaybacks}
           />
         ))}
         <button onClick={addPlayback}>+</button>
