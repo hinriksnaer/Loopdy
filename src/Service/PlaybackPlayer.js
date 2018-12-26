@@ -44,8 +44,14 @@ const PlaybackPlayer = function(notes, cols, speed, rows, noteStatus) {
     _notes = notes;
   }
 
+  function pauseLoop() {
+    _isLooping = false;
+    clearInterval(_playLoop);
+  }
+
   function stopLoop() {
     _isLooping = false;
+    _currentNote = 0;
     clearInterval(_playLoop);
   }
 
@@ -75,7 +81,8 @@ const PlaybackPlayer = function(notes, cols, speed, rows, noteStatus) {
     startLoop,
     getCurrentNote,
     getSpeed,
-    getIsLooping
+    getIsLooping,
+    pauseLoop
   };
 };
     
