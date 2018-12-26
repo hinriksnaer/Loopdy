@@ -26,7 +26,7 @@ class LoopBoard extends Component {
   }
   
   componentDidUpdate(prevProps) {
-    const { speed, rows, cols, alterCurrentNoteStatus, currentNoteStatus, notes } = this.props;
+    const { speed, rows, cols, alterCurrentNoteStatus, currentNoteStatus, notes, currentPlaybackIndex, setLoopBoardPlaybackPlayer } = this.props;
     const { playbackPlayer, playLoop } = this.state;
     if (speed !== prevProps.speed && this.state.looping) {
       this.setState({ 
@@ -45,6 +45,7 @@ class LoopBoard extends Component {
     }
     if (currentNoteStatus !== this.state.noteStatus) {
       this.setState({ noteStatus:currentNoteStatus});
+      playbackPlayer.setNoteStatus(currentNoteStatus)
     } else {
       if (rows !== prevProps.rows) {
         let newNoteStatus = LoopBoardService.alterRows(this.state.noteStatus, cols, rows, prevProps.rows);
@@ -63,7 +64,7 @@ class LoopBoard extends Component {
   }
 
   initStatus = () => {
-    let { cols, rows, notes, currentNoteStatus, speed } = this.props;
+    let { cols, rows, notes, currentNoteStatus, speed, setLoopBoardPlaybackPlayer } = this.props;
     let initData = LoopBoardService.initStatus(rows, cols);
     this.setState({ isPlaying: initData[1] });
     if(currentNoteStatus){
@@ -72,6 +73,7 @@ class LoopBoard extends Component {
       this.setState({ noteStatus: initData[0] });
     }
     let playbackPlayer = PlaybackPlayer(notes, cols, speed, rows, currentNoteStatus);
+    if (playbackPlayer) setLoopBoardPlaybackPlayer(playbackPlayer);
     this.setState({ playbackPlayer })
   }
 
