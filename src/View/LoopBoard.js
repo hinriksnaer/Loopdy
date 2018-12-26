@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { LoopBoardService } from '../Service/LoopBoardService';
 import NoteBox from './NoteBox';
 import '../App.css';
-import { playSound } from '../Service/SoundBox';
+import { PlaybackPlayer } from '../Service/PlaybackPlayer';
 import PropTypes from 'prop-types';
 
 class LoopBoard extends Component {
@@ -53,7 +53,7 @@ class LoopBoard extends Component {
   }
 
   initStatus = () => {
-    let { cols, rows, currentNoteStatus, alterCurrentNoteStatus } = this.props;
+    let { cols, rows, currentNoteStatus } = this.props;
     let initData = LoopBoardService.initStatus(rows, cols);
     this.setState({ isPlaying: initData[1] });
     if(currentNoteStatus){
@@ -63,19 +63,18 @@ class LoopBoard extends Component {
     }
   }
 
-
   // starts the loop if it is not currently active, iterates over the boxes and plays active noteboxes
   startLoop = () => {
     this.setState({ looping: !this.state.looping });
-    let { cols, speed } = this.props;
-    const { notes, rows } = this.props;
+    let { cols, speed, notes, currentNoteStatus, rows } = this.props;
+
     let newIsLooping = [];
-    let count = 0;
 
     // check if the loop is active
     if (this.state.looping) {
-      let interval = this.state.playLoop;
-      clearInterval(interval);
+      let { playLoop, playbackPlayer } = this.state;
+      clearInterval(playLoop);
+      playbackPlayer.stopLoop();
       this.setState({ 
         isPlaying: newIsLooping,
         currentNote: 0
@@ -86,22 +85,17 @@ class LoopBoard extends Component {
     for (let i = 0; i<cols;i++){
       newIsLooping.push(false);
     }
-
-    let playLoop = this.playLoop(speed);
-    this.setState({ playLoop });
+    let playbackPlayer = PlaybackPlayer(notes, cols, speed, rows, currentNoteStatus);
+    this.playLoop(speed);
+    playbackPlayer.startLoop();
+    this.setState({ playbackPlayer })
   }
 
   playLoop = () => {
-    const { notes, cols, speed } = this.props;
+    const { speed } = this.props;
     let playLoop = setInterval(() => {
-      let rows = this.props.rows;
-      let { noteStatus, currentNote } = this.state;
-      for (let i = 0; i<rows; i++){
-        if (noteStatus[i][currentNote]){
-          playSound(this.props.notes[i]);
-        }
-      }
-      
+      let { currentNote } = this.state;
+
       let { cols } = this.props;
       let newIsLooping = [];
       for (let i = 0; i<cols;i++){
@@ -115,7 +109,8 @@ class LoopBoard extends Component {
       }
       this.setState({ currentNote });
     }, speed);
-    return playLoop;
+    
+    this.setState({ playLoop });
   }
 
   // toggles whether or not a notebox is active or not
