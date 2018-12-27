@@ -20,13 +20,20 @@ class Playbacks extends Component {
 
   addPlayingPlayback = (playback) => {
     let { playingPlaybacks } = this.state;
-    if (!playingPlaybacks[0]) {
-      playingPlaybacks.push(playback);
+    playingPlaybacks.push(playback);
+    if (playingPlaybacks.length < 2) {
       this.setState({ playingPlaybacks });
       playback.startLoop();
     } else {
       playingPlaybacks[0].syncStartPlaybackPlayer(playback);
     }
+  }
+
+  removePlayingPlayback = (playback) => {
+    let { playingPlaybacks } = this.state;
+    let index = playingPlaybacks.indexOf(playback);
+    playingPlaybacks.splice(index, 1);
+    this.setState({ playingPlaybacks });
   }
 
   render() {
@@ -44,7 +51,8 @@ class Playbacks extends Component {
             editing={playback.index===currentPlaybackIndex}
             eigth = {playback.eigth}
             alterCurrentlyPlaying={alterCurrentlyPlaying}
-            addPlayingPlaybacks={this.addPlayingPlaybacks}
+            addPlayingPlayback={this.addPlayingPlayback}
+            removePlayingPlayback={this.removePlayingPlayback}
           />
         ))}
         <button onClick={addPlayback}>+</button>

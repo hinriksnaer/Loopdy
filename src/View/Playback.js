@@ -47,15 +47,17 @@ class Playback extends Component {
   }
 
   handlePlayButton = () => {
-    const { playing, playbackPlayer } = this.state;
-    const { addPlayingPlayback } = this.props;
+    const { playing, playbackPlayer, playbacksIndex } = this.state;
+    const { addPlayingPlayback, removePlayingPlayback } = this.props;
     const newPlaying = !playing;
     this.setState({ playing: newPlaying });
     
     if (!playing) {
-      addPlayingPlayback(playbackPlayer);
+      let index = addPlayingPlayback(playbackPlayer);
+      this.setState({ playbacksIndex: index });
     } else {
       playbackPlayer.stopLoop();
+      removePlayingPlayback(playbacksIndex);
     }
   }
 

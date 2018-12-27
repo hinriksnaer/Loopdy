@@ -26,7 +26,7 @@ class LoopBoard extends Component {
   }
   
   componentDidUpdate(prevProps) {
-    const { speed, rows, cols, alterCurrentNoteStatus, currentNoteStatus, notes, currentPlaybackIndex, setLoopBoardPlaybackPlayer } = this.props;
+    const { speed, rows, cols, alterCurrentNoteStatus, currentNoteStatus, notes } = this.props;
     const { playbackPlayer, playLoop } = this.state;
     if (speed !== prevProps.speed && this.state.looping) {
       this.setState({ 
