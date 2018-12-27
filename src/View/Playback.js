@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import PropTypes from 'prop-types';
-import { PlaybackPlayer } from '../Service/PlaybackPlayer';
+import PlaybackPlayer from '../Service/PlaybackPlayer';
 
 class Playback extends Component {
   static propTypes = {
@@ -25,7 +25,7 @@ class Playback extends Component {
   componentWillMount() {
     let { notes, rows, cols, noteStatus, speed } = this.props;
     
-    let playbackPlayer = PlaybackPlayer(notes, cols, speed, rows, noteStatus);
+    let playbackPlayer = new PlaybackPlayer(notes, cols, speed, rows, noteStatus);
 
     this.setState({
       playbackPlayer

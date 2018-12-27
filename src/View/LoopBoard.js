@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { LoopBoardService } from '../Service/LoopBoardService';
 import NoteBox from './NoteBox';
 import '../App.css';
-import { PlaybackPlayer } from '../Service/PlaybackPlayer';
+import PlaybackPlayer from '../Service/PlaybackPlayer';
 import PropTypes from 'prop-types';
 
 class LoopBoard extends Component {
@@ -71,7 +71,7 @@ class LoopBoard extends Component {
     } else {
       this.setState({ noteStatus: initData[0] });
     }
-    let playbackPlayer = PlaybackPlayer(notes, cols, speed, rows, currentNoteStatus);
+    let playbackPlayer = new PlaybackPlayer(notes, cols, speed, rows, currentNoteStatus);
     if (playbackPlayer) setLoopBoardPlaybackPlayer(playbackPlayer);
     this.setState({ playbackPlayer })
   }
