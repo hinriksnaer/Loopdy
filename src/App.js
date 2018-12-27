@@ -29,7 +29,6 @@ class App extends Component {
     let board = url.searchParams.get('board');
     if (board){
       let stateObject = AppService.decodeURL(board);
-      console.log(stateObject);
       try {
         this.setState({ 
           currentNoteStatus: stateObject.songArray,
@@ -57,6 +56,10 @@ class App extends Component {
       speed: this.state.speed
     };
     this.state.playbacks.push(playbackObj);
+  }
+
+  setBoardIsLooping = (isLooping) => {
+    this.setState({ boardIsLooping: isLooping });
   }
 
   // initializes the loopboard in a default state
@@ -125,7 +128,6 @@ class App extends Component {
   }
 
   setLoopBoardPlaybackPlayer = (playbackPlayer) => {
-    console.log(typeof playbackPlayer);
     this.setState({ loopBoardPlaybackPlayer: playbackPlayer })
   }
 
@@ -145,7 +147,7 @@ class App extends Component {
   }
 
   render() {
-    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackIndex } = this.state;
+    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackIndex, loopBoardPlaybackPlayer } = this.state;
     return (
       <main>
         <div className="BoardContainer">
@@ -171,13 +173,16 @@ class App extends Component {
               currentNoteStatus={currentNoteStatus}
               alterCurrentNoteStatus={this.alterCurrentNoteStatus}
               setLoopBoardPlaybackPlayer={this.setLoopBoardPlaybackPlayer}
-              currentPlaybackIndex={currentPlaybackIndex}/>
+              currentPlaybackIndex={currentPlaybackIndex}
+              setBoardIsLooping={this.setBoardIsLooping}/>
           </div>
           <Playbacks
             playbacks={playbacks}
             addPlayback={this.addPlayback}
             currentPlaybackIndex={currentPlaybackIndex}
             alterCurrentlyPlaying={this.alterCurrentlyPlaying}
+            loopBoardPlaybackPlayer={loopBoardPlaybackPlayer}
+            boardIsLooping={boardIsLooping}
           />
           <Share 
             songArray={currentNoteStatus}

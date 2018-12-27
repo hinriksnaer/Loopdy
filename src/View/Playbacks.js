@@ -11,11 +11,23 @@ class Playbacks extends Component {
     playbacks: PropTypes.array,
     addPlayback: PropTypes.func,
     currentPlaybackIndex: PropTypes.number,
-    alterCurrentlyPlaying: PropTypes.func
+    alterCurrentlyPlaying: PropTypes.func,
+    loopBoardPlaybackPlayer: PropTypes.func,
+    boardIsLooping: PropTypes.bool
   }
 
   state = {
     playingPlaybacks: []
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log(this.props.boardIsLooping + " " + prevProps.boardIsLooping);
+    if (!prevProps.boardIsLooping && this.props.boardIsLooping) {
+      console.log("start playing")
+      this.addPlayingPlayback(this.props.loopBoardPlaybackPlayer);
+    } else if (prevProps.boardIsLooping && !this.props.boardIsLooping) {
+      this.removePlayingPlayback(this.props.loopBoardPlaybackPlayer);
+    }
   }
 
   addPlayingPlayback = (playback) => {

@@ -17,7 +17,6 @@ class LoopBoard extends Component {
   }
 
   state = {
-    looping: false,
     currentNote: 0,
   }
 
@@ -28,7 +27,7 @@ class LoopBoard extends Component {
   componentDidUpdate(prevProps) {
     const { speed, rows, cols, alterCurrentNoteStatus, currentNoteStatus, notes } = this.props;
     const { playbackPlayer, playLoop } = this.state;
-    if (speed !== prevProps.speed && this.state.looping) {
+    if (speed !== prevProps.speed && this.props.boardIsLooping) {
       this.setState({ 
         isPlaying: []
       });
@@ -79,13 +78,13 @@ class LoopBoard extends Component {
 
   // starts the loop if it is not currently active, iterates over the boxes and plays active noteboxes
   startLoop = () => {
-    let { cols, speed } = this.props;
+    let { cols, speed, setBoardIsLooping, boardIsLooping } = this.props;
     let { playbackPlayer } = this.state;
     let newIsLooping = [];
-    this.setState({ looping: !this.state.looping });
+    setBoardIsLooping(!boardIsLooping);
     
     // check if the loop is active
-    if (this.state.looping) {
+    if (boardIsLooping) {
       let { playLoop, playbackPlayer } = this.state;
       clearInterval(playLoop);
       playbackPlayer.stopLoop();
@@ -100,7 +99,6 @@ class LoopBoard extends Component {
     for (let i = 0; i<cols;i++){
       newIsLooping.push(false);
     }
-    playbackPlayer.startLoop();
     this.playLoop(speed);
   }
   
@@ -172,7 +170,7 @@ class LoopBoard extends Component {
 
   render() {
     let { rows } = this.props;
-    let startText = this.state.looping? 'Stop':'Start';
+    let startText = this.props.boardIsLooping? 'Stop':'Start';
     let noteStatus = this.state.noteStatus;
     let isPlaying = this.state.isPlaying;
     return (
