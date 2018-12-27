@@ -21,9 +21,7 @@ class Playbacks extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(this.props.boardIsLooping + " " + prevProps.boardIsLooping);
     if (!prevProps.boardIsLooping && this.props.boardIsLooping) {
-      console.log("start playing")
       this.addPlayingPlayback(this.props.loopBoardPlaybackPlayer);
     } else if (prevProps.boardIsLooping && !this.props.boardIsLooping) {
       this.removePlayingPlayback(this.props.loopBoardPlaybackPlayer);

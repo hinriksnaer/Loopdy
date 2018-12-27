@@ -5,11 +5,17 @@ import { PlaybackPlayer } from '../Service/PlaybackPlayer';
 
 class Playback extends Component {
   static propTypes = {
+    index: PropTypes.number,
     notes: PropTypes.array,
     rows: PropTypes.number,
     cols: PropTypes.number,
     noteStatus: PropTypes.array,
     speed: PropTypes.number,
+    editing: PropTypes.bool,
+    eigth: PropTypes.number,
+    alterCurrentlyPlaying: PropTypes.func,
+    addPlayingPlayback: PropTypes.func,
+    removePlayingPlayback: PropTypes.func,
   };
 
   state = {
