@@ -68,6 +68,7 @@ class App extends Component {
     this.generateNotes(this.state.eigth, this.state.rows);
   }
 
+  // Function used to alter the current playback object
   alterCurrentPlayback = (key, value) => {
     let { currentPlaybackIndex, playbacks } = this.state;
 
@@ -75,6 +76,7 @@ class App extends Component {
     this.setState({ playbacks: Array.from(playbacks) });
   }
     
+  // Function passed as prop so the notestatus can be altered
   alterCurrentNoteStatus = (noteStatus) => {
     let newNoteStatus = noteStatus;
     this.setState({ currentNoteStatus: newNoteStatus });
@@ -87,6 +89,7 @@ class App extends Component {
     this.alterCurrentPlayback('speed', speed);
   }
 
+  // alters the eigth and generates the set of notes to play that eigth
   alterEigth = (eigth) => {
     let { rows } = this.state;
     let pitch = Number(eigth);
@@ -95,17 +98,20 @@ class App extends Component {
     this.alterCurrentPlayback('eigth', pitch);
   }
 
+  // alters the amount of rows in the state
   alterRows = (rows) => {
     this.setState({ rows });
     this.generateNotes(this.state.eigth, rows);
     this.alterCurrentPlayback('rows', rows);
   }
 
+  // alters the amount of cols in the state
   alterCols = (cols) => {
     this.setState({ cols });
     this.alterCurrentPlayback('cols', cols);
   }
 
+  // generates the notes required to play the current pitch (eigth)
   generateNotes = (eigth, rows) => {
     let notes = AppService.generateNotes(eigth, rows);
     this.setState({ notes });
@@ -127,10 +133,12 @@ class App extends Component {
 
   }
 
+  // sets the current playbackplayer on the loopboard
   setLoopBoardPlaybackPlayer = (playbackPlayer) => {
     this.setState({ loopBoardPlaybackPlayer: playbackPlayer })
   }
 
+  // adds a new playback that can be edited and played
   addPlayback = () => {
     let { eigth, rows, cols, speed, playbacks } = this.state;
     let initNoteStatus = LoopBoardService.initStatus(rows, cols);
