@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import '../App.css';
 import PropTypes from 'prop-types';
-import { PlaybackPlayer } from '../Service/PlaybackPlayer';
+import PlaybackPlayer from '../Service/PlaybackPlayer';
 
 class Playback extends Component {
   static propTypes = {
+    index: PropTypes.number,
     notes: PropTypes.array,
     rows: PropTypes.number,
     cols: PropTypes.number,
     noteStatus: PropTypes.array,
     speed: PropTypes.number,
+    editing: PropTypes.bool,
+    eigth: PropTypes.number,
+    alterCurrentlyPlaying: PropTypes.func,
+    addPlayingPlayback: PropTypes.func,
+    removePlayingPlayback: PropTypes.func,
   };
 
   state = {
@@ -19,7 +25,7 @@ class Playback extends Component {
   componentWillMount() {
     let { notes, rows, cols, noteStatus, speed } = this.props;
     
-    let playbackPlayer = PlaybackPlayer(notes, cols, speed, rows, noteStatus);
+    let playbackPlayer = new PlaybackPlayer(notes, cols, speed, rows, noteStatus);
 
     this.setState({
       playbackPlayer
@@ -47,15 +53,17 @@ class Playback extends Component {
   }
 
   handlePlayButton = () => {
-    const { playing, playbackPlayer } = this.state;
-    const { addPlayingPlayback } = this.props;
+    const { playing, playbackPlayer, playbacksIndex } = this.state;
+    const { addPlayingPlayback, removePlayingPlayback } = this.props;
     const newPlaying = !playing;
     this.setState({ playing: newPlaying });
     
     if (!playing) {
-      addPlayingPlayback(playbackPlayer);
+      let index = addPlayingPlayback(playbackPlayer);
+      this.setState({ playbacksIndex: index });
     } else {
       playbackPlayer.stopLoop();
+      removePlayingPlayback(playbacksIndex);
     }
   }
 

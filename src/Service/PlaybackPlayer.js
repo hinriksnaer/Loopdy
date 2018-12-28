@@ -1,101 +1,85 @@
 import { playSound } from './SoundBox';
 
-const PlaybackPlayer = function(notes, cols, speed, rows, noteStatus) {
+export default class PlaybackPlayer {
 
-  let _rows = rows;
-  let _cols = cols;
-  let _notes = notes;
-  let _speed = speed;
-  let _noteStatus = noteStatus;
-  let _isLooping = false;
-  let _currentNote = 0;
-  let _playLoop = null;
-  let _playersToStart = [];
-  
-  function setCols(cols) {
-    _cols = cols;
+  constructor(notes, cols, speed, rows, noteStatus) {
+    this._rows = rows;
+    this._cols = cols;
+    this._notes = notes;
+    this._speed = speed;
+    this._noteStatus = noteStatus;
+    this._isLooping = false;
+    this._currentNote = 0;
+    this._playLoop = null;
+    this._playersToStart = [];
   }
 
-  function setRows(rows) {
-    _rows = rows;
+  setCols(cols) {
+    this._cols = cols;
   }
 
-  function setNoteStatus(noteStatus) {
-    _noteStatus = noteStatus;
+  setRows(rows) {
+    this._rows = rows;
   }
 
-  function setSpeed(newSpeed) {
-    _speed = newSpeed;
-    if (_isLooping) this.startLoop();
+  setNoteStatus(noteStatus) {
+    this._noteStatus = noteStatus;
   }
 
-  function getIsLooping() {
-    return _isLooping;
+  setSpeed(newSpeed) {
+    this._speed = newSpeed;
+    if (this._isLooping) this.startLoop();
   }
 
-  function getCurrentNote() {
-    return _currentNote;
+  getSpeed() {
+    return this._speed;
   }
 
-  function getSpeed() {
-    return _speed;
+  getIsLooping() {
+    return this._isLooping;
   }
 
-  function setNotes(notes) {
-    _notes = notes;
+  getCurrentNote() {
+    return this._currentNote;
   }
 
-  function pauseLoop() {
-    _isLooping = false;
-    clearInterval(_playLoop);
+  setNotes(notes) {
+    this._notes = notes;
   }
 
-  function stopLoop() {
-    _isLooping = false;
-    _currentNote = 0;
-    clearInterval(_playLoop);
+  pauseLoop() {
+    this._isLooping = false;
+    clearInterval(this._playLoop);
   }
 
-  function syncStartPlaybackPlayer(playbackPlayer) {
-    _playersToStart.push(playbackPlayer);
+  stopLoop() {
+    this._isLooping = false;
+    this._currentNote = 0;
+    clearInterval(this._playLoop);
+  }
+
+  syncStartPlaybackPlayer(playbackPlayer) {
+    this._playersToStart.push(playbackPlayer);
   }
 
 
-  async function startLoop() {
-    _isLooping = true;
-    _playLoop = setInterval(() => {
-      for (let i = 0; i<_rows; i++){
-        if (_noteStatus[i][_currentNote]){
-          playSound(_notes[i]);
+  async startLoop() {
+    this._isLooping = true;
+    this._playLoop = setInterval(() => {
+      for (let i = 0; i<this._rows; i++){
+        if (this._noteStatus[i][this._currentNote]){
+          playSound(this._notes[i]);
         }
       }
-      _currentNote++;
-      if(_currentNote >= _cols){
-        _currentNote = 0;
+      this._currentNote++;
+      if(this._currentNote >= this._cols){
+        this._currentNote = 0;
       }
       
-      for (let playbackPlayer of _playersToStart) {
+      for (let playbackPlayer of this._playersToStart) {
         playbackPlayer.startLoop();
       }
-      _playersToStart = [];
-    }, _speed);
+      this._playersToStart = [];
+    }, this._speed);
   }
-  
-  return {
-    setRows,
-    setCols,
-    setNotes,
-    setSpeed,
-    setNoteStatus,
-    stopLoop,
-    startLoop,
-    getCurrentNote,
-    getSpeed,
-    getIsLooping,
-    pauseLoop,
-    syncStartPlaybackPlayer
-
-  };
-};
-    
-export { PlaybackPlayer };
+}
