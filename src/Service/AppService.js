@@ -2,6 +2,7 @@ const LZString = require('lz-string');
 
 const AppService = function() {
   function generateNotes(eigth, rows) {
+    console.log(eigth);
     eigth = Number(eigth);
     let dur = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
     let notes = [];
@@ -11,6 +12,7 @@ const AppService = function() {
         eigth += 1;
         listpos += 7;
       }
+      console.log(i + " " + listpos + " " + eigth);
       notes.push(dur[i-listpos]+eigth.toString());
     }
     return notes;

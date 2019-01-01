@@ -7,6 +7,7 @@ import Share from './View/Share';
 import Playbacks from './View/Playbacks';
 import { AppService,  } from './Service/AppService';
 import { LoopBoardService } from './Service/LoopBoardService';
+import PlaybackPlayer from './Service/PlaybackPlayer';
 
 class App extends Component {
 
@@ -17,7 +18,7 @@ class App extends Component {
     rows: 8,
     eigth: 3,
     playbacks: [],
-    currentPlaybackIndex: 0,
+    currentPlaybackPlayer: null,
   };
 
   // Initializes the loopboard, if the url contains a saved state then it will load, 
@@ -37,7 +38,7 @@ class App extends Component {
           eigth: stateObject.pitch,
           speed: stateObject.speed,
           playbacks: stateObject.playbacks,
-          currentPlaybackIndex: stateObject.currentPlaybackIndex,
+          currentPlaybackPlayer: stateObject.currentPlaybackPlayer,
         });
         this.generateNotes(stateObject.pitch, stateObject.row);
 
@@ -47,15 +48,10 @@ class App extends Component {
     } else {
       this.setInitialState(currentNoteStatus[0]);
     }
-    let playbackObj = {
-      index: this.state.currentPlaybackIndex,
-      eigth: this.state.eigth,
-      rows: this.state.rows,
-      cols: this.state.cols,
-      noteStatus: AppService.deepCopy2dArray(currentNoteStatus[0]),
-      speed: this.state.speed
-    };
-    this.state.playbacks.push(playbackObj);
+
+    let playbackPlayer = new PlaybackPlayer(this.state.eigth, this.state.cols, this.state.speed, this.state.rows, currentNoteStatus[0]);
+    this.setState({ currentPlaybackPlayer: playbackPlayer });
+    this.state.playbacks.push(playbackPlayer);
   }
 
   setBoardIsLooping = (isLooping) => {
@@ -68,34 +64,26 @@ class App extends Component {
     this.generateNotes(this.state.eigth, this.state.rows);
   }
 
-  // Function used to alter the current playback object
-  alterCurrentPlayback = (key, value) => {
-    let { currentPlaybackIndex, playbacks } = this.state;
-
-    playbacks[currentPlaybackIndex][key] = value;
-    this.setState({ playbacks: Array.from(playbacks) });
-  }
-    
   // Function passed as prop so the notestatus can be altered
   alterCurrentNoteStatus = (noteStatus) => {
+    const { currentPlaybackPlayer } = this.state;
     let newNoteStatus = noteStatus;
     this.setState({ currentNoteStatus: newNoteStatus });
-    this.alterCurrentPlayback('noteStatus', newNoteStatus);
+    currentPlaybackPlayer.setNoteStatus(newNoteStatus);
   }
 
-  // converts bpm to speed and sets it
   alterSpeed = (speed) => {
+    const { currentPlaybackPlayer } = this.state;
+    currentPlaybackPlayer.setSpeed(speed);
     this.setState({ speed });
-    this.alterCurrentPlayback('speed', speed);
   }
 
   // alters the eigth and generates the set of notes to play that eigth
   alterEigth = (eigth) => {
-    let { rows } = this.state;
+    let { currentPlaybackPlayer } = this.state;
     let pitch = Number(eigth);
     this.setState({ eigth: pitch });
-    this.generateNotes(pitch, rows);
-    this.alterCurrentPlayback('eigth', pitch);
+    currentPlaybackPlayer.setEigth(pitch);
   }
 
   // alters the amount of rows in the state
@@ -119,7 +107,7 @@ class App extends Component {
 
   // changes the currently select playback to edit
   alterCurrentlyPlaying = (obj) => {
-    let { rows, cols, eigth, speed, noteStatus, index } = obj;
+    let { rows, cols, eigth, speed, noteStatus, currentPlaybackPlayer} = obj;
     let notes = AppService.generateNotes(eigth, rows);
     this.setState({
       rows,
@@ -127,7 +115,7 @@ class App extends Component {
       eigth,
       speed,
       notes,
-      currentPlaybackIndex: index,
+      currentPlaybackPlayer: currentPlaybackPlayer,
       currentNoteStatus: noteStatus
     });
 
@@ -142,54 +130,37 @@ class App extends Component {
   addPlayback = () => {
     let { eigth, rows, cols, speed, playbacks } = this.state;
     let initNoteStatus = LoopBoardService.initStatus(rows, cols);
-    let newPlayback = {
-      index: playbacks.length,
-      eigth: eigth,
-      rows: rows,
-      cols: cols,
-      noteStatus: AppService.deepCopy2dArray(initNoteStatus[0]),
-      speed: speed
-    };
-    playbacks.push(newPlayback);
+    let playbackPlayer = new PlaybackPlayer(eigth, cols, speed, rows, initNoteStatus)
+    playbacks.push(playbackPlayer);
     this.setState({ playbacks: Array.from(playbacks) });
   }
 
   render() {
-    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackIndex, loopBoardPlaybackPlayer } = this.state;
+    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackPlayer, loopBoardPlaybackPlayer } = this.state;
     return (
       <main>
         <div className="BoardContainer">
           <BoardSettings 
-            rows={rows} 
-            alterRows={this.alterRows} 
-            cols={cols} 
-            alterCols={this.alterCols} 
-            eigth={eigth} 
-            alterEigth={this.alterEigth} 
-            speed={speed} 
+            playbackPlayer={currentPlaybackPlayer}
             alterSpeed={this.alterSpeed}
+            alterEigth={this.alterEigth}
             />
           <div className="SoundboardContainer">
             <PlayableBoard 
               notes={notes}/>
             <LoopBoard 
-              cols={cols} 
-              rows={rows} 
-              notes={notes} 
-              speed={speed} 
-              boardIsLooping={boardIsLooping}
+              playbackPlayer={currentPlaybackPlayer}
+              speed={speed}
               currentNoteStatus={currentNoteStatus}
               alterCurrentNoteStatus={this.alterCurrentNoteStatus}
               setLoopBoardPlaybackPlayer={this.setLoopBoardPlaybackPlayer}
-              currentPlaybackIndex={currentPlaybackIndex}
               setBoardIsLooping={this.setBoardIsLooping}/>
           </div>
           <Playbacks
             playbacks={playbacks}
             addPlayback={this.addPlayback}
-            currentPlaybackIndex={currentPlaybackIndex}
+            currentPlaybackPlayer={currentPlaybackPlayer}
             alterCurrentlyPlaying={this.alterCurrentlyPlaying}
-            loopBoardPlaybackPlayer={loopBoardPlaybackPlayer}
             boardIsLooping={boardIsLooping}
           />
           <Share 
@@ -199,7 +170,7 @@ class App extends Component {
             pitch={eigth}
             speed={speed}
             playbacks={playbacks}
-            currentPlaybackIndex={currentPlaybackIndex}
+            currentPlaybackPlayer={currentPlaybackPlayer}
             />
         </div>
         <div className="InfoText">

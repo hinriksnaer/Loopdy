@@ -5,21 +5,18 @@ import PropTypes from 'prop-types';
 class BoardSettings extends Component {
 
   static propTypes = {
-    speed: PropTypes.number,
-    alterspeed: PropTypes.func,
-    eigth: PropTypes.number,
-    cols: PropTypes.number,
-    rows: PropTypes.number
+    playbackPlayer: PropTypes.object,
   }
 
-  state = {
-    rows: this.props.rows,
-    cols: this.props.cols
-  }
-
-  componentDidMount() {
-    let speed = 60000/this.props.speed;
-    this.setState({ speed });
+  componentWillMount() {
+    const { playbackPlayer } = this.props;
+    let speed = 60000/playbackPlayer.getSpeed();
+    this.setState({ 
+      speed, 
+      rows: playbackPlayer.getRows(),
+      cols: playbackPlayer.getCols(),
+      eigth: playbackPlayer.getEigth()
+    });
   }
 
   handleSpeedChange = (event) => {
@@ -30,12 +27,13 @@ class BoardSettings extends Component {
     let { speed } = this.state;
     let { alterSpeed } = this.props;
     let convertedSpeed = 60000/speed;
-    alterSpeed(convertedSpeed);
+    alterSpeed(convertedSpeed)
   }  
 
   handlePitchChange = (newPitch) => {
     if (newPitch < 0 || newPitch > 7) return;
     let { alterEigth } = this.props;
+    this.setState({ eigth: newPitch})
     alterEigth(newPitch);
   }
 
@@ -57,7 +55,7 @@ class BoardSettings extends Component {
 
   render() {
     let { rows, cols } = this.state;
-    let { eigth } = this.props;
+    let { playbackPlayer } = this.props;
     return (
       <div className="MenuContainer">
         <div className="InputContainer">
@@ -79,11 +77,11 @@ class BoardSettings extends Component {
           </div>
         </div>
         <div className="InputContainer">
-          <label>Pitch:<input type="number" value={this.props.eigth} disabled={'true'}></input></label>
-          <div className="MenuIconContainer" onClick={() => this.handlePitchChange(eigth-1)}>
+          <label>Pitch:<input type="number" value={this.state.eigth} disabled={'true'}></input></label>
+          <div className="MenuIconContainer" onClick={() => this.handlePitchChange(playbackPlayer.getEigth()-1)}>
             <img src={ require('../img/minus.png')}/>
           </div>
-          <div className="MenuIconContainer" onClick={() => this.handlePitchChange(eigth+1)}>
+          <div className="MenuIconContainer" onClick={() => this.handlePitchChange(playbackPlayer.getEigth()+1)}>
             <img src={ require('../img/plus.png')}/>
           </div>
         </div>

@@ -1,69 +1,24 @@
 import React, { Component } from 'react';
 import '../App.css';
 import PropTypes from 'prop-types';
-import PlaybackPlayer from '../Service/PlaybackPlayer';
 
 class Playback extends Component {
   static propTypes = {
-    index: PropTypes.number,
-    notes: PropTypes.array,
-    rows: PropTypes.number,
-    cols: PropTypes.number,
-    noteStatus: PropTypes.array,
-    speed: PropTypes.number,
+    playbackPlayer: PropTypes.object,
     editing: PropTypes.bool,
-    eigth: PropTypes.number,
     alterCurrentlyPlaying: PropTypes.func,
     addPlayingPlayback: PropTypes.func,
     removePlayingPlayback: PropTypes.func,
   };
 
-  state = {
-    playing: false
-  }
-
-  componentWillMount() {
-    let { notes, rows, cols, noteStatus, speed } = this.props;
-    
-    let playbackPlayer = new PlaybackPlayer(notes, cols, speed, rows, noteStatus);
-
-    this.setState({
-      playbackPlayer
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let { notes, rows, cols, noteStatus, speed } = nextProps;
-    let { playbackPlayer } = this.state;
-    if (notes !== this.props.notes) {
-      playbackPlayer.setNotes(notes);
-    }
-    if (rows !== this.props.rows) {
-      playbackPlayer.setRows(rows);
-    }
-    if (cols !== this.props.cols) {
-      playbackPlayer.setCols(cols);
-    }
-    if (noteStatus !== this.props.noteStatus) {
-      playbackPlayer.setNoteStatus(noteStatus);
-    }
-    if (speed !== this.props.speed) {
-      playbackPlayer.setSpeed(speed);
-    }
-  }
-
   handlePlayButton = () => {
-    const { playing, playbackPlayer, playbacksIndex } = this.state;
-    const { addPlayingPlayback, removePlayingPlayback } = this.props;
-    const newPlaying = !playing;
-    this.setState({ playing: newPlaying });
+    const { addPlayingPlayback, removePlayingPlayback, playbackPlayer } = this.props;
     
-    if (!playing) {
-      let index = addPlayingPlayback(playbackPlayer);
-      this.setState({ playbacksIndex: index });
+    if (!playbackPlayer.getIsLooping()) {
+      addPlayingPlayback(playbackPlayer);
     } else {
       playbackPlayer.stopLoop();
-      removePlayingPlayback(playbacksIndex);
+      removePlayingPlayback(playbackPlayer);
     }
   }
 
@@ -82,12 +37,11 @@ class Playback extends Component {
   }
 
   render() {
-    let { playing } = this.state;
-    let playText = playing? 'Pause': 'Play';
+    let { playbackPlayer } = this.props;
+    let playText = playbackPlayer.getIsLooping()? 'Pause': 'Play';
     return (
       <div className={'PlaybackContainer'}>
         <button onClick={this.handleEditButton}>Edit</button>{!this.props.editing && <button onClick={this.handlePlayButton}>{playText}</button>}
-        <p>{this.props.uniq}</p>
       </div>
     );
   } 
