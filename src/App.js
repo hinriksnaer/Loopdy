@@ -107,17 +107,15 @@ class App extends Component {
   }
 
   // changes the currently select playback to edit
-  alterCurrentlyPlaying = (obj) => {
-    let { rows, cols, eigth, speed, noteStatus, currentPlaybackPlayer} = obj;
-    let notes = AppService.generateNotes(eigth, rows);
+  alterCurrentPlaybackPlayer = (playbackPlayer) => {
     this.setState({
-      rows,
-      cols,
-      eigth,
-      speed,
-      notes,
-      currentPlaybackPlayer: currentPlaybackPlayer,
-      currentNoteStatus: noteStatus
+      rows: playbackPlayer.getRows(),
+      cols: playbackPlayer.getCols(),
+      eigth: playbackPlayer.getEigth(),
+      speed: playbackPlayer.getSpeed(),
+      notes: playbackPlayer.getNotes(),
+      currentPlaybackPlayer: playbackPlayer,
+      currentNoteStatus: playbackPlayer.getNoteStatus()
     });
 
   }
@@ -131,13 +129,13 @@ class App extends Component {
   addPlayback = () => {
     let { eigth, rows, cols, speed, playbacks } = this.state;
     let initNoteStatus = LoopBoardService.initStatus(rows, cols);
-    let playbackPlayer = new PlaybackPlayer(eigth, cols, speed, rows, initNoteStatus)
+    let playbackPlayer = new PlaybackPlayer(eigth, cols, speed, rows, initNoteStatus[0]);
     playbacks.push(playbackPlayer);
     this.setState({ playbacks: Array.from(playbacks) });
   }
 
   render() {
-    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackPlayer, loopBoardPlaybackPlayer } = this.state;
+    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackPlayer } = this.state;
     return (
       <main>
         <div className="BoardContainer">
@@ -165,7 +163,7 @@ class App extends Component {
             playbacks={playbacks}
             addPlayback={this.addPlayback}
             currentPlaybackPlayer={currentPlaybackPlayer}
-            alterCurrentlyPlaying={this.alterCurrentlyPlaying}
+            alterCurrentPlaybackPlayer={this.alterCurrentPlaybackPlayer}
             boardIsLooping={boardIsLooping}
           />
           <Share 

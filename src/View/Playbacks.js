@@ -11,7 +11,7 @@ class Playbacks extends Component {
     playbacks: PropTypes.array,
     addPlayback: PropTypes.func,
     currentPlaybackPlayer: PropTypes.object,
-    alterCurrentlyPlaying: PropTypes.func,
+    alterCurrentPlaybackPlayer: PropTypes.func,
     boardIsLooping: PropTypes.bool
   }
 
@@ -48,16 +48,17 @@ class Playbacks extends Component {
   }
 
   render() {
-    let { playbacks, currentPlayback, addPlayback, alterCurrentlyPlaying } = this.props;
+    let { playbacks, currentPlaybackPlayer, addPlayback, alterCurrentPlaybackPlayer } = this.props;
     return (
       <div className={'PlaybacksContainer'}>
         {playbacks.map((playbackPlayer) => (
           <Playback
             playbackPlayer={playbackPlayer}
-            editing={playbackPlayer===currentPlayback}
-            alterCurrentlyPlaying={alterCurrentlyPlaying}
+            editing={playbackPlayer==currentPlaybackPlayer}
+            alterCurrentPlaybackPlayer={alterCurrentPlaybackPlayer}
             addPlayingPlayback={this.addPlayingPlayback}
             removePlayingPlayback={this.removePlayingPlayback}
+            isPlaying={playbackPlayer.getIsLooping()}
           />
         ))}
         <button onClick={addPlayback}>+</button>

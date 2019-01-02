@@ -16,6 +16,10 @@ export default class PlaybackPlayer {
     this._playersToStart = [];
   }
 
+  getNotes() {
+    return this._notes;
+  }
+
   getCols() {
     return this._cols;
   }

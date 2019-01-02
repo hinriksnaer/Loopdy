@@ -6,39 +6,38 @@ class Playback extends Component {
   static propTypes = {
     playbackPlayer: PropTypes.object,
     editing: PropTypes.bool,
-    alterCurrentlyPlaying: PropTypes.func,
+    alterCurrentPlaybackPlayer: PropTypes.func,
     addPlayingPlayback: PropTypes.func,
     removePlayingPlayback: PropTypes.func,
   };
 
+  componentWillMount() {
+    const { playbackPlayer } = this.props;
+    this.setState({ isPlaying: playbackPlayer.getIsLooping() });
+  }
+
   handlePlayButton = () => {
     const { addPlayingPlayback, removePlayingPlayback, playbackPlayer } = this.props;
-    
-    if (!playbackPlayer.getIsLooping()) {
+    const { isPlaying } = this.state;
+
+    if (!isPlaying) {
       addPlayingPlayback(playbackPlayer);
     } else {
       playbackPlayer.stopLoop();
       removePlayingPlayback(playbackPlayer);
     }
+    this.setState({ isPlaying: !isPlaying });
   }
 
   handleEditButton = () => {
-    let { notes, rows, cols, noteStatus, speed, alterCurrentlyPlaying, eigth, index } = this.props;
-    let playbackData = {
-      index,
-      notes,
-      rows,
-      cols,
-      noteStatus,
-      speed,
-      eigth,
-    }
-    alterCurrentlyPlaying(playbackData);
+    let { alterCurrentPlaybackPlayer, playbackPlayer } = this.props;
+
+    alterCurrentPlaybackPlayer(playbackPlayer);
   }
 
   render() {
-    let { playbackPlayer } = this.props;
-    let playText = playbackPlayer.getIsLooping()? 'Pause': 'Play';
+    let { isPlaying } = this.state;
+    let playText = isPlaying? 'Pause': 'Play';
     return (
       <div className={'PlaybackContainer'}>
         <button onClick={this.handleEditButton}>Edit</button>{!this.props.editing && <button onClick={this.handlePlayButton}>{playText}</button>}
