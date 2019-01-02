@@ -21,6 +21,15 @@ export default class PlaybackPlayer {
   }
 
   setCols(cols) {
+    if (cols>this._cols) {
+      for (let i = 0; i<this._noteStatus.length; i++) {
+        this._noteStatus[i][cols-1] = false;
+      }
+    } else {
+      for (let i = 0; i<this._noteStatus.length; i++) {
+        this._noteStatus[i].pop();
+      }
+    }
     this._cols = cols;
   }
 
@@ -29,11 +38,17 @@ export default class PlaybackPlayer {
   }
 
   setRows(rows) {
+    let newRow = [];
+    if (rows>this._rows) {
+      for (let i = 0; i<this._cols; i++) {
+        newRow.push(false);
+      }
+      this._noteStatus.push(newRow);
+    } else {
+      this._noteStatus.pop();
+    }
     this._rows = rows;
-  }
-
-  setNoteStatus(noteStatus) {
-    this._noteStatus = noteStatus;
+    this._notes = AppService.generateNotes(this._eigth, this._rows);
   }
 
   setSpeed(newSpeed) {
@@ -66,17 +81,11 @@ export default class PlaybackPlayer {
 
   setEigth(eigth) {
     this._eigth = eigth;
-    console.log(this._rows);
-    this._notes = AppService.generateNotes(eigth, this.rows);
-    console.log(this._notes)
+    this._notes = AppService.generateNotes(eigth, this._rows);
   }
 
   toggleNote(row, col) {
     this._noteStatus[row][col] = !this._noteStatus[row][col];
-  }
-
-  getIsLooping() {
-    return this._isLooping;
   }
 
   getNoteStatus() {
@@ -115,7 +124,7 @@ export default class PlaybackPlayer {
       if(this._currentNote >= this._cols){
         this._currentNote = 0;
       }
-      
+
       for (let playbackPlayer of this._playersToStart) {
         playbackPlayer.startLoop();
       }

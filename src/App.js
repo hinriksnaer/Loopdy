@@ -88,15 +88,16 @@ class App extends Component {
 
   // alters the amount of rows in the state
   alterRows = (rows) => {
+    const { currentPlaybackPlayer } = this.state;
     this.setState({ rows });
-    this.generateNotes(this.state.eigth, rows);
-    this.alterCurrentPlayback('rows', rows);
+    currentPlaybackPlayer.setRows(rows);
   }
 
   // alters the amount of cols in the state
   alterCols = (cols) => {
+    const { currentPlaybackPlayer } = this.state;
     this.setState({ cols });
-    this.alterCurrentPlayback('cols', cols);
+    currentPlaybackPlayer.setCols(cols);
   }
 
   // generates the notes required to play the current pitch (eigth)
@@ -140,17 +141,21 @@ class App extends Component {
     return (
       <main>
         <div className="BoardContainer">
-          <BoardSettings 
+          <BoardSettings
             playbackPlayer={currentPlaybackPlayer}
             alterSpeed={this.alterSpeed}
             alterEigth={this.alterEigth}
-            />
+            alterCols={this.alterCols}
+            alterRows={this.alterRows}
+          />
           <div className="SoundboardContainer">
             <PlayableBoard 
               notes={notes}/>
             <LoopBoard 
               playbackPlayer={currentPlaybackPlayer}
               speed={speed}
+              cols={cols}
+              rows={rows}
               currentNoteStatus={currentNoteStatus}
               alterCurrentNoteStatus={this.alterCurrentNoteStatus}
               setLoopBoardPlaybackPlayer={this.setLoopBoardPlaybackPlayer}
@@ -171,7 +176,7 @@ class App extends Component {
             speed={speed}
             playbacks={playbacks}
             currentPlaybackPlayer={currentPlaybackPlayer}
-            />
+          />
         </div>
         <div className="InfoText">
           <p>Loopdy 0.2.0 created by Hinrik S. Guðmundsson</p>
