@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Playback from '../View/Playback';
-import { AppService } from '../Service/AppService'
+import { AppService } from '../Service/AppService';
 import '../App.css';
 import PropTypes from 'prop-types';
 import { PlaybackPlayer } from '../Service/PlaybackPlayer';
@@ -10,9 +10,8 @@ class Playbacks extends Component {
   static propTypes = {
     playbacks: PropTypes.array,
     addPlayback: PropTypes.func,
-    currentPlaybackIndex: PropTypes.number,
-    alterCurrentlyPlaying: PropTypes.func,
-    loopBoardPlaybackPlayer: PropTypes.func,
+    currentPlaybackPlayer: PropTypes.object,
+    alterCurrentPlaybackPlayer: PropTypes.func,
     boardIsLooping: PropTypes.bool
   }
 
@@ -22,12 +21,13 @@ class Playbacks extends Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.boardIsLooping && this.props.boardIsLooping) {
-      this.addPlayingPlayback(this.props.loopBoardPlaybackPlayer);
+      this.addPlayingPlayback(this.props.currentPlaybackPlayer);
     } else if (prevProps.boardIsLooping && !this.props.boardIsLooping) {
-      this.removePlayingPlayback(this.props.loopBoardPlaybackPlayer);
+      this.removePlayingPlayback(this.props.currentPlaybackPlayer);
     }
   }
 
+  // adds playback to be started synced up with one of the currently playing playbacks
   addPlayingPlayback = (playback) => {
     let { playingPlaybacks } = this.state;
     playingPlaybacks.push(playback);
@@ -39,6 +39,7 @@ class Playbacks extends Component {
     }
   }
 
+  // removes/turns off a playback that is currently being played
   removePlayingPlayback = (playback) => {
     let { playingPlaybacks } = this.state;
     let index = playingPlaybacks.indexOf(playback);
@@ -47,22 +48,17 @@ class Playbacks extends Component {
   }
 
   render() {
-    let { playbacks, currentPlaybackIndex, addPlayback, alterCurrentlyPlaying } = this.props;
+    let { playbacks, currentPlaybackPlayer, addPlayback, alterCurrentPlaybackPlayer } = this.props;
     return (
       <div className={'PlaybacksContainer'}>
-        {playbacks.map((playback) => (
+        {playbacks.map((playbackPlayer) => (
           <Playback
-            index = {playback.index}
-            notes={AppService.generateNotes(playback.eigth, playback.rows)}
-            cols={playback.cols}
-            rows={playback.rows}
-            speed={playback.speed}
-            noteStatus={playback.noteStatus}
-            editing={playback.index===currentPlaybackIndex}
-            eigth = {playback.eigth}
-            alterCurrentlyPlaying={alterCurrentlyPlaying}
+            playbackPlayer={playbackPlayer}
+            editing={playbackPlayer==currentPlaybackPlayer}
+            alterCurrentPlaybackPlayer={alterCurrentPlaybackPlayer}
             addPlayingPlayback={this.addPlayingPlayback}
             removePlayingPlayback={this.removePlayingPlayback}
+            isPlaying={playbackPlayer.getIsLooping()}
           />
         ))}
         <button onClick={addPlayback}>+</button>
