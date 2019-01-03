@@ -7,6 +7,7 @@ import Share from './View/Share';
 import Playbacks from './View/Playbacks';
 import { AppService,  } from './Service/AppService';
 import { LoopBoardService } from './Service/LoopBoardService';
+import PlaybackPlayer from './Service/PlaybackPlayer';
 
 class App extends Component {
 
@@ -17,7 +18,7 @@ class App extends Component {
     rows: 8,
     eigth: 3,
     playbacks: [],
-    currentPlaybackIndex: 0,
+    currentPlaybackPlayer: null,
   };
 
   // Initializes the loopboard, if the url contains a saved state then it will load, 
@@ -29,7 +30,6 @@ class App extends Component {
     let board = url.searchParams.get('board');
     if (board){
       let stateObject = AppService.decodeURL(board);
-      console.log(stateObject);
       try {
         this.setState({ 
           currentNoteStatus: stateObject.songArray,
@@ -38,7 +38,7 @@ class App extends Component {
           eigth: stateObject.pitch,
           speed: stateObject.speed,
           playbacks: stateObject.playbacks,
-          currentPlaybackIndex: stateObject.currentPlaybackIndex,
+          currentPlaybackPlayer: stateObject.currentPlaybackPlayer,
         });
         this.generateNotes(stateObject.pitch, stateObject.row);
 
@@ -48,15 +48,14 @@ class App extends Component {
     } else {
       this.setInitialState(currentNoteStatus[0]);
     }
-    let playbackObj = {
-      index: this.state.currentPlaybackIndex,
-      eigth: this.state.eigth,
-      rows: this.state.rows,
-      cols: this.state.cols,
-      noteStatus: AppService.deepCopy2dArray(currentNoteStatus[0]),
-      speed: this.state.speed
-    };
-    this.state.playbacks.push(playbackObj);
+
+    let playbackPlayer = new PlaybackPlayer(this.state.eigth, this.state.cols, this.state.speed, this.state.rows, currentNoteStatus[0]);
+    this.setState({ currentPlaybackPlayer: playbackPlayer });
+    this.state.playbacks.push(playbackPlayer);
+  }
+
+  setBoardIsLooping = (isLooping) => {
+    this.setState({ boardIsLooping: isLooping });
   }
 
   // initializes the loopboard in a default state
@@ -65,112 +64,106 @@ class App extends Component {
     this.generateNotes(this.state.eigth, this.state.rows);
   }
 
-  alterCurrentPlayback = (key, value) => {
-    let { currentPlaybackIndex, playbacks } = this.state;
-
-    playbacks[currentPlaybackIndex][key] = value;
-    this.setState({ playbacks: Array.from(playbacks) });
-  }
-    
+  // Function passed as prop so the notestatus can be altered
   alterCurrentNoteStatus = (noteStatus) => {
+    const { currentPlaybackPlayer } = this.state;
     let newNoteStatus = noteStatus;
     this.setState({ currentNoteStatus: newNoteStatus });
-    this.alterCurrentPlayback('noteStatus', newNoteStatus);
+    currentPlaybackPlayer.setNoteStatus(newNoteStatus);
   }
 
-  // converts bpm to speed and sets it
   alterSpeed = (speed) => {
+    const { currentPlaybackPlayer } = this.state;
+    currentPlaybackPlayer.setSpeed(speed);
     this.setState({ speed });
-    this.alterCurrentPlayback('speed', speed);
   }
 
+  // alters the eigth and generates the set of notes to play that eigth
   alterEigth = (eigth) => {
-    let { rows } = this.state;
+    let { currentPlaybackPlayer } = this.state;
     let pitch = Number(eigth);
     this.setState({ eigth: pitch });
-    this.generateNotes(pitch, rows);
-    this.alterCurrentPlayback('eigth', pitch);
+    currentPlaybackPlayer.setEigth(pitch);
   }
 
+  // alters the amount of rows in the state
   alterRows = (rows) => {
+    const { currentPlaybackPlayer } = this.state;
     this.setState({ rows });
-    this.generateNotes(this.state.eigth, rows);
-    this.alterCurrentPlayback('rows', rows);
+    currentPlaybackPlayer.setRows(rows);
   }
 
+  // alters the amount of cols in the state
   alterCols = (cols) => {
+    const { currentPlaybackPlayer } = this.state;
     this.setState({ cols });
-    this.alterCurrentPlayback('cols', cols);
+    currentPlaybackPlayer.setCols(cols);
   }
 
+  // generates the notes required to play the current pitch (eigth)
   generateNotes = (eigth, rows) => {
     let notes = AppService.generateNotes(eigth, rows);
     this.setState({ notes });
   }
 
   // changes the currently select playback to edit
-  alterCurrentlyPlaying = (obj) => {
-    let { rows, cols, eigth, speed, noteStatus, index } = obj;
-    let notes = AppService.generateNotes(eigth, rows);
+  alterCurrentPlaybackPlayer = (playbackPlayer) => {
     this.setState({
-      rows,
-      cols,
-      eigth,
-      speed,
-      notes,
-      currentPlaybackIndex: index,
-      currentNoteStatus: noteStatus
+      rows: playbackPlayer.getRows(),
+      cols: playbackPlayer.getCols(),
+      eigth: playbackPlayer.getEigth(),
+      speed: playbackPlayer.getSpeed(),
+      notes: playbackPlayer.getNotes(),
+      currentPlaybackPlayer: playbackPlayer,
+      currentNoteStatus: playbackPlayer.getNoteStatus(),
+      boardIsLooping: playbackPlayer.getIsLooping()
     });
 
   }
 
+  // sets the current playbackplayer on the loopboard
+  setLoopBoardPlaybackPlayer = (playbackPlayer) => {
+    this.setState({ loopBoardPlaybackPlayer: playbackPlayer })
+  }
+
+  // adds a new playback that can be edited and played
   addPlayback = () => {
     let { eigth, rows, cols, speed, playbacks } = this.state;
     let initNoteStatus = LoopBoardService.initStatus(rows, cols);
-    let newPlayback = {
-      index: playbacks.length,
-      eigth: eigth,
-      rows: rows,
-      cols: cols,
-      noteStatus: AppService.deepCopy2dArray(initNoteStatus[0]),
-      speed: speed
-    };
-    playbacks.push(newPlayback);
+    let playbackPlayer = new PlaybackPlayer(eigth, cols, speed, rows, initNoteStatus[0]);
+    playbacks.push(playbackPlayer);
     this.setState({ playbacks: Array.from(playbacks) });
   }
 
   render() {
-    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackIndex } = this.state;
+    let { speed, boardIsLooping, cols, rows, eigth, currentNoteStatus, playbacks, currentPlaybackPlayer } = this.state;
     return (
       <main>
         <div className="BoardContainer">
-          <BoardSettings 
-            rows={rows} 
-            alterRows={this.alterRows} 
-            cols={cols} 
-            alterCols={this.alterCols} 
-            eigth={eigth} 
-            alterEigth={this.alterEigth} 
-            speed={speed} 
+          <BoardSettings
+            playbackPlayer={currentPlaybackPlayer}
             alterSpeed={this.alterSpeed}
-            />
+            alterEigth={this.alterEigth}
+            alterCols={this.alterCols}
+            alterRows={this.alterRows}
+          />
           <div className="SoundboardContainer">
-            <PlayableBoard 
-              notes={notes}/>
             <LoopBoard 
-              cols={cols} 
-              rows={rows} 
-              notes={notes} 
-              speed={speed} 
-              boardIsLooping={boardIsLooping}
+              playbackPlayer={currentPlaybackPlayer}
+              speed={speed}
+              cols={cols}
+              rows={rows}
               currentNoteStatus={currentNoteStatus}
-              alterCurrentNoteStatus={this.alterCurrentNoteStatus}/>
+              alterCurrentNoteStatus={this.alterCurrentNoteStatus}
+              setLoopBoardPlaybackPlayer={this.setLoopBoardPlaybackPlayer}
+              setBoardIsLooping={this.setBoardIsLooping}/>
           </div>
           <Playbacks
             playbacks={playbacks}
             addPlayback={this.addPlayback}
-            currentPlaybackIndex={currentPlaybackIndex}
-            alterCurrentlyPlaying={this.alterCurrentlyPlaying}
+            currentPlaybackPlayer={currentPlaybackPlayer}
+            alterCurrentPlaybackPlayer={this.alterCurrentPlaybackPlayer}
+            boardIsLooping={boardIsLooping}
           />
           <Share 
             songArray={currentNoteStatus}
@@ -179,8 +172,8 @@ class App extends Component {
             pitch={eigth}
             speed={speed}
             playbacks={playbacks}
-            currentPlaybackIndex={currentPlaybackIndex}
-            />
+            currentPlaybackPlayer={currentPlaybackPlayer}
+          />
         </div>
         <div className="InfoText">
           <p>Loopdy 0.2.0 created by Hinrik S. Guðmundsson</p>

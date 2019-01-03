@@ -25,6 +25,7 @@ main {
 
 .PlaybackContainer {
   margin-right: 4px;
+  min-width: 80px;
 }
 
 .PlaybacksContainer {

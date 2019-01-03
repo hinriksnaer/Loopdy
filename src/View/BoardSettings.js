@@ -5,38 +5,42 @@ import PropTypes from 'prop-types';
 class BoardSettings extends Component {
 
   static propTypes = {
-    speed: PropTypes.number,
-    alterspeed: PropTypes.func,
-    eigth: PropTypes.number,
-    cols: PropTypes.number,
-    rows: PropTypes.number
+    playbackPlayer: PropTypes.object,
   }
 
-  state = {
-    rows: this.props.rows,
-    cols: this.props.cols
+  componentWillMount() {
+    const { playbackPlayer } = this.props;
+    let speed = 60000/playbackPlayer.getSpeed();
+    this.setState({ 
+      speed, 
+      rows: playbackPlayer.getRows(),
+      cols: playbackPlayer.getCols(),
+      eigth: playbackPlayer.getEigth()
+    });
   }
 
-  componentDidMount() {
-    let speed = 60000/this.props.speed;
-    this.setState({ speed });
-  }
-
-  handleSpeedChange = (event) => {
-    this.setState({speed: Number(event.target.value)});
-  }
-
-  speedAltered = () => {
+  
+  handleSpeedChange = (change) => {
     let { speed } = this.state;
     let { alterSpeed } = this.props;
-    let convertedSpeed = 60000/speed;
-    alterSpeed(convertedSpeed);
+    let newSpeed = speed+change;
+    if (newSpeed <= 1500 && newSpeed >= 25) {
+      this.setState({speed: newSpeed});
+      let convertedSpeed = 60000/newSpeed;
+      alterSpeed(convertedSpeed);
+    }
   }  
 
   handlePitchChange = (newPitch) => {
     if (newPitch < 0 || newPitch > 7) return;
     let { alterEigth } = this.props;
+    this.setState({ eigth: newPitch})
     alterEigth(newPitch);
+  }
+
+  handleInstrumentChange = (event) => {
+    const { playbackPlayer } = this.props;
+    playbackPlayer.setInstrument(event.target.value);
   }
 
   applyRowChange = (newRows) => {
@@ -56,10 +60,20 @@ class BoardSettings extends Component {
   }
 
   render() {
-    let { rows, cols } = this.state;
-    let { eigth } = this.props;
+    let { rows, cols, speed } = this.state;
+    let { playbackPlayer } = this.props;
+    let instrument = playbackPlayer.getInstrument();
     return (
       <div className="MenuContainer">
+        <div className="InputContainer">
+          <select onChange={this.handleInstrumentChange}>
+            <option value="basic" selected={'basic' === instrument}>Basic</option>
+            <option value="fm" selected={'fm' === instrument}>FM</option>
+            <option value="duo" selected={'duo' === instrument}>Duo</option>
+            <option value="mono" selected={'mono' === instrument}>Mono (WARNING LOUD)</option>
+            <option value="pluck" selected={'pluck' === instrument}>Pluck</option>
+          </select>
+        </div>
         <div className="InputContainer">
           <label>Rows:<input type="number" value={this.state.rows} disabled={'true'}></input></label>
           <div className="MenuIconContainer" onClick={() => this.applyRowChange(rows-1)}>
@@ -79,17 +93,22 @@ class BoardSettings extends Component {
           </div>
         </div>
         <div className="InputContainer">
-          <label>Pitch:<input type="number" value={this.props.eigth} disabled={'true'}></input></label>
-          <div className="MenuIconContainer" onClick={() => this.handlePitchChange(eigth-1)}>
+          <label>Pitch:<input type="number" value={this.state.eigth} disabled={'true'}></input></label>
+          <div className="MenuIconContainer" onClick={() => this.handlePitchChange(playbackPlayer.getEigth()-1)}>
             <img src={ require('../img/minus.png')}/>
           </div>
-          <div className="MenuIconContainer" onClick={() => this.handlePitchChange(eigth+1)}>
+          <div className="MenuIconContainer" onClick={() => this.handlePitchChange(playbackPlayer.getEigth()+1)}>
             <img src={ require('../img/plus.png')}/>
           </div>
         </div>
         <div className="InputContainer">
-          <label>Notes per minute:<input value={this.state.speed} onChange={this.handleSpeedChange}></input></label>
-          <button onClick={this.speedAltered}>Confirm</button>
+          <label>Notes per minute: {speed}</label>
+          <div className="MenuIconContainer" onClick={() => this.handleSpeedChange(-25)}>
+            <img src={ require('../img/minus.png')}/>
+          </div>
+          <div className="MenuIconContainer" onClick={() => this.handleSpeedChange(25) }>
+            <img src={ require('../img/plus.png')}/>
+          </div>
         </div>
       </div>
     );
