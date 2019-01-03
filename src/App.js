@@ -32,7 +32,6 @@ class App extends Component {
       let playbacksArray = AppService.decodeURL(board);
       let playbacks = [];
       for (let playbackInitObject of playbacksArray) {
-        console.log(playbackInitObject);
         let playbackPlayer = new PlaybackPlayer(
           playbackInitObject.eigth,
           playbackInitObject.cols,
