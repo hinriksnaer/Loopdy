@@ -15,10 +15,31 @@ class BoardSettings extends Component {
       speed, 
       rows: playbackPlayer.getRows(),
       cols: playbackPlayer.getCols(),
-      eigth: playbackPlayer.getEigth()
+      eigth: playbackPlayer.getEigth(),
+      instrument: playbackPlayer.getInstrument()
     });
   }
 
+  componentDidUpdate(prevProps) {
+    console.log('changed');
+    const { playbackPlayer } = this.props;
+    if (prevProps.playbackPlayer.getRows() !== playbackPlayer.getRows()) {
+      this.setState({ rows: playbackPlayer.getRows() });
+    }
+    if (prevProps.playbackPlayer.getCols() !== playbackPlayer.getCols()) {
+      this.setState({ cols: playbackPlayer.getCols() });
+    }
+    if (prevProps.playbackPlayer.getEigth() !== playbackPlayer.getEigth()) {
+      this.setState({ eigth: playbackPlayer.getEigth() });
+    }
+    if (prevProps.playbackPlayer.getSpeed() !== playbackPlayer.getSpeed()) {
+      this.setState({ speed: 60000/playbackPlayer.getSpeed() });
+    }
+    if (prevProps.playbackPlayer.getInstrument() !== playbackPlayer.getInstrument()) {
+      console.log('im here');
+      this.setState({ instrument: playbackPlayer.getInstrument() });
+    }
+  }
   
   handleSpeedChange = (change) => {
     let { speed } = this.state;
@@ -41,10 +62,11 @@ class BoardSettings extends Component {
   handleInstrumentChange = (event) => {
     const { playbackPlayer } = this.props;
     playbackPlayer.setInstrument(event.target.value);
+    this.setState({ instrument: event.target.value });
   }
 
   applyRowChange = (newRows) => {
-    if (newRows < 1 || newRows > 16) return;
+    if (newRows < 1 || newRows > 12) return;
     this.setState({ rows: Number(newRows) });
     if(0 < newRows && newRows < 19) {
       let { alterRows } = this.props;
@@ -60,18 +82,17 @@ class BoardSettings extends Component {
   }
 
   render() {
-    let { rows, cols, speed } = this.state;
+    let { rows, cols, speed, instrument } = this.state;
     let { playbackPlayer } = this.props;
-    let instrument = playbackPlayer.getInstrument();
     return (
       <div className="MenuContainer">
         <div className="InputContainer">
-          <select onChange={this.handleInstrumentChange}>
-            <option value="basic" selected={'basic' === instrument}>Basic</option>
-            <option value="fm" selected={'fm' === instrument}>FM</option>
-            <option value="duo" selected={'duo' === instrument}>Duo</option>
-            <option value="mono" selected={'mono' === instrument}>Mono (WARNING LOUD)</option>
-            <option value="pluck" selected={'pluck' === instrument}>Pluck</option>
+          <select value={instrument} onChange={this.handleInstrumentChange}>
+            <option value="basic">Basic</option>
+            <option value="fm">FM</option>
+            <option value="duo">Duo</option>
+            <option value="mono">Mono (WARNING LOUD)</option>
+            <option value="pluck">Pluck</option>
           </select>
         </div>
         <div className="InputContainer">
