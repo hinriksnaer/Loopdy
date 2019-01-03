@@ -115,7 +115,8 @@ class App extends Component {
       speed: playbackPlayer.getSpeed(),
       notes: playbackPlayer.getNotes(),
       currentPlaybackPlayer: playbackPlayer,
-      currentNoteStatus: playbackPlayer.getNoteStatus()
+      currentNoteStatus: playbackPlayer.getNoteStatus(),
+      boardIsLooping: playbackPlayer.getIsLooping()
     });
 
   }

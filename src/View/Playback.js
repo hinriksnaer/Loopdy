@@ -16,6 +16,13 @@ class Playback extends Component {
     this.setState({ isPlaying: playbackPlayer.getIsLooping() });
   }
 
+  componentDidUpdate(prevProps) {
+    const { isPlaying } = this.props;
+    if (isPlaying !== prevProps.isPlaying) {
+      this.setState({ isPlaying });
+    }
+  }
+
   handlePlayButton = () => {
     const { addPlayingPlayback, removePlayingPlayback, playbackPlayer } = this.props;
     const { isPlaying } = this.state;
