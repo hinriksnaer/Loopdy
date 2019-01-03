@@ -136,7 +136,7 @@ class App extends Component {
   }
 
   render() {
-    let { speed, boardIsLooping, cols, rows, notes, eigth, currentNoteStatus, playbacks, currentPlaybackPlayer } = this.state;
+    let { speed, boardIsLooping, cols, rows, eigth, currentNoteStatus, playbacks, currentPlaybackPlayer } = this.state;
     return (
       <main>
         <div className="BoardContainer">

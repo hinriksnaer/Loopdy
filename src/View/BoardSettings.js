@@ -19,15 +19,16 @@ class BoardSettings extends Component {
     });
   }
 
-  handleSpeedChange = (event) => {
-    this.setState({speed: Number(event.target.value)});
-  }
-
-  speedAltered = () => {
+  
+  handleSpeedChange = (change) => {
     let { speed } = this.state;
     let { alterSpeed } = this.props;
-    let convertedSpeed = 60000/speed;
-    alterSpeed(convertedSpeed)
+    let newSpeed = speed+change;
+    if (newSpeed <= 1500 && newSpeed >= 25) {
+      this.setState({speed: newSpeed});
+      let convertedSpeed = 60000/newSpeed;
+      alterSpeed(convertedSpeed);
+    }
   }  
 
   handlePitchChange = (newPitch) => {
@@ -59,7 +60,7 @@ class BoardSettings extends Component {
   }
 
   render() {
-    let { rows, cols } = this.state;
+    let { rows, cols, speed } = this.state;
     let { playbackPlayer } = this.props;
     let instrument = playbackPlayer.getInstrument();
     return (
@@ -101,8 +102,13 @@ class BoardSettings extends Component {
           </div>
         </div>
         <div className="InputContainer">
-          <label>Notes per minute:<input value={this.state.speed} onChange={this.handleSpeedChange}></input></label>
-          <button onClick={this.speedAltered}>Confirm</button>
+          <label>Notes per minute: {speed}</label>
+          <div className="MenuIconContainer" onClick={() => this.handleSpeedChange(-25)}>
+            <img src={ require('../img/minus.png')}/>
+          </div>
+          <div className="MenuIconContainer" onClick={() => this.handleSpeedChange(25) }>
+            <img src={ require('../img/plus.png')}/>
+          </div>
         </div>
       </div>
     );
