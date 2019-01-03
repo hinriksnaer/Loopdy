@@ -100,6 +100,9 @@ export default class PlaybackPlayer {
 
   toggleNote(row, col) {
     this._noteStatus[row][col] = !this._noteStatus[row][col];
+    if (this._noteStatus[row][col]) {
+      playSound(this._notes[row], this._instrument);
+    }
   }
 
   getNoteStatus() {
@@ -128,7 +131,6 @@ export default class PlaybackPlayer {
   syncStartLoopboard(startFunction) {
     this._loopboardToStartFunction = startFunction;
   }
-
 
   async startLoop() {
     if (this._isLooping) return;

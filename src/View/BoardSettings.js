@@ -70,7 +70,7 @@ class BoardSettings extends Component {
             <option value="fm" selected={'fm' === instrument}>FM</option>
             <option value="duo" selected={'duo' === instrument}>Duo</option>
             <option value="mono" selected={'mono' === instrument}>Mono (WARNING LOUD)</option>
-            <option value="membrane" selected={'membrane' === instrument}>Membrane</option>
+            <option value="pluck" selected={'pluck' === instrument}>Pluck</option>
           </select>
         </div>
         <div className="InputContainer">
