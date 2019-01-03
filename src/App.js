@@ -148,8 +148,6 @@ class App extends Component {
             alterRows={this.alterRows}
           />
           <div className="SoundboardContainer">
-            <PlayableBoard 
-              notes={notes}/>
             <LoopBoard 
               playbackPlayer={currentPlaybackPlayer}
               speed={speed}
