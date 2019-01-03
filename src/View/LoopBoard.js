@@ -53,10 +53,9 @@ class LoopBoard extends Component {
         playbackPlayer.syncStartLoopboard(this.playLoopFromPos);
       }
     }
-    
+
     // check for speed
     if (speed !== prevProps.speed && playbackPlayer.getIsLooping()) {
-      console.log('speed altered');
       this.setState({ 
         isPlaying: []
       });
@@ -70,7 +69,6 @@ class LoopBoard extends Component {
     }
 
     if (currentNoteStatus !== this.state.noteStatus) {
-      console.log('notestatus altered');
       this.setState({ noteStatus:currentNoteStatus});
     }
     
