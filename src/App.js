@@ -29,18 +29,31 @@ class App extends Component {
     let url = new URL(window.location.href);
     let board = url.searchParams.get('board');
     if (board){
-      let stateObject = AppService.decodeURL(board);
+      let playbacksArray = AppService.decodeURL(board);
+      let playbacks = [];
+      for (let playbackInitObject of playbacksArray) {
+        let playbackPlayer = new PlaybackPlayer(
+          playbackInitObject.eigth,
+          playbackInitObject.cols,
+          playbackInitObject.speed,
+          playbackInitObject.rows,
+          playbackInitObject.noteStatus,
+          playbackInitObject.instrument
+        );
+        playbacks.push(playbackPlayer);
+      }
+
       try {
         this.setState({ 
-          currentNoteStatus: stateObject.songArray,
-          cols: stateObject.col,
-          rows: stateObject.row,
-          eigth: stateObject.pitch,
-          speed: stateObject.speed,
-          playbacks: stateObject.playbacks,
-          currentPlaybackPlayer: stateObject.currentPlaybackPlayer,
+          currentNoteStatus: playbacks[0].getNoteStatus(),
+          cols: playbacks[0].getCols(),
+          rows: playbacks[0].getRows(),
+          eigth: playbacks[0].getEigth(),
+          speed: playbacks[0].getSpeed(),
+          playbacks: playbacks,
+          currentPlaybackPlayer: playbacks[0],
+          notes: playbacks[0].getNotes()
         });
-        this.generateNotes(stateObject.pitch, stateObject.row);
 
       } catch (err) {
         this.setInitialState(currentNoteStatus[0]);
@@ -48,10 +61,6 @@ class App extends Component {
     } else {
       this.setInitialState(currentNoteStatus[0]);
     }
-
-    let playbackPlayer = new PlaybackPlayer(this.state.eigth, this.state.cols, this.state.speed, this.state.rows, currentNoteStatus[0]);
-    this.setState({ currentPlaybackPlayer: playbackPlayer });
-    this.state.playbacks.push(playbackPlayer);
   }
 
   setBoardIsLooping = (isLooping) => {
@@ -61,7 +70,9 @@ class App extends Component {
   // initializes the loopboard in a default state
   setInitialState = (defaultNoteStatus) => {
     this.setState({ currentNoteStatus: defaultNoteStatus });
-    this.generateNotes(this.state.eigth, this.state.rows);
+    let playbackPlayer = new PlaybackPlayer(this.state.eigth, this.state.cols, this.state.speed, this.state.rows, defaultNoteStatus);
+    this.setState({ currentPlaybackPlayer: playbackPlayer });
+    this.state.playbacks.push(playbackPlayer);
   }
 
   // Function passed as prop so the notestatus can be altered

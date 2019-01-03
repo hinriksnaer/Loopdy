@@ -25,8 +25,8 @@ class Share extends Component {
   }
 
   shareButtonPressed = () => {
-    const { songArray, rows, cols, pitch, speed, playbacks, currentPlaybackIndex } = this.props;
-    const link = ShareService.generateShareLink(songArray, rows, cols, pitch, speed, playbacks, currentPlaybackIndex);
+    const { playbacks } = this.props;
+    const link = ShareService.generateShareLink(playbacks);
     this.setState({shareLink: link});
   }
 

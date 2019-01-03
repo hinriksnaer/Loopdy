@@ -3,11 +3,11 @@ import { AppService } from '../Service/AppService';
 
 export default class PlaybackPlayer {
 
-  constructor(eigth, cols, speed, rows, noteStatus) {
+  constructor(eigth, cols, speed, rows, noteStatus, instrument = 'basic') {
     this._eigth = eigth;
-    this._rows = rows;
     this._cols = cols;
     this._speed = speed;
+    this._rows = rows;
     this._noteStatus = noteStatus;
     this._notes = AppService.generateNotes(eigth, rows);
     this._isLooping = false;
@@ -15,7 +15,7 @@ export default class PlaybackPlayer {
     this._playLoop = null;
     this._playersToStart = [];
     this._loopboardToStartFunction = null;
-    this._instrument = 'basic';
+    this._instrument = instrument;
   }
 
   setInstrument(instrument) {
