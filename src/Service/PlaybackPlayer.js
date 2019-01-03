@@ -15,6 +15,15 @@ export default class PlaybackPlayer {
     this._playLoop = null;
     this._playersToStart = [];
     this._loopboardToStartFunction = null;
+    this._instrument = 'basic';
+  }
+
+  setInstrument(instrument) {
+    this._instrument = instrument;
+  }
+
+  getInstrument() {
+    return this._instrument;
   }
 
   getNotes() {
@@ -129,10 +138,10 @@ export default class PlaybackPlayer {
       for (let playbackPlayer of this._playersToStart) {
         playbackPlayer.startLoop();
       }
-      
+
       for (let i = 0; i<this._rows; i++){
         if (this._noteStatus[i][this._currentNote]){
-          playSound(this._notes[i]);
+          playSound(this._notes[i], this._instrument);
         }
       }
       this._currentNote++;

@@ -37,6 +37,11 @@ class BoardSettings extends Component {
     alterEigth(newPitch);
   }
 
+  handleInstrumentChange = (event) => {
+    const { playbackPlayer } = this.props;
+    playbackPlayer.setInstrument(event.target.value);
+  }
+
   applyRowChange = (newRows) => {
     if (newRows < 1 || newRows > 16) return;
     this.setState({ rows: Number(newRows) });
@@ -56,8 +61,18 @@ class BoardSettings extends Component {
   render() {
     let { rows, cols } = this.state;
     let { playbackPlayer } = this.props;
+    let instrument = playbackPlayer.getInstrument();
     return (
       <div className="MenuContainer">
+        <div className="InputContainer">
+          <select onChange={this.handleInstrumentChange}>
+            <option value="basic" selected={'basic' === instrument}>Basic</option>
+            <option value="fm" selected={'fm' === instrument}>FM</option>
+            <option value="duo" selected={'duo' === instrument}>Duo</option>
+            <option value="mono" selected={'mono' === instrument}>Mono (WARNING LOUD)</option>
+            <option value="membrane" selected={'membrane' === instrument}>Membrane</option>
+          </select>
+        </div>
         <div className="InputContainer">
           <label>Rows:<input type="number" value={this.state.rows} disabled={'true'}></input></label>
           <div className="MenuIconContainer" onClick={() => this.applyRowChange(rows-1)}>
