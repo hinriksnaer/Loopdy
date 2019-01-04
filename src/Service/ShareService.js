@@ -14,7 +14,7 @@ const ShareService = function() {
         rows: playbackPlayer.getRows(),
         noteStatus: playbackPlayer.getNoteStatus(),
         instrument: playbackPlayer.getInstrument()
-      }
+      };
       playbacksArray.push(playbackInit);
     }
 

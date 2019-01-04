@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import LoopBoard from './View/LoopBoard';
-import PlayableBoard from './View/PlayableBoard';
-import BoardSettings from './View/BoardSettings';
-import Share from './View/Share';
-import Playbacks from './View/Playbacks';
 import { AppService,  } from './Service/AppService';
 import { LoopBoardService } from './Service/LoopBoardService';
 import PlaybackPlayer from './Service/PlaybackPlayer';
@@ -21,7 +16,7 @@ class App extends Component {
     currentPlaybackPlayer: null,
   };
 
-  // Initializes the loopboard, if the url contains a saved state then it will load, 
+  // Initializes the loopboard, if the url contains a saved state then it will load,
   // if the save state is faulty or the url does not contain a save state then it will
   // be initialized in a default state
   componentWillMount() {
@@ -44,7 +39,7 @@ class App extends Component {
       }
 
       try {
-        this.setState({ 
+        this.setState({
           currentNoteStatus: playbacks[0].getNoteStatus(),
           cols: playbacks[0].getCols(),
           rows: playbacks[0].getRows(),
@@ -134,7 +129,7 @@ class App extends Component {
 
   // sets the current playbackplayer on the loopboard
   setLoopBoardPlaybackPlayer = (playbackPlayer) => {
-    this.setState({ loopBoardPlaybackPlayer: playbackPlayer })
+    this.setState({ loopBoardPlaybackPlayer: playbackPlayer });
   }
 
   // adds a new playback that can be edited and played

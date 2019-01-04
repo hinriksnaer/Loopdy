@@ -11,8 +11,8 @@ class BoardSettings extends Component {
   componentWillMount() {
     const { playbackPlayer } = this.props;
     let speed = 60000/playbackPlayer.getSpeed();
-    this.setState({ 
-      speed, 
+    this.setState({
+      speed,
       rows: playbackPlayer.getRows(),
       cols: playbackPlayer.getCols(),
       eigth: playbackPlayer.getEigth(),
@@ -21,7 +21,6 @@ class BoardSettings extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('changed');
     const { playbackPlayer } = this.props;
     if (prevProps.playbackPlayer.getRows() !== playbackPlayer.getRows()) {
       this.setState({ rows: playbackPlayer.getRows() });
@@ -36,11 +35,10 @@ class BoardSettings extends Component {
       this.setState({ speed: 60000/playbackPlayer.getSpeed() });
     }
     if (prevProps.playbackPlayer.getInstrument() !== playbackPlayer.getInstrument()) {
-      console.log('im here');
       this.setState({ instrument: playbackPlayer.getInstrument() });
     }
   }
-  
+
   handleSpeedChange = (change) => {
     let { speed } = this.state;
     let { alterSpeed } = this.props;
@@ -50,12 +48,12 @@ class BoardSettings extends Component {
       let convertedSpeed = 60000/newSpeed;
       alterSpeed(convertedSpeed);
     }
-  }  
+  }
 
   handlePitchChange = (newPitch) => {
     if (newPitch < 0 || newPitch > 7) return;
     let { alterEigth } = this.props;
-    this.setState({ eigth: newPitch})
+    this.setState({ eigth: newPitch});
     alterEigth(newPitch);
   }
 

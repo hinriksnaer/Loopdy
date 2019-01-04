@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import Playback from '../View/Playback';
-import { AppService } from '../Service/AppService';
 import '../App.css';
 import PropTypes from 'prop-types';
-import { PlaybackPlayer } from '../Service/PlaybackPlayer';
 
 class Playbacks extends Component {
 

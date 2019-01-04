@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { LoopBoardService } from '../Service/LoopBoardService';
-import NoteBox from './NoteBox';
 import '../App.css';
-import PlaybackPlayer from '../Service/PlaybackPlayer';
 import PropTypes from 'prop-types';
 
 class LoopBoard extends Component {
-  
+
   static propTypes = {
     cols: PropTypes.number,
     rows: PropTypes.number,
@@ -27,7 +24,7 @@ class LoopBoard extends Component {
       isLooping: playbackPlayer.getIsLooping(),
       noteStatus: playbackPlayer.getNoteStatus(),
 
-     });
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -71,7 +68,6 @@ class LoopBoard extends Component {
     if (currentNoteStatus !== this.state.noteStatus) {
       this.setState({ noteStatus:currentNoteStatus});
     }
-    
 
   }
 
@@ -102,7 +98,7 @@ class LoopBoard extends Component {
     setBoardIsLooping(true);
     this.playLoop();
   }
-  
+
   playLoop = () => {
     const { playbackPlayer } = this.props;
     let playLoop = setInterval(() => {
@@ -118,7 +114,7 @@ class LoopBoard extends Component {
       }
       this.setState({ currentNote });
     }, playbackPlayer.getSpeed());
-    
+
     this.setState({ playLoop });
   }
 
@@ -136,7 +132,7 @@ class LoopBoard extends Component {
       }
       this.setState({ currentNote: pos });
     }, playbackPlayer.getSpeed());
-    
+
     this.setState({ playLoop });
   }
 
