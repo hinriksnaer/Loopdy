@@ -2,6 +2,7 @@ const LZString = require('lz-string');
 
 const ShareService = function() {
 
+  // generates a link that is used to enter a previous state
   function generateShareLink(playbacks) {
 
     let playbacksArray = [];
