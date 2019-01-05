@@ -7,13 +7,15 @@ import PropTypes from 'prop-types';
 class LoopBoard extends Component {
 
   static propTypes = {
-    cols: PropTypes.number,
-    rows: PropTypes.number,
-    notes: PropTypes.array,
+    playbackPlayer: PropTypes.object,
     speed: PropTypes.number,
-    noteStatus: PropTypes.array,
+    currentNoteStatus: PropTypes.array,
+    setLoopBoardPlaybackPlayer: PropTypes.func,
+    setBoardIsLooping: PropTypes.func
   }
 
+  // currentNote: index of the current note being played, 0 if paused
+  // isPlaying: array where the index of the current note is true
   state = {
     currentNote: 0,
     isPlaying: []
