@@ -8,6 +8,7 @@ class Share extends Component {
     playbacks: PropTypes.array,
   };
 
+  // shareLink: link that contains the stored state
   state = {
     shareLink: ''
   }
