@@ -29,7 +29,7 @@ class LoopBoard extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { playbackPlayer, speed, currentNoteStatus } = this.props;
+    const { playbackPlayer, speed, currentNoteStatus, setBoardIsLooping } = this.props;
     const { playLoop } = this.state;
 
     if (playbackPlayer !== prevProps.playbackPlayer) {
@@ -54,21 +54,21 @@ class LoopBoard extends Component {
         this.setState({ noteStatus:currentNoteStatus});
       }
     } else {
-      
       // check for speed
       if (speed !== prevProps.speed && playbackPlayer.getIsLooping()) {
-        this.setState({
-          isPlaying: []
-        });
-        playbackPlayer.pauseLoop();
+        let { playLoop } = this.state;
         clearInterval(playLoop);
-        playbackPlayer.setSpeed(speed);
-        playbackPlayer.startLoop();
-        this.playLoop();
+        setBoardIsLooping(false);
+        playbackPlayer.stopLoop();
+        this.setState({
+          isPlaying: [],
+          currentNote: 0
+        });
+        this.setState({ isLooping: false });
       } else if (speed !== prevProps.speed) {
         playbackPlayer.setSpeed(speed);
       }
-  
+
     }
 
 
