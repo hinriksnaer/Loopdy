@@ -9,7 +9,11 @@ class Playback extends Component {
     alterCurrentPlaybackPlayer: PropTypes.func,
     addPlayingPlayback: PropTypes.func,
     removePlayingPlayback: PropTypes.func,
+    isPlaying: PropTypes.bool
   };
+
+  // state
+  // isPlaying: boolean value indicating if the loop is being played or not
 
   componentWillMount() {
     const { playbackPlayer } = this.props;
@@ -23,6 +27,7 @@ class Playback extends Component {
     }
   }
 
+  // called when the play button is pressed
   handlePlayButton = () => {
     const { addPlayingPlayback, removePlayingPlayback, playbackPlayer } = this.props;
     const { isPlaying } = this.state;
@@ -36,6 +41,7 @@ class Playback extends Component {
     this.setState({ isPlaying: !isPlaying });
   }
 
+  // called when the edit button is pressed
   handleEditButton = () => {
     let { alterCurrentPlaybackPlayer, playbackPlayer } = this.props;
 

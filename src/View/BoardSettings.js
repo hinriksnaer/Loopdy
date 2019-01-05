@@ -6,13 +6,24 @@ class BoardSettings extends Component {
 
   static propTypes = {
     playbackPlayer: PropTypes.object,
+    alterSpeed: PropTypes.func,
+    alterEigth: PropTypes.func,
+    alterCols: PropTypes.func,
+    alterRows: PropTypes.func
   }
+
+  // states
+  // speed: current speed on settings
+  // rows: current row on settings 
+  // cols: current col on settings
+  // eigth: current eigth on settings
+  // instrument: current instrument on settings
 
   componentWillMount() {
     const { playbackPlayer } = this.props;
     let speed = 60000/playbackPlayer.getSpeed();
-    this.setState({ 
-      speed, 
+    this.setState({
+      speed,
       rows: playbackPlayer.getRows(),
       cols: playbackPlayer.getCols(),
       eigth: playbackPlayer.getEigth(),
@@ -21,7 +32,6 @@ class BoardSettings extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('changed');
     const { playbackPlayer } = this.props;
     if (prevProps.playbackPlayer.getRows() !== playbackPlayer.getRows()) {
       this.setState({ rows: playbackPlayer.getRows() });
@@ -36,11 +46,11 @@ class BoardSettings extends Component {
       this.setState({ speed: 60000/playbackPlayer.getSpeed() });
     }
     if (prevProps.playbackPlayer.getInstrument() !== playbackPlayer.getInstrument()) {
-      console.log('im here');
       this.setState({ instrument: playbackPlayer.getInstrument() });
     }
   }
-  
+
+  // Called to handle when the speed is changed
   handleSpeedChange = (change) => {
     let { speed } = this.state;
     let { alterSpeed } = this.props;
@@ -50,21 +60,24 @@ class BoardSettings extends Component {
       let convertedSpeed = 60000/newSpeed;
       alterSpeed(convertedSpeed);
     }
-  }  
+  }
 
+  // called to handle when the pitch is changed
   handlePitchChange = (newPitch) => {
     if (newPitch < 0 || newPitch > 7) return;
     let { alterEigth } = this.props;
-    this.setState({ eigth: newPitch})
+    this.setState({ eigth: newPitch});
     alterEigth(newPitch);
   }
 
+  // called to handle when the instrument is changed
   handleInstrumentChange = (event) => {
     const { playbackPlayer } = this.props;
     playbackPlayer.setInstrument(event.target.value);
     this.setState({ instrument: event.target.value });
   }
 
+  // called to handle when the row is changed
   applyRowChange = (newRows) => {
     if (newRows < 1 || newRows > 12) return;
     this.setState({ rows: Number(newRows) });
@@ -74,6 +87,7 @@ class BoardSettings extends Component {
     }
   }
 
+  // called to handle when the col is changed
   applyColumnChange = (newCols) => {
     if (newCols < 1 || newCols > 20) return;
     this.setState({ cols: Number(newCols) });
@@ -87,16 +101,18 @@ class BoardSettings extends Component {
     return (
       <div className="MenuContainer">
         <div className="InputContainer">
-          <select value={instrument} onChange={this.handleInstrumentChange}>
-            <option value="basic">Basic</option>
-            <option value="fm">FM</option>
-            <option value="duo">Duo</option>
-            <option value="mono">Mono (WARNING LOUD)</option>
-            <option value="pluck">Pluck</option>
-          </select>
+          <label>Synth:
+            <select value={instrument} onChange={this.handleInstrumentChange}>
+              <option value="basic">Basic</option>
+              <option value="fm">FM</option>
+              <option value="duo">Duo</option>
+              <option value="mono">Mono (WARNING LOUD)</option>
+              <option value="pluck">Pluck</option>
+            </select>
+          </label>
         </div>
         <div className="InputContainer">
-          <label>Rows:<input type="number" value={this.state.rows} disabled={'true'}></input></label>
+          <label>Rows: {this.state.rows}</label>
           <div className="MenuIconContainer" onClick={() => this.applyRowChange(rows-1)}>
             <img src={ require('../img/minus.png')}/>
           </div>
@@ -105,7 +121,7 @@ class BoardSettings extends Component {
           </div>
         </div>
         <div className="InputContainer">
-          <label>Columns:<input type="number" value={this.state.cols} disabled={'true'}></input></label>
+          <label>Columns: {this.state.cols}</label>
           <div className="MenuIconContainer" onClick={() => this.applyColumnChange(cols-1)}>
             <img src={ require('../img/minus.png')}/>
           </div>
@@ -114,7 +130,7 @@ class BoardSettings extends Component {
           </div>
         </div>
         <div className="InputContainer">
-          <label>Pitch:<input type="number" value={this.state.eigth} disabled={'true'}></input></label>
+          <label>Pitch: {this.state.eigth}</label>
           <div className="MenuIconContainer" onClick={() => this.handlePitchChange(playbackPlayer.getEigth()-1)}>
             <img src={ require('../img/minus.png')}/>
           </div>

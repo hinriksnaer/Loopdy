@@ -1,9 +1,10 @@
 const Tone = require('tone');
 
-
+// plays a note based on specified note and instrument
 async function playSound(note, instrument) {
+  
   // create a synth and connect it to the master output (your speakers)
-  let synth = new Tone.Synth().toMaster();
+  let synth;
 
   switch (instrument) {
   case 'fm':
@@ -25,8 +26,7 @@ async function playSound(note, instrument) {
     synth = new Tone.Synth().toMaster();
   }
 
-  // play a middle 'C' for the duration of an 8th note
   synth.triggerAttackRelease(note, '16n');
 }
 
-export { playSound };
+export{ playSound };

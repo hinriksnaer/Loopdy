@@ -25,11 +25,17 @@ main {
 
 .PlaybackContainer {
   margin-right: 4px;
-  min-width: 80px;
+  min-width: 130px;
+}
+
+.Playbacks p {
+  margin-bottom: 4px;
+  color:white;
 }
 
 .PlaybacksContainer {
   display: flex;
+  margin-bottom: 15px;
 }
 
 .PlayableBoardContainer {
@@ -53,6 +59,7 @@ main {
 
 .SoundboardContainer {
   display: flex;
+  margin-bottom: 15px;
 }
 
 .NoteRow {
@@ -85,6 +92,10 @@ main {
   align-items: center;
 }
 
+.InputContainer label {
+  margin-right: 3px;
+}
+
 .MenuIconContainer img {
   max-width: 100%;
 }
@@ -100,4 +111,23 @@ main {
 
 .InputContainer button {
   margin-left: 5px;
+}
+
+button {
+  background-color: #2E2E2E; /* Green */
+  border-color: aqua;
+  border-width: 2px; 
+  color: aqua;
+  padding: 7px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+button:focus {outline:0;}
+
+.ShareContainer input {
+  margin: 0 8px;
 }

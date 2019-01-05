@@ -8,7 +8,7 @@ class PlayableBoard extends Component {
   static propTypes = {
     notes: PropTypes.array
   }
-  
+
   componentWillMount() {
     const { notes } = this.props;
     let noteStatus = [];

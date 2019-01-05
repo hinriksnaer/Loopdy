@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
-import { LoopBoardService } from '../Service/LoopBoardService';
 import NoteBox from './NoteBox';
 import '../App.css';
-import PlaybackPlayer from '../Service/PlaybackPlayer';
 import PropTypes from 'prop-types';
 
+
 class LoopBoard extends Component {
-  
+
   static propTypes = {
-    cols: PropTypes.number,
-    rows: PropTypes.number,
-    notes: PropTypes.array,
+    playbackPlayer: PropTypes.object,
     speed: PropTypes.number,
-    noteStatus: PropTypes.array,
-    alterCurrentNoteStatus: PropTypes.func
+    currentNoteStatus: PropTypes.array,
+    setLoopBoardPlaybackPlayer: PropTypes.func,
+    setBoardIsLooping: PropTypes.func
   }
 
+  // currentNote: index of the current note being played, 0 if paused
+  // isPlaying: array where the index of the current note is true
   state = {
     currentNote: 0,
     isPlaying: []
@@ -23,23 +23,22 @@ class LoopBoard extends Component {
 
   componentWillMount() {
     const { playbackPlayer } = this.props;
-    this.setState({ 
+    this.setState({
       isLooping: playbackPlayer.getIsLooping(),
       noteStatus: playbackPlayer.getNoteStatus(),
 
-     });
+    });
   }
 
   componentDidUpdate(prevProps) {
-    const { playbackPlayer, speed, currentNoteStatus } = this.props;
+    const { playbackPlayer, speed, currentNoteStatus, setBoardIsLooping } = this.props;
     const { playLoop } = this.state;
 
     if (playbackPlayer !== prevProps.playbackPlayer) {
-      const { playLoop } = this.state;
       clearInterval(playLoop);
       if (!playbackPlayer.getIsLooping() && prevProps.playbackPlayer.getIsLooping()) {
         clearInterval(playLoop);
-        this.setState({ 
+        this.setState({
           isPlaying: [],
           isLooping: playbackPlayer.getIsLooping(),
           currentNote: 0
@@ -52,26 +51,27 @@ class LoopBoard extends Component {
       if (playbackPlayer.getIsLooping()) {
         playbackPlayer.syncStartLoopboard(this.playLoopFromPos);
       }
+      if (currentNoteStatus !== this.state.noteStatus) {
+        this.setState({ noteStatus:currentNoteStatus});
+      }
+    } else {
+      // check for speed
+      if (speed !== prevProps.speed && playbackPlayer.getIsLooping()) {
+        let { playLoop } = this.state;
+        clearInterval(playLoop);
+        setBoardIsLooping(false);
+        playbackPlayer.stopLoop();
+        this.setState({
+          isPlaying: [],
+          currentNote: 0
+        });
+        this.setState({ isLooping: false });
+      } else if (speed !== prevProps.speed) {
+        playbackPlayer.setSpeed(speed);
+      }
+
     }
 
-    // check for speed
-    if (speed !== prevProps.speed && playbackPlayer.getIsLooping()) {
-      this.setState({ 
-        isPlaying: []
-      });
-      playbackPlayer.pauseLoop();
-      clearInterval(playLoop);
-      playbackPlayer.setSpeed(speed);
-      playbackPlayer.startLoop();
-      this.playLoop();
-    } else if (speed !== prevProps.speed) {
-      playbackPlayer.setSpeed(speed);
-    }
-
-    if (currentNoteStatus !== this.state.noteStatus) {
-      this.setState({ noteStatus:currentNoteStatus});
-    }
-    
 
   }
 
@@ -89,7 +89,7 @@ class LoopBoard extends Component {
       clearInterval(playLoop);
       setBoardIsLooping(false);
       playbackPlayer.stopLoop();
-      this.setState({ 
+      this.setState({
         isPlaying: newIsLooping,
         currentNote: 0
       });
@@ -102,7 +102,8 @@ class LoopBoard extends Component {
     setBoardIsLooping(true);
     this.playLoop();
   }
-  
+
+  // starts the interval for the loop visualization
   playLoop = () => {
     const { playbackPlayer } = this.props;
     let playLoop = setInterval(() => {
@@ -118,10 +119,11 @@ class LoopBoard extends Component {
       }
       this.setState({ currentNote });
     }, playbackPlayer.getSpeed());
-    
+
     this.setState({ playLoop });
   }
 
+  // starts the loop interval from a specific position
   playLoopFromPos = (pos) => {
     const { playbackPlayer } = this.props;
     let playLoop = setInterval(() => {
@@ -136,7 +138,7 @@ class LoopBoard extends Component {
       }
       this.setState({ currentNote: pos });
     }, playbackPlayer.getSpeed());
-    
+
     this.setState({ playLoop });
   }
 
@@ -153,6 +155,7 @@ class LoopBoard extends Component {
     for(let i = 0; i<noteStatus[0].length; i++) {
       notes.push(
         <NoteBox
+          key={`${row}${i}`}
           isActive={noteStatus[row][i]}
           isPlaying={isPlaying[i]}
           onClick={this.alterActiveState}

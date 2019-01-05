@@ -1,6 +1,8 @@
 const LZString = require('lz-string');
 
 const AppService = function() {
+
+  // generates and array of notes that fit the height and pitch of the loopboard
   function generateNotes(eigth, rows) {
     eigth = Number(eigth);
     let dur = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
@@ -16,11 +18,13 @@ const AppService = function() {
     return notes;
   }
 
+  // decodes the url into a json string
   function decodeURL(url) {
     let decodedURL = JSON.parse(LZString.decompressFromEncodedURIComponent(url));
     return decodedURL;
   }
 
+  // deep copies a 2d array
   function deepCopy2dArray(array) {
     let newArray = [];
     for (let subArray of array) {

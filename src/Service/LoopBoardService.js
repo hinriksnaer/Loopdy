@@ -1,5 +1,6 @@
 const LoopBoardService = function() {
 
+  // generates notestatus and isPlaying array for default state
   function initStatus(rows, cols) {
     let noteStatus = [];
     let falseInit = [];
@@ -18,6 +19,5 @@ const LoopBoardService = function() {
     initStatus,
   };
 }();
-  
 
 export { LoopBoardService };

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import Playback from '../View/Playback';
-import { AppService } from '../Service/AppService';
+import Playback from './Playback';
 import '../App.css';
 import PropTypes from 'prop-types';
-import { PlaybackPlayer } from '../Service/PlaybackPlayer';
 
 class Playbacks extends Component {
 
@@ -15,6 +13,7 @@ class Playbacks extends Component {
     boardIsLooping: PropTypes.bool
   }
 
+  // playingPlaybacks: list of all playbacks that are currently being played
   state = {
     playingPlaybacks: []
   }
@@ -39,7 +38,7 @@ class Playbacks extends Component {
     }
   }
 
-  // removes/turns off a playback that is currently being played
+  // removes and turns off a playback that is currently being played
   removePlayingPlayback = (playback) => {
     let { playingPlaybacks } = this.state;
     let index = playingPlaybacks.indexOf(playback);
@@ -50,18 +49,21 @@ class Playbacks extends Component {
   render() {
     let { playbacks, currentPlaybackPlayer, addPlayback, alterCurrentPlaybackPlayer } = this.props;
     return (
-      <div className={'PlaybacksContainer'}>
-        {playbacks.map((playbackPlayer) => (
-          <Playback
-            playbackPlayer={playbackPlayer}
-            editing={playbackPlayer==currentPlaybackPlayer}
-            alterCurrentPlaybackPlayer={alterCurrentPlaybackPlayer}
-            addPlayingPlayback={this.addPlayingPlayback}
-            removePlayingPlayback={this.removePlayingPlayback}
-            isPlaying={playbackPlayer.getIsLooping()}
-          />
-        ))}
-        <button onClick={addPlayback}>+</button>
+      <div className={'Playbacks'}>
+        <p>Loops:</p>
+        <div className={'PlaybacksContainer'}>
+          {playbacks.map((playbackPlayer) => (
+            <Playback
+              playbackPlayer={playbackPlayer}
+              editing={playbackPlayer==currentPlaybackPlayer}
+              alterCurrentPlaybackPlayer={alterCurrentPlaybackPlayer}
+              addPlayingPlayback={this.addPlayingPlayback}
+              removePlayingPlayback={this.removePlayingPlayback}
+              isPlaying={playbackPlayer.getIsLooping()}
+            />
+          ))}
+          <button onClick={playbacks.length<10?addPlayback:null}>Add Loop</button>
+        </div>
       </div>
     );
   }

@@ -5,25 +5,22 @@ import { ShareService } from '../Service/ShareService';
 
 class Share extends Component {
   static propTypes = {
-    songArray: PropTypes.array,
-    rows: PropTypes.number,
-    cols: PropTypes.number,
-    pitch: PropTypes.number,
-    speed: PropTypes.number,
     playbacks: PropTypes.array,
-    currentPlaybackIndex: PropTypes.number,
   };
 
+  // shareLink: link that contains the stored state
   state = {
     shareLink: ''
   }
 
+  // Copies the link in the input to the clipboard
   copyLinkToClipboard = () => {
     const shareInput = document.getElementsByClassName('ShareLinkInput');
     shareInput[0].select();
     document.execCommand('copy');
   }
 
+  // Generates a share link
   shareButtonPressed = () => {
     const { playbacks } = this.props;
     const link = ShareService.generateShareLink(playbacks);
