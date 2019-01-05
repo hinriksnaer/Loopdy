@@ -186,9 +186,6 @@ class App extends Component {
             currentPlaybackPlayer={currentPlaybackPlayer}
           />
         </div>
-        <div className="InfoText">
-          <p>Loopdy 0.2.0 created by Hinrik S. Guðmundsson</p>
-        </div>
       </main>
     );
   }
