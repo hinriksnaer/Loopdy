@@ -33,7 +33,6 @@ class LoopBoard extends Component {
     const { playLoop } = this.state;
 
     if (playbackPlayer !== prevProps.playbackPlayer) {
-      const { playLoop } = this.state;
       clearInterval(playLoop);
       if (!playbackPlayer.getIsLooping() && prevProps.playbackPlayer.getIsLooping()) {
         clearInterval(playLoop);
@@ -102,6 +101,7 @@ class LoopBoard extends Component {
     this.playLoop();
   }
 
+  // starts the interval for the loop visualization
   playLoop = () => {
     const { playbackPlayer } = this.props;
     let playLoop = setInterval(() => {
@@ -121,6 +121,7 @@ class LoopBoard extends Component {
     this.setState({ playLoop });
   }
 
+  // starts the loop interval from a specific position
   playLoopFromPos = (pos) => {
     const { playbackPlayer } = this.props;
     let playLoop = setInterval(() => {
