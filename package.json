@@ -8,8 +8,7 @@
     "react-adsense": "0.0.6",
     "react-dom": "^16.5.0",
     "react-scripts": "1.1.5",
-    "tone": "^0.12.80",
-    "uniqid": "^5.0.3"
+    "tone": "^0.12.80"
   },
   "scripts": {
     "start": "react-scripts start",
