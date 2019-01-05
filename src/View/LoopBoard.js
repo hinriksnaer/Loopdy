@@ -12,7 +12,6 @@ class LoopBoard extends Component {
     notes: PropTypes.array,
     speed: PropTypes.number,
     noteStatus: PropTypes.array,
-    alterCurrentNoteStatus: PropTypes.func
   }
 
   state = {
@@ -51,25 +50,27 @@ class LoopBoard extends Component {
       if (playbackPlayer.getIsLooping()) {
         playbackPlayer.syncStartLoopboard(this.playLoopFromPos);
       }
+      if (currentNoteStatus !== this.state.noteStatus) {
+        this.setState({ noteStatus:currentNoteStatus});
+      }
+    } else {
+      
+      // check for speed
+      if (speed !== prevProps.speed && playbackPlayer.getIsLooping()) {
+        this.setState({
+          isPlaying: []
+        });
+        playbackPlayer.pauseLoop();
+        clearInterval(playLoop);
+        playbackPlayer.setSpeed(speed);
+        playbackPlayer.startLoop();
+        this.playLoop();
+      } else if (speed !== prevProps.speed) {
+        playbackPlayer.setSpeed(speed);
+      }
+  
     }
 
-    // check for speed
-    if (speed !== prevProps.speed && playbackPlayer.getIsLooping()) {
-      this.setState({
-        isPlaying: []
-      });
-      playbackPlayer.pauseLoop();
-      clearInterval(playLoop);
-      playbackPlayer.setSpeed(speed);
-      playbackPlayer.startLoop();
-      this.playLoop();
-    } else if (speed !== prevProps.speed) {
-      playbackPlayer.setSpeed(speed);
-    }
-
-    if (currentNoteStatus !== this.state.noteStatus) {
-      this.setState({ noteStatus:currentNoteStatus});
-    }
 
   }
 
