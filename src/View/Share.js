@@ -18,12 +18,14 @@ class Share extends Component {
     shareLink: ''
   }
 
+  // Copies the link in the input to the clipboard
   copyLinkToClipboard = () => {
     const shareInput = document.getElementsByClassName('ShareLinkInput');
     shareInput[0].select();
     document.execCommand('copy');
   }
 
+  // Generates a share link
   shareButtonPressed = () => {
     const { playbacks } = this.props;
     const link = ShareService.generateShareLink(playbacks);
