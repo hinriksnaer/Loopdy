@@ -13,6 +13,7 @@ class Playbacks extends Component {
     boardIsLooping: PropTypes.bool
   }
 
+  // playingPlaybacks: list of all playbacks that are currently being played
   state = {
     playingPlaybacks: []
   }
@@ -37,7 +38,7 @@ class Playbacks extends Component {
     }
   }
 
-  // removes/turns off a playback that is currently being played
+  // removes and turns off a playback that is currently being played
   removePlayingPlayback = (playback) => {
     let { playingPlaybacks } = this.state;
     let index = playingPlaybacks.indexOf(playback);

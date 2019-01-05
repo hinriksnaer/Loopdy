@@ -5,13 +5,7 @@ import { ShareService } from '../Service/ShareService';
 
 class Share extends Component {
   static propTypes = {
-    songArray: PropTypes.array,
-    rows: PropTypes.number,
-    cols: PropTypes.number,
-    pitch: PropTypes.number,
-    speed: PropTypes.number,
     playbacks: PropTypes.array,
-    currentPlaybackIndex: PropTypes.number,
   };
 
   state = {

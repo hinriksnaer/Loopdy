@@ -148,7 +148,7 @@ class App extends Component {
   }
 
   render() {
-    let { speed, boardIsLooping, cols, rows, eigth, currentNoteStatus, playbacks, currentPlaybackPlayer } = this.state;
+    let { speed, boardIsLooping, currentNoteStatus, playbacks, currentPlaybackPlayer } = this.state;
     return (
       <main>
         <div className="BoardContainer">
@@ -163,8 +163,6 @@ class App extends Component {
             <LoopBoard 
               playbackPlayer={currentPlaybackPlayer}
               speed={speed}
-              cols={cols}
-              rows={rows}
               currentNoteStatus={currentNoteStatus}
               setLoopBoardPlaybackPlayer={this.setLoopBoardPlaybackPlayer}
               setBoardIsLooping={this.setBoardIsLooping}/>
@@ -177,13 +175,7 @@ class App extends Component {
             boardIsLooping={boardIsLooping}
           />
           <Share 
-            songArray={currentNoteStatus}
-            rows={rows}
-            cols={cols}
-            pitch={eigth}
-            speed={speed}
             playbacks={playbacks}
-            currentPlaybackPlayer={currentPlaybackPlayer}
           />
         </div>
       </main>
