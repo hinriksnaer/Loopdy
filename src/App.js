@@ -10,6 +10,13 @@ import { LoopBoardService } from './Service/LoopBoardService';
 
 class App extends Component {
 
+  // speed: Current speed on the loopboard
+  // boardIsLooping: flag indicating weather or not the loopboard is currently playing
+  // cols: amount of columns on the loopboard (width)
+  // rows: amount of rows on the loopboard (height)
+  // eigth: which eigth is being played on the loopboard, higher number indicates higher pitch
+  // playbacks: List of all loops
+  // currentPlaybackPlayer: playbackPlayer instance for the current loop on the loopboard
   state = {
     speed: 200,
     boardIsLooping: false,
@@ -62,10 +69,7 @@ class App extends Component {
     }
   }
 
-  setBoardIsLooping = (isLooping) => {
-    this.setState({ boardIsLooping: isLooping });
-  }
-
+  
   // initializes the loopboard in a default state
   setInitialState = (defaultNoteStatus) => {
     this.setState({ currentNoteStatus: defaultNoteStatus });
@@ -74,14 +78,12 @@ class App extends Component {
     this.state.playbacks.push(playbackPlayer);
   }
 
-  // Function passed as prop so the notestatus can be altered
-  alterCurrentNoteStatus = (noteStatus) => {
-    const { currentPlaybackPlayer } = this.state;
-    let newNoteStatus = noteStatus;
-    this.setState({ currentNoteStatus: newNoteStatus });
-    currentPlaybackPlayer.setNoteStatus(newNoteStatus);
+  // passed as prop so the boardIsLooping value can be altered
+  setBoardIsLooping = (isLooping) => {
+    this.setState({ boardIsLooping: isLooping });
   }
 
+  // passed as prop so the speed value can be altered
   alterSpeed = (speed) => {
     const { currentPlaybackPlayer } = this.state;
     currentPlaybackPlayer.setSpeed(speed);
@@ -164,7 +166,6 @@ class App extends Component {
               cols={cols}
               rows={rows}
               currentNoteStatus={currentNoteStatus}
-              alterCurrentNoteStatus={this.alterCurrentNoteStatus}
               setLoopBoardPlaybackPlayer={this.setLoopBoardPlaybackPlayer}
               setBoardIsLooping={this.setBoardIsLooping}/>
           </div>
