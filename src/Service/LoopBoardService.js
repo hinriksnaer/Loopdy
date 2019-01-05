@@ -18,6 +18,5 @@ const LoopBoardService = function() {
     initStatus,
   };
 }();
-  
 
 export { LoopBoardService };

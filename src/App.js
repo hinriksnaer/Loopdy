@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
+import PlaybackPlayer from './Service/PlaybackPlayer';
+import BoardSettings from './View/BoardSettings';
+import LoopBoard from './View/LoopBoard';
+import Playbacks from './View/Playbacks';
+import Share from './View/Share';
 import './App.css';
 import { AppService,  } from './Service/AppService';
 import { LoopBoardService } from './Service/LoopBoardService';
-import PlaybackPlayer from './Service/PlaybackPlayer';
 
 class App extends Component {
 

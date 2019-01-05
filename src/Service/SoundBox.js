@@ -29,4 +29,4 @@ async function playSound(note, instrument) {
   synth.triggerAttackRelease(note, '16n');
 }
 
-export { playSound };
+export{ playSound };

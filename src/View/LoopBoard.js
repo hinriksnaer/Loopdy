@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import NoteBox from './NoteBox';
 import '../App.css';
 import PropTypes from 'prop-types';
+
 
 class LoopBoard extends Component {
 
@@ -20,7 +22,7 @@ class LoopBoard extends Component {
 
   componentWillMount() {
     const { playbackPlayer } = this.props;
-    this.setState({ 
+    this.setState({
       isLooping: playbackPlayer.getIsLooping(),
       noteStatus: playbackPlayer.getNoteStatus(),
 
@@ -36,7 +38,7 @@ class LoopBoard extends Component {
       clearInterval(playLoop);
       if (!playbackPlayer.getIsLooping() && prevProps.playbackPlayer.getIsLooping()) {
         clearInterval(playLoop);
-        this.setState({ 
+        this.setState({
           isPlaying: [],
           isLooping: playbackPlayer.getIsLooping(),
           currentNote: 0
@@ -53,7 +55,7 @@ class LoopBoard extends Component {
 
     // check for speed
     if (speed !== prevProps.speed && playbackPlayer.getIsLooping()) {
-      this.setState({ 
+      this.setState({
         isPlaying: []
       });
       playbackPlayer.pauseLoop();
@@ -85,7 +87,7 @@ class LoopBoard extends Component {
       clearInterval(playLoop);
       setBoardIsLooping(false);
       playbackPlayer.stopLoop();
-      this.setState({ 
+      this.setState({
         isPlaying: newIsLooping,
         currentNote: 0
       });

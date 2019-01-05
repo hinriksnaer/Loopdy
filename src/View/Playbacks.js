@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Playback from './Playback';
 import '../App.css';
 import PropTypes from 'prop-types';
 
