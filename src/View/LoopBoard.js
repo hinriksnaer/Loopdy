@@ -155,6 +155,7 @@ class LoopBoard extends Component {
     for(let i = 0; i<noteStatus[0].length; i++) {
       notes.push(
         <NoteBox
+          key={`${row}${i}`}
           isActive={noteStatus[row][i]}
           isPlaying={isPlaying[i]}
           onClick={this.alterActiveState}

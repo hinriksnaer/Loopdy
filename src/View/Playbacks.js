@@ -62,7 +62,7 @@ class Playbacks extends Component {
               isPlaying={playbackPlayer.getIsLooping()}
             />
           ))}
-          <button onClick={addPlayback}>Add Loop</button>
+          <button onClick={playbacks.length<10?addPlayback:null}>Add Loop</button>
         </div>
       </div>
     );
