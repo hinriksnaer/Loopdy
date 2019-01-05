@@ -6,7 +6,18 @@ class BoardSettings extends Component {
 
   static propTypes = {
     playbackPlayer: PropTypes.object,
+    alterSpeed: PropTypes.func,
+    alterEigth: PropTypes.func,
+    alterCols: PropTypes.func,
+    alterRows: PropTypes.func
   }
+
+  // states
+  // speed: current speed on settings
+  // rows: current row on settings 
+  // cols: current col on settings
+  // eigth: current eigth on settings
+  // instrument: current instrument on settings
 
   componentWillMount() {
     const { playbackPlayer } = this.props;
@@ -39,6 +50,7 @@ class BoardSettings extends Component {
     }
   }
 
+  // Called to handle when the speed is changed
   handleSpeedChange = (change) => {
     let { speed } = this.state;
     let { alterSpeed } = this.props;
@@ -50,6 +62,7 @@ class BoardSettings extends Component {
     }
   }
 
+  // called to handle when the pitch is changed
   handlePitchChange = (newPitch) => {
     if (newPitch < 0 || newPitch > 7) return;
     let { alterEigth } = this.props;
@@ -57,12 +70,14 @@ class BoardSettings extends Component {
     alterEigth(newPitch);
   }
 
+  // called to handle when the instrument is changed
   handleInstrumentChange = (event) => {
     const { playbackPlayer } = this.props;
     playbackPlayer.setInstrument(event.target.value);
     this.setState({ instrument: event.target.value });
   }
 
+  // called to handle when the row is changed
   applyRowChange = (newRows) => {
     if (newRows < 1 || newRows > 12) return;
     this.setState({ rows: Number(newRows) });
@@ -72,6 +87,7 @@ class BoardSettings extends Component {
     }
   }
 
+  // called to handle when the col is changed
   applyColumnChange = (newCols) => {
     if (newCols < 1 || newCols > 20) return;
     this.setState({ cols: Number(newCols) });
@@ -85,13 +101,15 @@ class BoardSettings extends Component {
     return (
       <div className="MenuContainer">
         <div className="InputContainer">
-          <select value={instrument} onChange={this.handleInstrumentChange}>
-            <option value="basic">Basic</option>
-            <option value="fm">FM</option>
-            <option value="duo">Duo</option>
-            <option value="mono">Mono (WARNING LOUD)</option>
-            <option value="pluck">Pluck</option>
-          </select>
+          <label>Synth:
+            <select value={instrument} onChange={this.handleInstrumentChange}>
+              <option value="basic">Basic</option>
+              <option value="fm">FM</option>
+              <option value="duo">Duo</option>
+              <option value="mono">Mono (WARNING LOUD)</option>
+              <option value="pluck">Pluck</option>
+            </select>
+          </label>
         </div>
         <div className="InputContainer">
           <label>Rows:<input type="number" value={this.state.rows} disabled={'true'}></input></label>
