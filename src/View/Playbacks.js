@@ -49,18 +49,21 @@ class Playbacks extends Component {
   render() {
     let { playbacks, currentPlaybackPlayer, addPlayback, alterCurrentPlaybackPlayer } = this.props;
     return (
-      <div className={'PlaybacksContainer'}>
-        {playbacks.map((playbackPlayer) => (
-          <Playback
-            playbackPlayer={playbackPlayer}
-            editing={playbackPlayer==currentPlaybackPlayer}
-            alterCurrentPlaybackPlayer={alterCurrentPlaybackPlayer}
-            addPlayingPlayback={this.addPlayingPlayback}
-            removePlayingPlayback={this.removePlayingPlayback}
-            isPlaying={playbackPlayer.getIsLooping()}
-          />
-        ))}
-        <button onClick={addPlayback}>+</button>
+      <div className={'Playbacks'}>
+        <p>Loops:</p>
+        <div className={'PlaybacksContainer'}>
+          {playbacks.map((playbackPlayer) => (
+            <Playback
+              playbackPlayer={playbackPlayer}
+              editing={playbackPlayer==currentPlaybackPlayer}
+              alterCurrentPlaybackPlayer={alterCurrentPlaybackPlayer}
+              addPlayingPlayback={this.addPlayingPlayback}
+              removePlayingPlayback={this.removePlayingPlayback}
+              isPlaying={playbackPlayer.getIsLooping()}
+            />
+          ))}
+          <button onClick={addPlayback}>Add Loop</button>
+        </div>
       </div>
     );
   }
