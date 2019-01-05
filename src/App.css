@@ -92,6 +92,10 @@ main {
   align-items: center;
 }
 
+.InputContainer label {
+  margin-right: 3px;
+}
+
 .MenuIconContainer img {
   max-width: 100%;
 }

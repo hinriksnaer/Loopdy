@@ -112,7 +112,7 @@ class BoardSettings extends Component {
           </label>
         </div>
         <div className="InputContainer">
-          <label>Rows:<input type="number" value={this.state.rows} disabled={true}></input></label>
+          <label>Rows: {this.state.rows}</label>
           <div className="MenuIconContainer" onClick={() => this.applyRowChange(rows-1)}>
             <img src={ require('../img/minus.png')}/>
           </div>
@@ -121,7 +121,7 @@ class BoardSettings extends Component {
           </div>
         </div>
         <div className="InputContainer">
-          <label>Columns:<input type="number" value={this.state.cols} disabled={true}></input></label>
+          <label>Columns: {this.state.cols}</label>
           <div className="MenuIconContainer" onClick={() => this.applyColumnChange(cols-1)}>
             <img src={ require('../img/minus.png')}/>
           </div>
@@ -130,7 +130,7 @@ class BoardSettings extends Component {
           </div>
         </div>
         <div className="InputContainer">
-          <label>Pitch:<input type="number" value={this.state.eigth} disabled={true}></input></label>
+          <label>Pitch: {this.state.eigth}</label>
           <div className="MenuIconContainer" onClick={() => this.handlePitchChange(playbackPlayer.getEigth()-1)}>
             <img src={ require('../img/minus.png')}/>
           </div>
