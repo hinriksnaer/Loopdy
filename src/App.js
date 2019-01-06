@@ -35,21 +35,21 @@ class App extends Component {
     let url = new URL(window.location.href);
     let board = url.searchParams.get('board');
     if (board){
-      let playbacksArray = AppService.decodeURL(board);
-      let playbacks = [];
-      for (let playbackInitObject of playbacksArray) {
-        let playbackPlayer = new PlaybackPlayer(
-          playbackInitObject.eigth,
-          playbackInitObject.cols,
-          playbackInitObject.speed,
-          playbackInitObject.rows,
-          playbackInitObject.noteStatus,
-          playbackInitObject.instrument
-        );
-        playbacks.push(playbackPlayer);
-      }
-
       try {
+        let playbacksArray = AppService.decodeURL(board);
+        let playbacks = [];
+        for (let playbackInitObject of playbacksArray) {
+          let playbackPlayer = new PlaybackPlayer(
+            playbackInitObject.eigth,
+            playbackInitObject.cols,
+            playbackInitObject.speed,
+            playbackInitObject.rows,
+            playbackInitObject.noteStatus,
+            playbackInitObject.instrument
+          );
+          playbacks.push(playbackPlayer);
+        }
+
         this.setState({
           currentNoteStatus: playbacks[0].getNoteStatus(),
           cols: playbacks[0].getCols(),
