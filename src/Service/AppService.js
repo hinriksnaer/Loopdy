@@ -24,28 +24,9 @@ const AppService = function() {
     return decodedURL;
   }
 
-  // deep copies a 2d array
-  function deepCopy2dArray(array) {
-    let newArray = [];
-    for (let subArray of array) {
-      newArray.push(Array.from(subArray).slice());
-    }
-    return newArray;
-  }
-
-  function getCurrentPlaybackIndex(list, key) {
-    for (let i = 0; i< list.length; i++) {
-      if (list[i].key === key) {
-        return i;
-      }
-    }
-  }
-
   return {
     generateNotes,
-    decodeURL,
-    deepCopy2dArray,
-    getCurrentPlaybackIndex
+    decodeURL
   };
 }();
   
