@@ -16,6 +16,8 @@ class LoopBoard extends Component {
 
   // currentNote: index of the current note being played, 0 if paused
   // isPlaying: array where the index of the current note is true
+  // isLooping: boolean indicating if the current board is looping or not
+  // noteStatus: 2d array containing all the notes on the board, their value is true if active and false if inactive
   state = {
     currentNote: 0,
     isPlaying: []
